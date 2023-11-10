@@ -5,18 +5,31 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import theme from './themes';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const queryConfig = {
+  queries: {
+    refetchOnWindowFocus: false,
+    retry: false,
+  },
+};
+const queryClient = new QueryClient({ defaultOptions: queryConfig });
+
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ChakraProvider>
+    </QueryClientProvider>
+
   </React.StrictMode>
 );
 
