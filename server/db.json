@@ -9,7 +9,7 @@
           "category_id": 1,
           "name": "Izlivanje noktiju",
           "time_in_minutes": 90,
-          "price": 0,
+          "price": 1700,
           "workers_id": [1, 2, 3]
         },
         {
