@@ -1,286 +1,257 @@
 {
+  "categories": [
+    { "id": 1, "name": "Manikir" },
+    { "id": 2, "name": "Tretmani lica" },
+    { "id": 3, "name": "Tretmani tela" },
+    { "id": 4, "name": "Masaze" },
+    { "id": 5, "name": "Obrve" }
+  ],
   "services": [
     {
       "id": 1,
-      "category_name": "Manikir",
-      "category_services": [
-        {
-          "id": 1,
-          "category_id": 1,
-          "name": "Izlivanje noktiju",
-          "time_in_minutes": 90,
-          "price": 1700,
-          "workers_id": [1, 2, 3]
-        },
-        {
-          "id": 2,
-          "category_id": 1,
-          "name": "Nadogradnja noktiju",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1, 2, 3]
-        },
-        {
-          "id": 3,
-          "category_id": 1,
-          "name": "Korekcija gela",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1, 2, 3]
-        },
-        {
-          "id": 4,
-          "category_id": 1,
-          "name": "Gel na prirodnim noktima",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1, 2, 3]
-        },
-        {
-          "id": 5,
-          "category_id": 1,
-          "name": "Gel lak",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [1, 2, 3]
-        },
-        {
-          "id": 6,
-          "category_id": 1,
-          "name": "Dipping powder tehnika",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1, 2, 3]
-        }
-      ]
+      "category_id": 1,
+      "name": "Izlivanje noktiju",
+      "time_in_minutes": 90,
+      "price": 1700,
+      "workers_id": [1, 2, 3]
     },
     {
       "id": 2,
-      "category_name": "Tretmani lica",
-      "category_services": [
-        {
-          "id": 7,
-          "category_id": 2,
-          "name": "Higijenski tretman lica",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 8,
-          "category_id": 2,
-          "name": "Bioloski tretman lica",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 9,
-          "category_id": 2,
-          "name": "Mezoporacija lica",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 10,
-          "category_id": 2,
-          "name": "Derma pen",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 11,
-          "category_id": 2,
-          "name": "Hemijski piling lica",
-          "time_in_minutes": 30,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 12,
-          "category_id": 2,
-          "name": "Fitopiling",
-          "time_in_minutes": 30,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 13,
-          "category_id": 2,
-          "name": "Chantarel tretman",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 14,
-          "category_id": 2,
-          "name": "Laser tretman",
-          "time_in_minutes": 15,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 15,
-          "category_id": 2,
-          "name": "Masaza lica",
-          "time_in_minutes": 30,
-          "price": 0,
-          "workers_id": [1]
-        }
-      ]
+      "category_id": 1,
+      "name": "Nadogradnja noktiju",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1, 2, 3]
     },
     {
       "id": 3,
-      "category_name": "Tretmani tela",
-      "category_services": [
-        {
-          "id": 16,
-          "category_id": 3,
-          "name": "Presoterapija",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 17,
-          "category_id": 3,
-          "name": "Kavitacija + presoterapija",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1]
-        },
-        {
-          "id": 18,
-          "category_id": 3,
-          "name": "Vacum fit + presoterapija",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [1]
-        }
-      ]
+      "category_id": 1,
+      "name": "Korekcija gela",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1, 2, 3]
     },
     {
       "id": 4,
-      "category_name": "Masaze",
-      "category_services": [
-        {
-          "id": 19,
-          "category_id": 4,
-          "name": "Madero terapija tela",
-          "time_in_minutes": 45,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 20,
-          "category_id": 4,
-          "name": "Madero terapija lica",
-          "time_in_minutes": 30,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 21,
-          "category_id": 4,
-          "name": "Relax masaza celog tela",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 22,
-          "category_id": 4,
-          "name": "Relax masaza celog tela",
-          "time_in_minutes": 45,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 23,
-          "category_id": 4,
-          "name": "Masaza vulkanskim kamenjem",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 24,
-          "category_id": 4,
-          "name": "Sportska masaza",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 25,
-          "category_id": 4,
-          "name": "Terapeutska masaza",
-          "time_in_minutes": 60,
-          "price": 0,
-          "workers_id": [2]
-        }
-      ]
+      "category_id": 1,
+      "name": "Gel na prirodnim noktima",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1, 2, 3]
     },
     {
       "id": 5,
-      "category_name": "Obrve",
-      "category_services": [
-        {
-          "id": 26,
-          "category_id": 5,
-          "name": "Puder obrve",
-          "time_in_minutes": 120,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 27,
-          "category_id": 5,
-          "name": "Korekcija puder obrva",
-          "time_in_minutes": 90,
-          "price": 0,
-          "workers_id": [2]
-        },
-        {
-          "id": 28,
-          "category_id": 5,
-          "name": "Oblikovanje obrva",
-          "time_in_minutes": 15,
-          "price": 0,
-          "workers_id": [1]
-        }
-      ]
+      "category_id": 1,
+      "name": "Gel lak",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [1, 2, 3]
+    },
+    {
+      "id": 6,
+      "category_id": 1,
+      "name": "Dipping powder tehnika",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1, 2, 3]
+    },
+    {
+      "id": 7,
+      "category_id": 2,
+      "name": "Higijenski tretman lica",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 8,
+      "category_id": 2,
+      "name": "Bioloski tretman lica",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 9,
+      "category_id": 2,
+      "name": "Mezoporacija lica",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 10,
+      "category_id": 2,
+      "name": "Derma pen",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 11,
+      "category_id": 2,
+      "name": "Hemijski piling lica",
+      "time_in_minutes": 30,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 12,
+      "category_id": 2,
+      "name": "Fitopiling",
+      "time_in_minutes": 30,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 13,
+      "category_id": 2,
+      "name": "Chantarel tretman",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 14,
+      "category_id": 2,
+      "name": "Laser tretman",
+      "time_in_minutes": 15,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 15,
+      "category_id": 2,
+      "name": "Masaza lica",
+      "time_in_minutes": 30,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 16,
+      "category_id": 3,
+      "name": "Presoterapija",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 17,
+      "category_id": 3,
+      "name": "Kavitacija + presoterapija",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 18,
+      "category_id": 3,
+      "name": "Vacum fit + presoterapija",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [1]
+    },
+    {
+      "id": 19,
+      "category_id": 4,
+      "name": "Madero terapija tela",
+      "time_in_minutes": 45,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 20,
+      "category_id": 4,
+      "name": "Madero terapija lica",
+      "time_in_minutes": 30,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 21,
+      "category_id": 4,
+      "name": "Relax masaza celog tela",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 22,
+      "category_id": 4,
+      "name": "Relax masaza celog tela",
+      "time_in_minutes": 45,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 23,
+      "category_id": 4,
+      "name": "Masaza vulkanskim kamenjem",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 24,
+      "category_id": 4,
+      "name": "Sportska masaza",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 25,
+      "category_id": 4,
+      "name": "Terapeutska masaza",
+      "time_in_minutes": 60,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 26,
+      "category_id": 5,
+      "name": "Puder obrve",
+      "time_in_minutes": 120,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 27,
+      "category_id": 5,
+      "name": "Korekcija puder obrva",
+      "time_in_minutes": 90,
+      "price": 0,
+      "workers_id": [2]
+    },
+    {
+      "id": 28,
+      "category_id": 5,
+      "name": "Oblikovanje obrva",
+      "time_in_minutes": 15,
+      "price": 0,
+      "workers_id": [1]
     }
   ],
   "workers": [
     {
       "id": 1,
       "name": "Marija",
-      "image": "",
-      "services": [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 28
-      ]
+      "image": ""
     },
     {
       "id": 2,
       "name": "Jelena",
-      "image": "",
-      "services": [1, 2, 3, 4, 5, 6]
+      "image": ""
     },
     {
       "id": 3,
       "name": "Kaja",
-      "image": "",
-      "services": [1, 2, 3, 4, 5, 6, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+      "image": ""
     },
     {
       "id": 4,
       "name": "Jeka",
-      "image": "",
-      "services": []
+      "image": ""
     }
   ]
 }
