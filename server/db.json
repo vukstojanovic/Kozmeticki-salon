@@ -85,7 +85,7 @@
         {
           "id": 10,
           "category_id": 2,
-          "name": "Derma pen ",
+          "name": "Derma pen",
           "time_in_minutes": 60,
           "price": 0,
           "workers_id": [1]

@@ -17,7 +17,7 @@ const serviceSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
-  workers_id: {
+  workers_ids: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Worker",
   },
