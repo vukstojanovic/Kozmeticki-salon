@@ -114,16 +114,7 @@ app.delete("/categories/:id", async (req, res) => {
     if (!category) {
       res.status(404).json({ message: `Category with id ${id} not found.` });
     }
-    category.category_services.forEach(async (serviceId) => {
-      await Service.findByIdAndDelete(serviceId);
-    });
-    // const workers = await Worker.find({});
-    // workers.forEach(async (worker) => {
-    //   const newServiceArray = worker.services.filter(
-    //     (serviceId) => !category.category_services.includes(serviceId)
-    //   );
-    //   await Worker.findByIdAndUpdate(worker.id, { services: newServiceArray });
-    // });
+    Service.deleteMany({ category_id: id });
 
     res.status(200).json(category);
   } catch (error) {
@@ -173,23 +164,6 @@ app.delete("/services/:id", async (req, res) => {
       res.status(404).json({ message: `Service with id ${id} not found.` });
     }
 
-    const category = await Category.findById(service.category_id);
-    const categoryServices = category.category_services;
-    const index = categoryServices.indexOf(id);
-    categoryServices.splice(index, 1);
-
-    await Category.findByIdAndUpdate(service.category_id, {
-      category_services: categoryServices,
-    });
-
-    // const workers = await Worker.find({});
-    // workers.forEach(async (worker) => {
-    //   const workerServices = worker.services;
-    //   const index = workerServices.indexOf(id);
-    //   workerServices.splice(index, 1);
-    //   await Worker.findByIdAndUpdate(worker.id, { services: workerServices });
-    // });
-
     res.status(200).json(service);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -237,16 +211,7 @@ app.delete("/workers/:id", async (req, res) => {
     if (!worker) {
       res.status(404).json({ message: `Worker with id ${id} not found.` });
     }
-
-    const services = await Service.find({});
-    services.forEach(async (service) => {
-      const { workers_ids } = service;
-      const index = workers_ids.indexOf(id);
-      if (index > -1) {
-        workers_ids.splice(index, 1);
-        await Service.findByIdAndUpdate(service.id, { workers_ids });
-      }
-    });
+    Service.updateMany({ workers_id: id }, { $pull: { workers_id: id } });
 
     res.status(200).json(worker);
   } catch (error) {
