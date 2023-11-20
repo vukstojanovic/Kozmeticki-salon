@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const Product = require("./models/product");
 const serviceControllers = require("./controllers/services.controller.js");
 const categoriesControllers = require("./controllers/categories.controller.js");
@@ -7,6 +8,7 @@ const workersControllers = require("./controllers/workers.controller.js");
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("hello node api");
@@ -100,6 +102,5 @@ mongoose
   )
   .then(() => {
     app.listen(4000, () => console.log("listenting on port 4000"));
-    // Category.populate
   })
   .catch((error) => console.log(error));
