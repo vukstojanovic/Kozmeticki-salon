@@ -1,6 +1,6 @@
 import axiosInstance from "../config/axios";
 
-type Service = {
+type Category = {
     id: number;
     category_id: number;
     name: string;
@@ -9,18 +9,12 @@ type Service = {
     workers_id: number[];
 };
 
-type Category = {
-    id: number;
-    category_name: string;
-    category_services: Service[];
-};
-
-export type SalonData = {
+export type CategoryData = {
     data: Category[];
 };
 
 const apiServices = {
-    getServices: () => axiosInstance.get<null, SalonData>("/services"),
+    getServices: () => axiosInstance.get<null, CategoryData>("/services"),
 
 };
 
