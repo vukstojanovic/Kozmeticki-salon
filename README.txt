@@ -7,5 +7,5 @@ Endpointi su:
 
 NOVO!!!
 Sada se zapravo moze koristiti node
-Pokrece se tako sto se najpre udje u client folder pa komanda: npm run dev
+Pokrece se tako sto se najpre udje u server folder pa komanda: npm run dev
 Endpointi su isti kao i kod json-servera
