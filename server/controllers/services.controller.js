@@ -9,6 +9,16 @@ async function getServices(_req, res) {
   }
 }
 
+async function getService(req, res) {
+  try {
+    const { id } = req.params;
+    const service = await Service.findById(id);
+    res.status(200).json(service);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function postService(req, res) {
   try {
     const service = await Service.create(req.body);
@@ -48,6 +58,7 @@ async function deleteService(req, res) {
 
 module.exports = {
   getServices,
+  getService,
   postService,
   putService,
   deleteService,

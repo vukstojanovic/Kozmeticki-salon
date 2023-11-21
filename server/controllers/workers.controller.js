@@ -10,6 +10,16 @@ async function getWorkers(_req, res) {
   }
 }
 
+async function getWorker(req, res) {
+  try {
+    const { id } = req.params;
+    const worker = await Worker.findById(id);
+    res.status(200).json(worker);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function postWorker(req, res) {
   try {
     const worker = await Worker.create(req.body);
@@ -50,6 +60,7 @@ async function deleteWorker(req, res) {
 
 module.exports = {
   getWorkers,
+  getWorker,
   postWorker,
   putWorker,
   deleteWorker,
