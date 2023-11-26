@@ -5,6 +5,7 @@ const categoriesRoutes = require("./routes/categoriesRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const workersRoutes = require("./routes/workersRoutes");
 const authRoutes = require("./routes/authRoutes");
+
 const app = express();
 
 app.use(express.json());
