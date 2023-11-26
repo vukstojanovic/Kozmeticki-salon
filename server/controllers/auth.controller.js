@@ -19,7 +19,7 @@ async function loginUser(req, res) {
       { userId: user.userId, username: user.username },
       "batman",
       {
-        expiresIn: "5m",
+        expiresIn: "3m",
       }
     );
 
