@@ -50,4 +50,4 @@ Endpoint za autentifikaciju je localhost:4000/auth/login, to je post request koj
   password: "filadelfija123"
 }
 
-nakon uspesne autentifikacije dobijate token koji bi trebalo da istice nakon 5 minuta kada trebate opet da se logujete
+nakon uspesne autentifikacije dobijate token koji bi trebalo da istice nakon 3 minuta kada trebate opet da se logujete
