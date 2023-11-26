@@ -43,3 +43,11 @@ i kao payload saljes samo property koji zelis da izmenis, npr:
 
 Kod Delete requesta za koji od ovih endpointa se umesto :id stavlja id (kategorije, usluge, radnice) koje zelis da obrises
 Npr localhost:4000/workers/3 (radnica ciji je id 3) i kao payload ne prosledjujes nista
+
+Endpoint za autentifikaciju je localhost:4000/auth/login, to je post request koji za payload salje username i password koji su fiksni:
+{
+  username: "Marija",
+  password: "filadelfija123"
+}
+
+nakon uspesne autentifikacije dobijate token koji bi trebalo da istice nakon 5 minuta kada trebate opet da se logujete
