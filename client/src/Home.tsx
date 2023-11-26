@@ -1,9 +1,9 @@
 import { Box, Text, Spinner, Flex, Grid, Img } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "./services/index";
-import beauty from "../src/assets/Beauty-Salon.jpg";
 import { useState } from "react";
 import ChoseStaff from "./components/choseStaff/ChoseStaff";
+import beauty from "../src/assets/Beauty-Salon.jpg";
 
 const Home = () => {
   const {
@@ -20,7 +20,7 @@ const Home = () => {
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
 
-  const [activeWorker, setActiveWorker] = useState<number | null>(null);
+  const [activeWorker, setActiveWorker] = useState<number | null>();
 
   const handleButtonClick = (id: number) => {
     setActiveWorker(prevActiveWorker => (prevActiveWorker === id ? null : id));

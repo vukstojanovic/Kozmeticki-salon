@@ -4,6 +4,8 @@ const cors = require("cors");
 const categoriesRoutes = require("./routes/categoriesRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const workersRoutes = require("./routes/workersRoutes");
+const authRoutes = require("./routes/authRoutes");
+
 const app = express();
 
 app.use(express.json());
@@ -12,6 +14,7 @@ app.use(cors());
 app.use("/categories", categoriesRoutes);
 app.use("/services", servicesRoutes);
 app.use("/workers", workersRoutes);
+app.use("/auth", authRoutes);
 
 mongoose
   .connect(
