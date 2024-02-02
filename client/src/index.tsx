@@ -6,6 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import theme from "./themes";
+import "@fontsource/alfa-slab-one";
+import "@fontsource/abhaya-libre";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
