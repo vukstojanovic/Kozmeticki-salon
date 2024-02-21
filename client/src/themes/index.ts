@@ -2,18 +2,18 @@ import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
   fonts: {
-    heading: `'Ubuntu', sans-serif`,
-    body: `'Ubuntu', sans-serif`,
+    heading: `'Alfa Slab One', serif`,
+    body: `'Abhaya Libre', serif`,
   },
+
   textStyles: {
     primary: {
-      fontFamily: `'Ubuntu', sans-serif`,
+      fontFamily: `'Abhaya Libre', serif`,
     },
     secondary: {
-      fontFamily: `'Montserrat', sans-serif`,
+      fontFamily: `'Alfa Slab One', serif`,
     },
   },
 });
 
 export default theme;
-

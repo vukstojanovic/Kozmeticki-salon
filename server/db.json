@@ -157,7 +157,7 @@
       "name": "Madero terapija tela",
       "time_in_minutes": 45,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 20,
@@ -165,7 +165,7 @@
       "name": "Madero terapija lica",
       "time_in_minutes": 30,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 21,
@@ -173,7 +173,7 @@
       "name": "Relax masaza celog tela",
       "time_in_minutes": 60,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 22,
@@ -181,7 +181,7 @@
       "name": "Relax masaza celog tela",
       "time_in_minutes": 45,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 23,
@@ -189,7 +189,7 @@
       "name": "Masaza vulkanskim kamenjem",
       "time_in_minutes": 60,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 24,
@@ -197,7 +197,7 @@
       "name": "Sportska masaza",
       "time_in_minutes": 60,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 25,
@@ -205,7 +205,7 @@
       "name": "Terapeutska masaza",
       "time_in_minutes": 60,
       "price": 0,
-      "workers_id": [2]
+      "workers_id": [4]
     },
     {
       "id": 26,
