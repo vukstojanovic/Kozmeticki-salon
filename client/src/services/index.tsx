@@ -13,6 +13,7 @@ export type ServicesData = {
     data: Services[];
 };
 
+
 export type Categories = {
     id: number;
     name: string

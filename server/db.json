@@ -224,6 +224,7 @@
       "name": "Madero terapija tela",
       "time_in_minutes": 45,
       "price": 0,
+
       "workers_id": [
         2
       ]
@@ -237,6 +238,7 @@
       "workers_id": [
         2
       ]
+
     },
     {
       "id": 21,
@@ -247,6 +249,7 @@
       "workers_id": [
         2
       ]
+
     },
     {
       "id": 22,
@@ -284,6 +287,7 @@
       "name": "Terapeutska masaza",
       "time_in_minutes": 60,
       "price": 0,
+
       "workers_id": [
         2
       ]
