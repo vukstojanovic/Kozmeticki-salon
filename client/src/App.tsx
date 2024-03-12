@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import "./App.scss";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, Container, VStack } from "@chakra-ui/react";
 
 import Admin from "./Admin";
 import Loader from "./components/custom/loader/Loader";
 import Header from "./components/custom/header/Header";
+import Footer from "./components/custom/footer/Footer";
+import SimpleMap from "./components/custom/simpleMap/SimpleMap";
+import Services from "./components/custom/services/Services";
 
 function App() {
   const [isAuthenticated] = useState(true);
@@ -24,12 +27,18 @@ function App() {
   return isLoading ? (
     <Loader />
   ) : (
-    <VStack bgColor="#FAEEE9" minHeight="100vh">
+    <VStack bgColor="#F0EFED" minHeight="100vh" spacing={0}>
       <Header />
-      <section id="Services">Services</section>
-      <section id="Portfolio">Portfolio</section>
-      <section id="Contact">Contact</section>
+      <Container maxW="1440px" bg="blue.600" color="white">
+        <section id="Usluge">
+          <Services />
+        </section>
+        <section id="O nama">O nama</section>
+        <section id="Kontakt">Kontakt</section>
+      </Container>
 
+      <SimpleMap />
+      <Footer />
       {/* 
           <Routes>
             <Route path="/home" element={<Home />} />

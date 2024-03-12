@@ -18,7 +18,7 @@ export default function Navbar() {
         py="1%"
       >
         <Img src={logo} alt="logo" h="112px" />
-        <Links />
+        <Links color="#000000" />
         <Button leftIcon={<TimeIcon />} colorScheme="red" onClick={onOpen}>
           Zakaži termin
         </Button>

@@ -56,7 +56,7 @@ export default function DrawerExample({
       placement="right"
       initialFocusRef={firstField}
       onClose={onClose}
-      size="xs"
+      variant="secondary"
     >
       <DrawerOverlay />
       <DrawerContent>

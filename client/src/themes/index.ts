@@ -14,6 +14,21 @@ const theme = extendTheme({
       fontFamily: `'Alfa Slab One', serif`,
     },
   },
+
+  components: {
+    Drawer: {
+      parts: ["dialog", "header", "body"],
+      variants: {
+        primary: {
+          secondary: {
+            dialog: {
+              maxW: "360px",
+            },
+          },
+        },
+      },
+    },
+  },
 });
 
 export default theme;
