@@ -1,67 +1,103 @@
-
-import { Flex, Box, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { MdCategory } from "react-icons/md";
-import { FaServicestack } from "react-icons/fa";
-import { FcBusinesswoman } from "react-icons/fc";
-import { Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react";
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  TabPanel,
+  forwardRef,
+  useTab,
+  useMultiStyleConfig,
+  Button,
+  Box,
+  Icon,
+  Stack,
+  Img,
+} from "@chakra-ui/react";
 import CategoryAdmin from "./CategoryAdmin";
-import ServicesAdmin from "./ServicesAdmin";
-import WorkersAdmin from "./WorkersAdmin";
+import AdminFullCalendar from "./components/custom/adminFullCalendar/adminFullCalendar";
 
-// const createNewCategory
+import WorkersAdmin from "./WorkersAdmin";
+import logo from "./assets/logo.png";
+
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { IoGridOutline } from "react-icons/io5";
+import { MdSupervisorAccount } from "react-icons/md";
+
+const CustomTab = forwardRef((props, ref) => {
+  const tabProps = useTab({ ...props, ref });
+  const styles = useMultiStyleConfig("Tabs", tabProps);
+
+  return (
+    <Button
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      fontSize="17px"
+      fontWeight="bold"
+      gap={3}
+      color="#e2e8f0"
+      height="50px"
+      borderRadius="lg"
+      __css={styles.tab}
+      _selected={{
+        color: "#343A59",
+        backgroundColor: "#F0EFED",
+      }}
+      {...tabProps}
+    >
+      <Box display="flex" as="span">
+        {props.icon}
+      </Box>
+      {tabProps.children}
+    </Button>
+  );
+});
 
 const Admin = () => {
-    return (
-        // <Flex
-        //     bg="blue.500"
-        //     p={3}
-        //     flexDirection={{ base: 'column', md: 'row', lg: 'row' }}
-        //     justifyContent='space-between'
-        // >
-        //     <Link to="/category-admin">
-        //         <Flex maxH={{ base: "50px", md: "170px", lg: "170px" }} maxW={{ md: "200px", lg: "330px" }} width="350px" height="150px" bg="green.400" alignItems='center' justifyContent='space-between' px='10px' borderRadius='10px' _hover={{
-        //             opacity: "0.8",
-        //         }}>
-        //             <Text fontSize='2xl' color='white'> Categories</Text> <MdCategory size='40px' color="white" />
-        //         </Flex>
-        //     </Link>
-
-        //     <Link to="/services-admin">
-        //         <Flex maxH={{ base: "50px", md: "170px", lg: "170px" }} maxW={{ md: "200px", lg: "330px" }} width="350px" height="150px" bg="orange.400" alignItems='center' justifyContent='space-between' px='10px' borderRadius='10px' _hover={{
-        //             opacity: "0.8",
-        //         }}>
-        //             <Text fontSize='2xl' color='white'>Services</Text><FaServicestack size='40px' color="white" />
-        //         </Flex>
-        //     </Link>
-        //     <Link to="/workers-admin">
-        //         <Flex maxH={{ base: "50px", md: "170px", lg: "170px" }} maxW={{ md: "200px", lg: "330px" }} width="350px" height="150px" bg="purple.300" alignItems='center' justifyContent='space-between' px='10px' borderRadius='10px' _hover={{
-        //             opacity: "0.8",
-        //         }}>
-        //             <Text fontSize='2xl' color='white'>Workers</Text> <FcBusinesswoman size='40px' color="white" />
-        //         </Flex>
-        //     </Link>
-        //     <MySelect />
-        // </Flex>
-        <Tabs size='md' variant='enclosed' display='flex'>
-            <TabList display='flex' flexDirection='column' >
-                <Tab>Calendar</Tab>
-                <Tab>Categories & Services</Tab>
-                <Tab>Workers</Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel>
-                    <p>Calendar</p>
-                </TabPanel>
-                <TabPanel>
-                    <CategoryAdmin />
-                </TabPanel>
-                <TabPanel>
-                    <WorkersAdmin />
-                </TabPanel>
-            </TabPanels>
-        </Tabs>
-    );
+  return (
+    <Tabs
+      size="md"
+      variant="enclosed"
+      display="flex"
+      minHeight="100vh"
+      bgColor="#F8F8F8"
+    >
+      <TabList
+        display="flex"
+        flexDirection="column"
+        bgColor="#343A59"
+        w={320}
+        position="fixed"
+        top={0}
+        bottom={0}
+        zIndex={1}
+        p={5}
+      >
+        <Img src={logo} alt="logo" h={107} w={150} alignSelf="center" mb={10} />
+        <Stack spacing={3}>
+          <CustomTab icon={<Icon as={FaRegCalendarAlt} boxSize={6} />}>
+            Kalendar
+          </CustomTab>
+          <CustomTab icon={<Icon as={IoGridOutline} boxSize={6} />}>
+            Usluge
+          </CustomTab>
+          <CustomTab icon={<Icon as={MdSupervisorAccount} boxSize={6} />}>
+            Zaposleni
+          </CustomTab>
+        </Stack>
+      </TabList>
+      <TabPanels ml={320}>
+        <TabPanel>
+          <AdminFullCalendar />
+        </TabPanel>
+        <TabPanel>
+          <CategoryAdmin />
+        </TabPanel>
+        <TabPanel>
+          <WorkersAdmin />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
 };
 
 export default Admin;

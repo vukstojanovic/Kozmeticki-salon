@@ -27,28 +27,33 @@ function App() {
   return isLoading ? (
     <Loader />
   ) : (
-    <VStack bgColor="#F0EFED" minHeight="100vh" spacing={0}>
+    // <Admin />
+    <VStack minHeight="100vh" spacing={0}>
       <Header />
-      <Container maxW="1440px" bg="blue.600" color="white">
-        <section id="Usluge">
+      <Container maxW="1440px" bg="white" color="white" p={0}>
+        <section className="section" id="Usluge">
           <Services />
         </section>
-        <section id="O nama">O nama</section>
-        <section id="Kontakt">Kontakt</section>
+        <section className="section" id="O nama">
+          O nama
+        </section>
+        <section className="section" id="Kontakt">
+          Kontakt
+        </section>
       </Container>
 
       <SimpleMap />
       <Footer />
-      {/* 
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route
-              path="/admin"
-              element={isAuthenticated ? <Admin /> : <Navigate to="/" />}
-            />
-            <Route path="*" element={<Navigate to="/home" />} />
-          </Routes>
- */}
+      {/*
+              <Routes>
+                <Route path="/home" element={<Home />} />
+                <Route
+                  path="/admin"
+                  element={isAuthenticated ? <Admin /> : <Navigate to="/" />}
+                />
+                <Route path="*" element={<Navigate to="/home" />} />
+              </Routes>
+     */}
     </VStack>
   );
 }

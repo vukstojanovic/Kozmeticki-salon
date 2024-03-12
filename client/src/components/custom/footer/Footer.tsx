@@ -13,7 +13,7 @@ export default function Footer() {
           <IconButton
             aria-label="Instagram"
             fontSize="30px"
-            color="#F0EFED"
+            color="#000000"
             icon={<FaInstagram />}
             isRound={true}
             variant="none"
@@ -21,13 +21,13 @@ export default function Footer() {
           <IconButton
             aria-label="Facebook"
             fontSize="30px"
-            color="#F0EFED"
+            color="#000000"
             icon={<FaFacebookF />}
             isRound={true}
             variant="none"
           />
         </Stack>
-        <Links color="#F0EFED" />
+        <Links color="#000000" />
       </Stack>
     </Box>
   );
