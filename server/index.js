@@ -4,6 +4,7 @@ const cors = require("cors");
 const categoriesRoutes = require("./routes/categoriesRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const workersRoutes = require("./routes/workersRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
 const authRoutes = require("./routes/authRoutes");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 app.use("/categories", categoriesRoutes);
 app.use("/services", servicesRoutes);
 app.use("/workers", workersRoutes);
+app.use("/appointments", appointmentRoutes);
 app.use("/auth", authRoutes);
 
 mongoose

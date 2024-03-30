@@ -2,10 +2,15 @@ const Appointment = require("../models/appointment");
 
 async function getAppointments(req, res) {
   try {
+    let appointments;
     const { from, to } = req.query;
-    const appointments = await Appointment.find({
-      date: { $gte: from, $lte: to },
-    });
+    if (from && to) {
+      appointments = await Appointment.find({
+        date: { $gte: from, $lte: to },
+      });
+    } else {
+      appointments = await Appointment.find({});
+    }
     res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({ message: error.message });
