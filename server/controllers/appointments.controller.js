@@ -1,8 +1,11 @@
 const Appointment = require("../models/appointment");
 
-async function getAppointments(_req, res) {
+async function getAppointments(req, res) {
   try {
-    const appointments = await Appointment.find({});
+    const { from, to } = req.query;
+    const appointments = await Appointment.find({
+      date: { $gte: from, $lte: to },
+    });
     res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -20,6 +23,7 @@ async function getAppointment(req, res) {
 }
 
 async function postAppointment(req, res) {
+  // ovde treba biti nekih ogranicenja da se termini ne preklapaju
   try {
     const appointment = await Appointment.create(req.body);
     res.status(200).json(appointment);
@@ -29,6 +33,7 @@ async function postAppointment(req, res) {
 }
 
 async function putAppointment(req, res) {
+  // ovde treba biti nekih ogranicenja da se termini ne preklapaju
   try {
     const { id } = req.params;
     const appointment = await Appointment.findByIdAndUpdate(id, req.body);
