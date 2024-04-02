@@ -3,9 +3,10 @@ const Appointment = require("../models/appointment");
 async function getAppointments(req, res) {
   try {
     let appointments;
-    const { from, to } = req.query;
+    const { from, to, worker_id } = req.query;
     if (from && to) {
       appointments = await Appointment.find({
+        worker_id,
         date: { $gte: from, $lte: to },
       });
     } else {
