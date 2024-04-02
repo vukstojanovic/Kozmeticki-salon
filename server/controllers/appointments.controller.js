@@ -28,8 +28,31 @@ async function getAppointment(req, res) {
 }
 
 async function postAppointment(req, res) {
-  // ovde treba biti nekih ogranicenja da se termini ne preklapaju
   try {
+    let serviceDuration;
+    const { date, worker_id, service_id, service_duration } = req.body;
+
+    if (service_duration) {
+      serviceDuration = service_duration * 60000;
+    } else {
+      const service = await Service.findById(service_id);
+      serviceDuration = service.time_in_minutes * 60000;
+    }
+
+    const appointmentEndTime = date + serviceDuration;
+
+    const overlappingAppointments = await Appointment.find({
+      worker_id,
+      date: { $lt: appointmentEndTime },
+      date: { $gt: date },
+    });
+
+    if (overlappingAppointments.length > 0) {
+      return res
+        .status(400)
+        .json({ message: "Overlapping appointments are not allowed." });
+    }
+
     const appointment = await Appointment.create(req.body);
     res.status(200).json(appointment);
   } catch (error) {
@@ -38,9 +61,33 @@ async function postAppointment(req, res) {
 }
 
 async function putAppointment(req, res) {
-  // ovde treba biti nekih ogranicenja da se termini ne preklapaju
   try {
     const { id } = req.params;
+
+    let serviceDuration;
+    const { date, worker_id, service_id, service_duration } = req.body;
+
+    if (service_duration) {
+      serviceDuration = service_duration * 60000;
+    } else {
+      const service = await Service.findById(service_id);
+      serviceDuration = service.time_in_minutes * 60000;
+    }
+
+    const appointmentEndTime = date + serviceDuration;
+
+    const overlappingAppointments = await Appointment.find({
+      worker_id,
+      date: { $lt: appointmentEndTime },
+      date: { $gt: date },
+    });
+
+    if (overlappingAppointments.length > 0) {
+      return res
+        .status(400)
+        .json({ message: "Overlapping appointments are not allowed." });
+    }
+
     const appointment = await Appointment.findByIdAndUpdate(id, req.body);
     if (!appointment) {
       res.status(404).json({ message: `Appointment with id ${id} not found.` });

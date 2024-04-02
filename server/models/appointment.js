@@ -17,6 +17,20 @@ const appointmentSchema = mongoose.Schema(
       ref: "Worker",
       required: [true, "You must enter wanted worker id."],
     },
+    service_duration: {
+      type: Number,
+    },
+    cutomer_name: {
+      type: String,
+      required: [true, "You must enter customer name."],
+    },
+    customer_number: {
+      type: Number,
+      required: [true, "You must enter customer number."],
+    },
+    customer_email: {
+      type: String,
+    },
     notes: {
       type: String,
     },
