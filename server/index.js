@@ -6,6 +6,7 @@ const servicesRoutes = require("./routes/servicesRoutes");
 const workersRoutes = require("./routes/workersRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const authRoutes = require("./routes/authRoutes");
+// const cron = require("node-cron");
 
 const app = express();
 
@@ -17,6 +18,15 @@ app.use("/services", servicesRoutes);
 app.use("/workers", workersRoutes);
 app.use("/appointments", appointmentRoutes);
 app.use("/auth", authRoutes);
+
+// cron.schedule("0 0 * *", async () => {
+//   try {
+//     await deleteAppointmentsBeforeOneMonth();
+//     console.log("Appointment cleanup job completed successfully.");
+//   } catch (error) {
+//     console.error("Error running appointment cleanup job:", error);
+//   }
+// });
 
 mongoose
   .connect(
