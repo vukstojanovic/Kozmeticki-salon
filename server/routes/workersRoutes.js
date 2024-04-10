@@ -5,8 +5,8 @@ const requireAuth = require("../middlewares/requireAuth");
 
 router.get("/", workersControllers.getWorkers);
 router.get("/:id", workersControllers.getWorker);
-router.post("/", requireAuth, workersControllers.postWorker);
-router.put("/:id", requireAuth, workersControllers.putWorker);
-router.delete("/:id", requireAuth, workersControllers.deleteWorker);
+router.post("/", workersControllers.postWorker);
+router.put("/:id", workersControllers.putWorker);
+router.delete("/:id", workersControllers.deleteWorker);
 
 module.exports = router;

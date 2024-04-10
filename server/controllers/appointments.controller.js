@@ -30,22 +30,22 @@ async function getAppointment(req, res) {
 
 async function postAppointment(req, res) {
   try {
-    let serviceDuration;
-    const { date, worker_id, service_id, service_duration } = req.body;
-
-    if (service_duration) {
-      serviceDuration = service_duration * 60000;
-    } else {
-      const service = await Service.findById(service_id);
-      serviceDuration = service.time_in_minutes * 60000;
-    }
-
-    const appointmentEndTime = date + serviceDuration;
+    const { date, worker_id, service_duration } = req.body;
+    const newAppointmentEnd = date + service_duration * 60000;
 
     const overlappingAppointments = await Appointment.find({
       worker_id,
-      date: { $lt: appointmentEndTime },
-      date: { $gt: date },
+      $expr: {
+        $and: [
+          { $lt: ["$date", newAppointmentEnd] },
+          {
+            $gt: [
+              { $add: ["$date", { $multiply: ["$service_duration", 60000] }] },
+              date,
+            ],
+          },
+        ],
+      },
     });
 
     if (overlappingAppointments.length > 0) {
@@ -61,26 +61,90 @@ async function postAppointment(req, res) {
   }
 }
 
+// async function postAppointment(req, res) {
+//   try {
+//     const { date, worker_id, service_duration } = req.body;
+//     const newAppointmentEnd = date + service_duration * 60000;
+
+//     const existingAppointments = await Appointment.find({
+//       $and: [
+//         { worker_id: worker_id },
+//         {
+//           $or: [
+//             {
+//               $and: [
+//                 { date: { $lte: date } },
+//                 {
+//                   $expr: {
+//                     $gt: [
+//                       {
+//                         $add: [
+//                           "$date",
+//                           { $multiply: ["$service_duration", 60000] },
+//                         ],
+//                       },
+//                       newAppointmentEnd,
+//                     ],
+//                   },
+//                 },
+//               ],
+//             },
+//             {
+//               $and: [
+//                 { date: { $lt: newAppointmentEnd } },
+//                 {
+//                   $expr: {
+//                     $gte: [
+//                       {
+//                         $add: [
+//                           "$date",
+//                           { $multiply: ["$service_duration", 60000] },
+//                         ],
+//                       },
+//                       newAppointmentEnd,
+//                     ],
+//                   },
+//                 },
+//               ],
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     if (existingAppointments.length > 0) {
+//       return res
+//         .status(400)
+//         .json({ message: "Appointment overlaps with existing appointments." });
+//     }
+
+//     const appointment = await Appointment.create(req.body);
+//     res.status(200).json(appointment);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// }
+
 async function putAppointment(req, res) {
   try {
     const { id } = req.params;
 
-    let serviceDuration;
-    const { date, worker_id, service_id, service_duration } = req.body;
-
-    if (service_duration) {
-      serviceDuration = service_duration * 60000;
-    } else {
-      const service = await Service.findById(service_id);
-      serviceDuration = service.time_in_minutes * 60000;
-    }
-
-    const appointmentEndTime = date + serviceDuration;
+    const { date, worker_id, service_duration } = req.body;
+    const newAppointmentEnd = date + service_duration * 60000;
 
     const overlappingAppointments = await Appointment.find({
       worker_id,
-      date: { $lt: appointmentEndTime },
-      date: { $gt: date },
+      $expr: {
+        $and: [
+          { $lt: ["$date", newAppointmentEnd] },
+          {
+            $gt: [
+              { $add: ["$date", { $multiply: ["$service_duration", 60000] }] },
+              date,
+            ],
+          },
+        ],
+      },
     });
 
     if (overlappingAppointments.length > 0) {

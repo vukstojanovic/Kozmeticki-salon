@@ -6,7 +6,7 @@ const requireAuth = require("../middlewares/requireAuth.js");
 router.get("/", appointmentControllers.getAppointments);
 router.get("/:id", appointmentControllers.getAppointment);
 router.post("/", appointmentControllers.postAppointment);
-router.put("/:id", requireAuth, appointmentControllers.putAppointment);
-router.delete("/:id", requireAuth, appointmentControllers.deleteAppointment);
+router.put("/:id", appointmentControllers.putAppointment);
+router.delete("/:id", appointmentControllers.deleteAppointment);
 
 module.exports = router;

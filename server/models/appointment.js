@@ -19,13 +19,14 @@ const appointmentSchema = mongoose.Schema(
     },
     service_duration: {
       type: Number,
+      required: [true, "You must enter service duration."],
     },
-    cutomer_name: {
+    customer_name: {
       type: String,
       required: [true, "You must enter customer name."],
     },
     customer_number: {
-      type: Number,
+      type: String,
       required: [true, "You must enter customer number."],
     },
     customer_email: {

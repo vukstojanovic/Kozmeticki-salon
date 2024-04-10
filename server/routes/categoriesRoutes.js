@@ -5,8 +5,8 @@ const requireAuth = require("../middlewares/requireAuth");
 
 router.get("/", categoriesControllers.getCategories);
 router.get("/:id", categoriesControllers.getCategory);
-router.post("/", requireAuth, categoriesControllers.postCategory);
-router.put("/:id", requireAuth, categoriesControllers.putCategory);
-router.delete("/:id", requireAuth, categoriesControllers.deleteCategory);
+router.post("/", categoriesControllers.postCategory);
+router.put("/:id", categoriesControllers.putCategory);
+router.delete("/:id", categoriesControllers.deleteCategory);
 
 module.exports = router;
