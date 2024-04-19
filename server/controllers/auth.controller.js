@@ -5,7 +5,7 @@ const User = require("../models/user");
 async function loginUser(req, res) {
   try {
     const { username, password } = req.body;
-    const user = User.findOne({ username: username });
+    const user = await User.findOne({ username: username });
     if (!user) {
       res.status(401).json({ error: "Invalid username or password." });
     }
@@ -25,7 +25,7 @@ async function loginUser(req, res) {
 
     res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ error: "Internal server errror." });
+    res.status(500).json({ error: "Internal server error." });
   }
 }
 

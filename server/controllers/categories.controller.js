@@ -50,7 +50,7 @@ async function deleteCategory(req, res) {
     if (!category) {
       res.status(404).json({ message: `Category with id ${id} not found.` });
     }
-    Service.deleteMany({ category_id: id });
+    await Service.deleteMany({ category_id: id });
 
     res.status(200).json(category);
   } catch (error) {
