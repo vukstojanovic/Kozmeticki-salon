@@ -1,8 +1,13 @@
 import axiosInstance from "../config/axios";
 
+type LoginData = {
+  username: string;
+  password: string;
+};
+
 type Services = {
   id: number;
-  category_id: string;
+  category_id: number;
   name: string;
   time_in_minutes: number;
   price: number;
@@ -14,7 +19,7 @@ export type ServicesData = {
 };
 
 export type Categories = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -54,8 +59,8 @@ const apiServices = {
   getCategories: () => axiosInstance.get<null, CategoriesData>("/categories"),
   addCategory: (categoryData: Categories) =>
     axiosInstance.post<Categories, null>("/categories", categoryData),
-  deleteCategory: (id: string) =>
-    axiosInstance.delete<string, null>(`/categories/${id}`),
+  deleteCategory: (id: number) =>
+    axiosInstance.delete<number, null>(`/categories/${id}`),
   updateCategory: ({ data, id }: any) =>
     axiosInstance.put<CategoryType, null>(`/categories/${id}`, data),
   getServices: () => axiosInstance.get<null, ServicesData>("/services"),
@@ -72,6 +77,8 @@ const apiServices = {
     axiosInstance.delete<null, number>(`/workers/${id}`),
   updateWorker: ({ data, id }: any) =>
     axiosInstance.put<Workers, null>(`/workers/${id}`, data),
+  loginAdmin: (data: LoginData) =>
+    axiosInstance.post<LoginData, string>("/auth/login", data),
 };
 
 export default apiServices;
