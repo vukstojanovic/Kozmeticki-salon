@@ -6,6 +6,15 @@ const theme = extendTheme({
     body: `'Abhaya Libre', serif`,
   },
 
+  colors: {
+    default: "#E9BFC0",
+    secondary: "#E6888A",
+    blue: "#343A59",
+    darkBlue: "#071720",
+    lightGrey: "#D8D7D6",
+    darkGrey: "#C1C0BF",
+  },
+
   textStyles: {
     primary: {
       fontFamily: `'Abhaya Libre', serif`,
@@ -13,17 +22,68 @@ const theme = extendTheme({
     secondary: {
       fontFamily: `'Alfa Slab One', serif`,
     },
+    tertiary: {
+      fontFamily: `'Gellatio Personal Use', sans-serif`,
+    },
   },
 
   components: {
+    Heading: {
+      variants: {
+        customH1: {
+          fontFamily: `'Cormorant', serif`,
+          color: "default",
+          fontSize: "6xl",
+          fontWeight: 600,
+        },
+        customH2: {
+          fontFamily: `'Cormorant', serif`,
+          color: "blue",
+          fontSize: "6xl",
+          fontWeight: 600,
+        },
+        customH1Mob: {
+          fontFamily: `'Cormorant', serif`,
+          color: "default",
+          fontSize: "5xl",
+          fontWeight: 600,
+        },
+        customH2Mob: {
+          fontFamily: `'Cormorant', serif`,
+          color: "blue",
+          fontSize: "5xl",
+          fontWeight: 600,
+        },
+      },
+    },
+    Button: {
+      variants: {
+        blue: {
+          backgroundColor: "blue",
+          color: "white",
+          _hover: {
+            bg: "blue",
+          },
+        },
+      },
+    },
+    IconButton: {
+      variants: {
+        blue: {
+          backgroundColor: "blue",
+          color: "white",
+          _hover: {
+            bg: "blue",
+          },
+        },
+      },
+    },
     Drawer: {
       parts: ["dialog", "header", "body"],
       variants: {
-        primary: {
-          secondary: {
-            dialog: {
-              maxW: "360px",
-            },
+        secondary: {
+          dialog: {
+            maxW: "360px",
           },
         },
       },

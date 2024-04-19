@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Loader = () => {
   return (
-    <Flex align="center" justify="center" minHeight="100vh" bgColor="#F0EFED">
+    <Flex align="center" justify="center" minHeight="100vh">
       <motion.img
         src={logo}
         alt="logo"

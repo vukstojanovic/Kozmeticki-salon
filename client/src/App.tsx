@@ -9,6 +9,12 @@ import Header from "./components/custom/header/Header";
 import Footer from "./components/custom/footer/Footer";
 import SimpleMap from "./components/custom/simpleMap/SimpleMap";
 import Services from "./components/custom/services/Services";
+import Educations from "./components/custom/educations/Educations";
+import FollowUsSection from "./components/custom/followUsSection/FollowUsSection";
+import AboutUs from "./components/custom/aboutUs/AboutUs";
+import VaucherSection from "./components/custom/voucherSection/VoucherSection";
+import WorkHours from "./components/custom/workHours/workHours";
+import Login from "./components/custom/login/Login";
 
 function App() {
   const [isAuthenticated] = useState(true);
@@ -18,7 +24,7 @@ function App() {
     const fakeDataFetch = () => {
       setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 1000);
     };
 
     fakeDataFetch();
@@ -27,22 +33,26 @@ function App() {
   return isLoading ? (
     <Loader />
   ) : (
+    // <Login />
     // <Admin />
     <VStack minHeight="100vh" spacing={0}>
       <Header />
-      <Container maxW="1440px" bg="white" color="white" p={0}>
+      <Container minW="100vw" bg="white" color="white" p={0} m={0}>
+        <section className="section" id="O nama">
+          <WorkHours />
+          <AboutUs />
+        </section>
         <section className="section" id="Usluge">
+          <FollowUsSection />
           <Services />
         </section>
-        <section className="section" id="O nama">
-          O nama
+        <section className="section" id="Edukacije">
+          <VaucherSection />
+          <Educations />
         </section>
-        <section className="section" id="Kontakt">
-          Kontakt
-        </section>
+        <SimpleMap />
       </Container>
 
-      <SimpleMap />
       <Footer />
       {/*
               <Routes>

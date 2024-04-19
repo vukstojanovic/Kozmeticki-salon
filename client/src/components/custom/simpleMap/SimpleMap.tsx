@@ -19,9 +19,9 @@ const SimpleMap: React.FC = () => {
   return (
     <MapContainer
       center={position}
-      zoom={17}
-      style={{ width: "100%", height: "400px" }}
+      zoom={16}
       className="custom-map-container"
+      scrollWheelZoom={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

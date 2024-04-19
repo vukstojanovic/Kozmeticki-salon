@@ -115,21 +115,6 @@ export default function CategoryAdmin() {
           </Stack>
         </Stack>
       </Box>
-      {/* <Stack spacing={3}>
-        {categoriesData?.data.map(category => (
-          <Stack borderRadius="md" backgroundColor="white" py={4} spacing={5}>
-            <EditDeleteCategory {...category} />
-            {servicesData?.data
-              .filter(service => service.category_id === category.id)
-              .map(service => (
-                <Box key={category.id}>
-                  <EditDeleteService key={service.id} {...service} />
-                  <Divider orientation="horizontal" />
-                </Box>
-              ))}
-          </Stack>
-        ))}
-      </Stack> */}
       {categoriesData?.data.map(category => (
         <TableContainer marginBlock="20px">
           <Table variant="simple">
@@ -176,17 +161,6 @@ export default function CategoryAdmin() {
               >
                 Dodaj uslugu
               </Button>
-
-              {/* <IconButton
-                marginLeft="20px"
-                marginBlock="10px"
-                bgColor="#343A59"
-                aria-label="Add Service"
-                isRound={true}
-                size="xs"
-                colorScheme="blue"
-                icon={<AddIcon />}
-              /> */}
             </Tbody>
           </Table>
         </TableContainer>

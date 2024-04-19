@@ -1,85 +1,77 @@
 import axiosInstance from "../config/axios";
 
 type Services = {
-    id: number;
-    category_id: number;
-    name: string;
-    time_in_minutes: number;
-    price: number;
-    workers_id: number[];
+  id: number;
+  category_id: string;
+  name: string;
+  time_in_minutes: number;
+  price: number;
+  workers_id: number[];
 };
 
 export type ServicesData = {
-    data: Services[];
+  data: Services[];
 };
 
-
 export type Categories = {
-    id: number;
-    name: string
-}
+  id: string;
+  name: string;
+};
 
 type CategoriesData = {
-    data: Categories[]
-}
+  data: Categories[];
+};
 
 export type CategoryType = {
-    name: string
-}
+  name: string;
+};
 
 export type ServiceType = {
-    id: number;
-    category_id: number;
-    name: string;
-    time_in_minutes: number;
-    price: number;
-    workers_id: number[]
-}
+  id: number;
+  category_id: number;
+  name: string;
+  time_in_minutes: number;
+  price: number;
+  workers_id: number[];
+};
 
 type WorkersData = {
-    data: WorkersType[]
-}
-
+  data: WorkersType[];
+};
 
 export type WorkersType = {
-    name: string;
-    image?: string;
-    id: number
-}
+  name: string;
+  image?: string;
+  id: number;
+};
 
 export type Workers = {
-    name: string;
-    image?: string;
-}
+  name: string;
+  image?: string;
+};
 
 const apiServices = {
-    getCategories: () => axiosInstance.get<null, CategoriesData>("/categories"),
-    addCategory: (categoryData: Categories) =>
-        axiosInstance.post<Categories, null>(
-            "/categories",
-            categoryData
-        ),
-    deleteCategory: (id: number) => axiosInstance.delete<number, null>(`/categories/${id}`),
-    updateCategory: ({ data, id }: any) => axiosInstance.put<CategoryType, null>(`/categories/${id}`,
-        data),
-    getServices: () => axiosInstance.get<null, ServicesData>("/services"),
-    addService: (serviceData: ServiceType) =>
-        axiosInstance.post<ServiceType, null>(
-            "/services",
-            serviceData
-        ),
-    deleteService: (id: number) => axiosInstance.delete<null, number>(`/services/${id}`),
-    updateService: ({ data, id }: any) => axiosInstance.put<ServiceType>(`/services/${id}`,
-        data),
-    getWorkers: () => axiosInstance.get<null, WorkersData>("/workers"),
-    addWorker: (workersData: WorkersType) =>
-        axiosInstance.post<WorkersType, null>(
-            "/workers",
-            workersData
-        ),
-    deleteWorker: (id: number) => axiosInstance.delete<null, number>(`/workers/${id}`),
-    updateWorker: ({ data, id }: any) => axiosInstance.put<Workers, null>(`/workers/${id}`,
-        data),
+  getCategories: () => axiosInstance.get<null, CategoriesData>("/categories"),
+  addCategory: (categoryData: Categories) =>
+    axiosInstance.post<Categories, null>("/categories", categoryData),
+  deleteCategory: (id: string) =>
+    axiosInstance.delete<string, null>(`/categories/${id}`),
+  updateCategory: ({ data, id }: any) =>
+    axiosInstance.put<CategoryType, null>(`/categories/${id}`, data),
+  getServices: () => axiosInstance.get<null, ServicesData>("/services"),
+  addService: (serviceData: ServiceType) =>
+    axiosInstance.post<ServiceType, null>("/services", serviceData),
+  deleteService: (id: number) =>
+    axiosInstance.delete<null, number>(`/services/${id}`),
+  updateService: ({ data, id }: any) =>
+    axiosInstance.put<ServiceType>(`/services/${id}`, data),
+  getWorkers: () => axiosInstance.get<null, WorkersData>("/workers"),
+  addWorker: (workersData: WorkersType) =>
+    axiosInstance.post<WorkersType, null>("/workers", workersData),
+  deleteWorker: (id: number) =>
+    axiosInstance.delete<null, number>(`/workers/${id}`),
+  updateWorker: ({ data, id }: any) =>
+    axiosInstance.put<Workers, null>(`/workers/${id}`, data),
 };
 
 export default apiServices;

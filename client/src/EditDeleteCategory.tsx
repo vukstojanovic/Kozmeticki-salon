@@ -57,7 +57,7 @@ export default function EditDeleteCategory({ name, id }: Categories) {
     onClose: onDeleteCategoryClose,
   } = useDisclosure();
 
-  function deleteCategory(id: number) {
+  function deleteCategory(id: string) {
     deleteCategoryMutation.mutate(id);
   }
 
