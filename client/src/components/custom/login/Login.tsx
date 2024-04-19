@@ -9,11 +9,11 @@ import {
   Container,
   Img,
 } from "@chakra-ui/react";
-
+import apiServices from "../../../services";
 import logo from "../../../assets/logo.png";
 
 interface FormValues {
-  name: string;
+  username: string;
   password: string;
 }
 
@@ -24,13 +24,15 @@ export default function Login() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
-  const onSubmit = (values: FormValues): Promise<void> => {
-    return new Promise<void>(resolve => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
-    });
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const token = await apiServices.loginAdmin(values);
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -45,20 +47,20 @@ export default function Login() {
     >
       <Img src={logo} alt="logo" h="112px" cursor="pointer" />
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-        <FormControl isInvalid={!!errors.name} mb={4}>
-          <FormLabel htmlFor="name" color="black">
+        <FormControl isInvalid={!!errors.username} mb={4}>
+          <FormLabel htmlFor="username" color="black">
             Korisničko ime
           </FormLabel>
           <Input
-            id="name"
-            placeholder="Name"
-            {...register("name", {
+            id="username"
+            placeholder="Username"
+            {...register("username", {
               required: "This is required",
               minLength: { value: 4, message: "Minimum length should be 4" },
             })}
           />
           <FormErrorMessage>
-            {errors.name?.message ? errors.name.message : null}
+            {errors.username?.message ? errors.username.message : null}
           </FormErrorMessage>
         </FormControl>
 
