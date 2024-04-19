@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const workersControllers = require("../controllers/workers.controller");
+const requireAuth = require("../middlewares/requireAuth");
 
 router.get("/", workersControllers.getWorkers);
 router.get("/:id", workersControllers.getWorker);
