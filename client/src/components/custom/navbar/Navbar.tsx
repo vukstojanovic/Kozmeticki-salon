@@ -1,11 +1,20 @@
-import { Box, Button, Img, Stack, useDisclosure } from "@chakra-ui/react";
-import { TimeIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import {
+  Box,
+  Img,
+  Stack,
+  useDisclosure,
+  useMediaQuery,
+} from "@chakra-ui/react";
 
-import DrawerExample from "../drawer/Drawer";
 import logo from "../../../assets/logo.png";
 import Links from "./links/Links";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import Sidebar from "../sidebar/Sidebar";
 
 export default function Navbar() {
+  const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -14,16 +23,31 @@ export default function Navbar() {
         direction={"row"}
         align={"center"}
         justify="space-between"
-        px="3%"
-        py="1%"
+        px={{ base: "5%", md: "3%" }}
+        py={{ base: "3%", md: "1%" }}
       >
-        <Img src={logo} alt="logo" h="112px" />
-        <Links />
-        <Button leftIcon={<TimeIcon />} colorScheme="red" onClick={onOpen}>
-          Zakaži termin
-        </Button>
+        <Img
+          src={logo}
+          alt="logo"
+          h={{ base: "70px", md: "112px" }}
+          cursor="pointer"
+          onClick={() => setSelectedIndex(null)}
+        />
+        {isLargerThan768 ? (
+          <Links
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
+          />
+        ) : (
+          <HamburgerIcon boxSize={6} onClick={onOpen} />
+        )}
       </Stack>
-      <DrawerExample isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <Sidebar
+        isOpen={isOpen}
+        onClose={onClose}
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+      />
     </Box>
   );
 }

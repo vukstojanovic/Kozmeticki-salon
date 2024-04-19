@@ -5,7 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import theme from "./themes";
+import theme from "./themes/index";
 import "@fontsource/alfa-slab-one";
 import "@fontsource/abhaya-libre";
 
