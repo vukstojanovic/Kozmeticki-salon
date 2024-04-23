@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import apiServices from "./services";
 import { useQuery } from "@tanstack/react-query";
-import { Categories } from "./services";
+import { Category } from "./services";
 
 type AddCategoryModalProps = {
   isOpen: boolean;
@@ -25,7 +25,7 @@ export default function AddCategoryModal({
   isOpen,
   onClose,
 }: AddCategoryModalProps) {
-  function addCategory(data: Categories) {
+  function addCategory(data: Category) {
     addCategoryMutation.mutate(data);
   }
   const addCategoryMutation = useMutation(apiServices.addCategory, {
@@ -39,7 +39,7 @@ export default function AddCategoryModal({
     register: registerForm,
     handleSubmit: handleSubmitForm,
     formState: { errors },
-  } = useForm<Categories>();
+  } = useForm<Category>();
 
   console.log(errors, "greske");
 

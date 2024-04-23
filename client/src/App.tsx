@@ -15,6 +15,7 @@ import AboutUs from "./components/custom/aboutUs/AboutUs";
 import VaucherSection from "./components/custom/voucherSection/VoucherSection";
 import WorkHours from "./components/custom/workHours/workHours";
 import Login from "./components/custom/login/Login";
+import WorkHoursSection from "./components/custom/workHoursSection/WorkHoursSection";
 
 function App() {
   const [isAuthenticated] = useState(true);
@@ -39,18 +40,17 @@ function App() {
       <Header />
       <Container minW="100vw" bg="white" color="white" p={0} m={0}>
         <section className="section" id="O nama">
-          <WorkHours />
+          <FollowUsSection />
           <AboutUs />
         </section>
         <section className="section" id="Usluge">
-          <FollowUsSection />
+          <VaucherSection />
           <Services />
         </section>
         <section className="section" id="Edukacije">
-          <VaucherSection />
-          <Educations />
+          {/* <Educations /> */}
         </section>
-        <SimpleMap />
+        <WorkHoursSection />
       </Container>
 
       <Footer />

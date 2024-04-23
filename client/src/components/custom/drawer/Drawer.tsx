@@ -21,6 +21,7 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
+import { Category, Service } from "../../../services/index";
 
 import ChoseStaff from "../choseStaff/ChoseStaff";
 import { useQuery } from "@tanstack/react-query";
@@ -43,11 +44,13 @@ export default function DrawerExample({
   isOpen: any;
   onClose: any;
 }) {
-  const [activeWorker, setActiveWorker] = useState<number | null>();
   const [day, setDay] = useState<Date>(new Date());
+
+  const [activeWorker, setActiveWorker] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<string>("");
+
   const [activeStep, setActiveStep] = useState(1);
-  const [isSubmitted, setIsSubmitted] = useState(false); // New state for tracking submission status
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
   const { data: categories } = useQuery(
@@ -62,15 +65,15 @@ export default function DrawerExample({
 
   const firstField = useRef<HTMLInputElement>(null);
 
-  const handleButtonClick = (id: number) => {
-    setActiveWorker(prevActiveWorker => (prevActiveWorker === id ? null : id));
+  const handleButtonClick = (id: string) => {
+    setActiveWorker(id);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setActiveCategory(event.target.value);
   };
 
-  const isWorkerActive = (id: number) => activeWorker === id;
+  const isWorkerActive = (id: string) => activeWorker === id;
 
   const handleNext = () => {
     setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
@@ -83,6 +86,8 @@ export default function DrawerExample({
   const handleSubmit = () => {
     setIsSubmitted(true);
   };
+
+  console.log(activeCategory);
 
   return (
     <Drawer
@@ -137,15 +142,13 @@ export default function DrawerExample({
                     placeholder="Izaberi kategoriju"
                     onChange={handleChange}
                   >
-                    {categories?.data?.map(
-                      (category: { id: string; name: string }) => {
-                        return (
-                          <option key={category.id} value={category.id}>
-                            {category.name}
-                          </option>
-                        );
-                      }
-                    )}
+                    {categories?.data?.map((category: Category) => {
+                      return (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      );
+                    })}
                   </Select>
                 </Box>
                 <Box>
@@ -155,7 +158,7 @@ export default function DrawerExample({
                       ?.filter(
                         service => service.category_id === activeCategory
                       )
-                      .map((service: { id: number; name: string }) => {
+                      .map((service: Service) => {
                         return (
                           <option key={service.id} value={service.name}>
                             {service.name}

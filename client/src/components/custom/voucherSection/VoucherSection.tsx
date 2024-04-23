@@ -19,8 +19,13 @@ const VaucherSection = () => {
         zIndex={1}
         alignItems={{ base: "center", md: "start" }}
         paddingX={{ base: "5%", md: "0px" }}
+        spacing={0}
       >
-        <Text fontSize={{ base: "4xl", md: "6xl" }} color="lightGrey">
+        <Text
+          fontSize={{ base: "4xl", md: "6xl" }}
+          lineHeight="48px"
+          color="lightGrey"
+        >
           Poklon vaučer
         </Text>
         <Text

@@ -17,9 +17,9 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import apiServices, { ServiceType } from "../../../services";
+import apiServices, { Service } from "../../../services";
 
-export default function EditDeleteService({ name, id }: ServiceType) {
+export default function EditDeleteService({ name, id }: Service) {
   const { refetch: refetchServices } = useQuery(
     ["services"],
     apiServices.getServices
@@ -37,7 +37,7 @@ export default function EditDeleteService({ name, id }: ServiceType) {
     onClose: onDeleteServiceClose,
   } = useDisclosure();
 
-  function deleteService(id: number) {
+  function deleteService(id: string) {
     deleteServiceMutation.mutate(id);
   }
 

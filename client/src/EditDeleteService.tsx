@@ -74,7 +74,7 @@ export default function EditDeleteService({
     onClose: onDeleteServiceClose,
   } = useDisclosure();
 
-  function deleteService(id: number) {
+  function deleteService(id: string) {
     deleteServiceMutation.mutate(id);
   }
 

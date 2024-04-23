@@ -1,6 +1,13 @@
 import React from "react";
 import "./Footer.scss";
-import { Box, Divider, IconButton, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Heading,
+  IconButton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 
 import { FaInstagram, FaFacebookF } from "react-icons/fa";
 import Links from "../navbar/links/Links";
@@ -14,30 +21,59 @@ export default function Footer() {
       id="Kontakt"
       display="flex"
       flexDirection="row"
-      justifyContent="space-around"
+      justifyContent="space-between"
       backgroundColor="darkBlue"
     >
-      <Stack direction="column" justify="center" align="center" spacing={5}>
-        <Stack direction="row">
-          <IconButton
-            aria-label="Instagram"
-            fontSize="30px"
-            color="#EFEEED"
-            icon={<FaInstagram />}
-            isRound={true}
-            variant="none"
-          />
-          <IconButton
-            aria-label="Facebook"
-            fontSize="30px"
-            color="#EFEEED"
-            icon={<FaFacebookF />}
-            isRound={true}
-            variant="none"
-          />
+      <Stack w="full" direction="row" justify="space-between" align="center">
+        <Stack direction="column" justify="center" align="center" spacing={5}>
+          <Heading>Edukacije</Heading>
+
+          <Stack direction="row">
+            <IconButton
+              aria-label="Instagram"
+              fontSize="30px"
+              color="#EFEEED"
+              icon={<FaInstagram />}
+              isRound={true}
+              variant="none"
+            />
+            <IconButton
+              aria-label="Facebook"
+              fontSize="30px"
+              color="#EFEEED"
+              icon={<FaFacebookF />}
+              isRound={true}
+              variant="none"
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="column" justify="center" align="center" spacing={5}>
+          <Heading>Follow us</Heading>
+
+          <Stack direction="row">
+            <IconButton
+              aria-label="Instagram"
+              fontSize="30px"
+              color="#EFEEED"
+              icon={<FaInstagram />}
+              isRound={true}
+              variant="none"
+            />
+            <IconButton
+              aria-label="Facebook"
+              fontSize="30px"
+              color="#EFEEED"
+              icon={<FaFacebookF />}
+              isRound={true}
+              variant="none"
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="column" justify="center" align="center" spacing={5}>
+          <Heading>Lokacija</Heading>
+          <SimpleMap />
         </Stack>
       </Stack>
-      {/* <SimpleMap /> */}
     </Box>
   );
 }

@@ -34,7 +34,7 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
     },
   });
 
-  function deleteWorker(id: number) {
+  function deleteWorker(id: string) {
     deleteWorkerMutation.mutate(id);
   }
 

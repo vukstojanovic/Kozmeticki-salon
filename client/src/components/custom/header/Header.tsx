@@ -26,7 +26,6 @@ export default function Header() {
         mt={{ base: "30vh", md: "unset" }}
         spacing={0}
       >
-        {/* <Text fontSize={32}>Dobrodošli u</Text> */}
         <Heading
           fontSize={{ base: "42px", md: "80px" }}
           noOfLines={1}

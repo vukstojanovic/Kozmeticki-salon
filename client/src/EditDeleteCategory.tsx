@@ -13,7 +13,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Categories } from "./services";
+import { Category } from "./services";
 import apiServices from "./services";
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
@@ -21,16 +21,18 @@ import { useQuery } from "@tanstack/react-query";
 import { IoTrash } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 
-export default function EditDeleteCategory({ name, id }: Categories) {
+export default function EditDeleteCategory({ name, id }: Category) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Categories>();
-  const { refetch: refetchCategories } = useQuery(
+  } = useForm<Category>();
+  const { refetch: refetchCategories, data } = useQuery(
     ["categories"],
     apiServices.getCategories
   );
+
+  console.log(data);
 
   const updateCategoryMutation = useMutation(apiServices.updateCategory, {
     onSuccess: () => {
