@@ -83,7 +83,7 @@ const theme = extendTheme({
       variants: {
         secondary: {
           dialog: {
-            maxW: "360px",
+            maxW: "375px",
           },
         },
       },

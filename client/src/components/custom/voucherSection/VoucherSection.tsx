@@ -23,7 +23,7 @@ const VaucherSection = () => {
       >
         <Text
           fontSize={{ base: "4xl", md: "6xl" }}
-          lineHeight="48px"
+          lineHeight="52px"
           color="lightGrey"
         >
           Poklon vaučer

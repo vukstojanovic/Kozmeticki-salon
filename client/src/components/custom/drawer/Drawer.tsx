@@ -46,7 +46,7 @@ export default function DrawerExample({
 }) {
   const [day, setDay] = useState<Date>(new Date());
 
-  const [activeWorker, setActiveWorker] = useState<string>("");
+  const [activeWorker, setActiveWorker] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("");
   const [activeService, setActiveService] = useState<string>("");
 
@@ -67,7 +67,11 @@ export default function DrawerExample({
   const firstField = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = (id: string) => {
-    setActiveWorker(id);
+    if (activeWorker === id) {
+      setActiveWorker(null);
+    } else {
+      setActiveWorker(id);
+    }
   };
 
   const handleChangeCategory = (
@@ -80,8 +84,9 @@ export default function DrawerExample({
     setActiveService(event.target.value);
   };
 
-  const isWorkerActive = (id: string) => activeWorker === id;
-
+  const isWorkerActive = (id: string): boolean => {
+    return activeWorker === id;
+  };
   const handleNext = () => {
     setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
   };
@@ -97,6 +102,8 @@ export default function DrawerExample({
   useEffect(() => {
     console.log(services);
   }, [services]);
+
+  console.log(activeWorker);
 
   return (
     <Drawer
@@ -145,7 +152,6 @@ export default function DrawerExample({
             {activeStep === 1 && (
               <Stack spacing="20px" px={2}>
                 <Box>
-                  <FormLabel>Izaberi kategoriju</FormLabel>
                   <Select
                     cursor="pointer"
                     placeholder="Izaberi kategoriju"
@@ -161,7 +167,6 @@ export default function DrawerExample({
                   </Select>
                 </Box>
                 <Box>
-                  <FormLabel>Izaberi uslugu</FormLabel>
                   <Select
                     placeholder="Izaberi uslugu"
                     cursor="pointer"
@@ -181,21 +186,28 @@ export default function DrawerExample({
                   </Select>
                 </Box>
 
-                <ChoseStaff
-                  //  data={workers.filter(worker => activeService === worker)}
-                  data={workers}
-                  isWorkerActive={isWorkerActive}
-                  handleButtonClick={handleButtonClick}
-                />
+                <Stack spacing={2}>
+                  <Text color="blue">Izaberi radnika</Text>
+                  <ChoseStaff
+                    //  data={workers.filter(worker => activeService === worker)}
+                    data={workers}
+                    isWorkerActive={isWorkerActive}
+                    handleButtonClick={handleButtonClick}
+                  />
+                </Stack>
               </Stack>
             )}
 
             {activeStep === 2 && (
               <Stack spacing="20px" px={2}>
-                <Calendar onClickDay={onClickDay} value={day} />
-                <VStack align="start">
+                <Stack spacing={0}>
+                  <Text color="blue">Izaberi datum</Text>
+                  <Calendar onClickDay={onClickDay} value={day} />
+                </Stack>
+
+                <VStack align="start" spacing={0}>
                   <FormLabel>Izaberi termin</FormLabel>
-                  <SimpleGrid columns={4} spacing="10px">
+                  <SimpleGrid gap={3} columns={4} spacing="10px">
                     <Button
                       colorScheme="#2D3748"
                       variant="outline"
@@ -211,28 +223,42 @@ export default function DrawerExample({
                     >
                       13:00
                     </Button>
+                    <Button
+                      colorScheme="#2D3748"
+                      variant="outline"
+                      _hover={{ bg: "#ebedf0" }}
+                    >
+                      14:00
+                    </Button>
+                    <Button
+                      colorScheme="#2D3748"
+                      variant="outline"
+                      _hover={{ bg: "#ebedf0" }}
+                    >
+                      15:00
+                    </Button>
                   </SimpleGrid>
                 </VStack>
               </Stack>
             )}
             {activeStep === 3 && (
               <Stack spacing="20px">
-                <Box>
+                <Stack spacing={0}>
                   <FormLabel htmlFor="fullName">Ime i prezime</FormLabel>
                   <Input
                     ref={firstField}
                     id="fullName"
                     placeholder="Unesi ime i prezime"
                   />
-                </Box>
-                <Box>
+                </Stack>
+                <Stack spacing={0}>
                   <FormLabel htmlFor="number">Broj telefona</FormLabel>
                   <Input id="number" placeholder="Broj telefona" />
-                </Box>
-                <Box>
+                </Stack>
+                <Stack spacing={0}>
                   <FormLabel htmlFor="desc">Napomena</FormLabel>
                   <Textarea id="desc" />
-                </Box>
+                </Stack>
               </Stack>
             )}
           </DrawerBody>

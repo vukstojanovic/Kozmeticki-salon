@@ -38,7 +38,10 @@ const Services = () => {
       position="relative"
     >
       <Stack display="flex" direction="column" spacing={{ base: 0, md: 3 }}>
-        <Heading variant={{ base: "customH2Mob", md: "customH2" }}>
+        <Heading
+          variant={{ base: "customH2Mob", md: "customH2" }}
+          lineHeight="52px"
+        >
           Usluge
         </Heading>
         <Text fontSize={{ base: "15px", md: "xl" }} color="black">

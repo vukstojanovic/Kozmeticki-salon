@@ -9,11 +9,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
+import { Workers } from "../../../services/index";
 
 interface ChoseStaffProps {
   data: any;
-  isWorkerActive: any;
-  handleButtonClick: any;
+  isWorkerActive: (id: string) => boolean;
+  handleButtonClick: (id: string) => void;
 }
 
 const ChoseStaff: React.FC<ChoseStaffProps> = ({
@@ -22,8 +23,10 @@ const ChoseStaff: React.FC<ChoseStaffProps> = ({
   handleButtonClick,
 }) => {
   return (
-    <Flex gap={3}>
-      {data?.data?.map((worker: { id: number; name: string }) => {
+    <Flex gap={2} justify="center" align="center">
+      {data?.data?.map((worker: { id: string; name: string }) => {
+        const isActive = isWorkerActive(worker.id);
+
         return (
           <Flex
             direction="column"
@@ -31,20 +34,16 @@ const ChoseStaff: React.FC<ChoseStaffProps> = ({
             onClick={() => handleButtonClick(worker.id)}
             align="center"
             gap={2}
+            border={isActive ? "1px solid darkgray" : "0.5px solid lightgray"}
+            p={2}
+            borderRadius="10px"
+            cursor="pointer"
           >
             <Image
               borderRadius="full"
               src="https://bit.ly/dan-abramov"
               alt="Dan Abramov"
             />
-            {/* {isWorkerActive(worker.id) && (
-                <Avatar
-                  bg="green"
-                  position="absolute"
-                  icon={<CheckIcon fontSize="1rem" color="white" />}
-                  opacity="75%"
-                />
-              )} */}
             <Text>{worker.name}</Text>
           </Flex>
         );
