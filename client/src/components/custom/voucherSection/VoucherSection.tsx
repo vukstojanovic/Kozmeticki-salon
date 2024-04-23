@@ -41,7 +41,7 @@ const VaucherSection = () => {
       <Image
         src={vaucher}
         alt="Vaucher"
-        height={{ base: "260px", md: "350px" }}
+        height={{ base: "260px", md: "250px" }}
       />
     </Stack>
   );

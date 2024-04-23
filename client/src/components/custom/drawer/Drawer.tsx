@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -48,6 +48,7 @@ export default function DrawerExample({
 
   const [activeWorker, setActiveWorker] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<string>("");
+  const [activeService, setActiveService] = useState<string>("");
 
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -69,8 +70,14 @@ export default function DrawerExample({
     setActiveWorker(id);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeCategory = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setActiveCategory(event.target.value);
+  };
+
+  const handleChangeService = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setActiveService(event.target.value);
   };
 
   const isWorkerActive = (id: string) => activeWorker === id;
@@ -87,7 +94,9 @@ export default function DrawerExample({
     setIsSubmitted(true);
   };
 
-  console.log(activeCategory);
+  useEffect(() => {
+    console.log(services);
+  }, [services]);
 
   return (
     <Drawer
@@ -140,7 +149,7 @@ export default function DrawerExample({
                   <Select
                     cursor="pointer"
                     placeholder="Izaberi kategoriju"
-                    onChange={handleChange}
+                    onChange={handleChangeCategory}
                   >
                     {categories?.data?.map((category: Category) => {
                       return (
@@ -153,7 +162,11 @@ export default function DrawerExample({
                 </Box>
                 <Box>
                   <FormLabel>Izaberi uslugu</FormLabel>
-                  <Select placeholder="Izaberi uslugu" cursor="pointer">
+                  <Select
+                    placeholder="Izaberi uslugu"
+                    cursor="pointer"
+                    onChange={handleChangeService}
+                  >
                     {services?.data
                       ?.filter(
                         service => service.category_id === activeCategory
@@ -169,6 +182,7 @@ export default function DrawerExample({
                 </Box>
 
                 <ChoseStaff
+                  //  data={workers.filter(worker => activeService === worker)}
                   data={workers}
                   isWorkerActive={isWorkerActive}
                   handleButtonClick={handleButtonClick}
