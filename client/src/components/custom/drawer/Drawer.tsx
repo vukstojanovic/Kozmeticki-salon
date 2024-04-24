@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import {
   Box,
   Button,
@@ -37,6 +39,16 @@ const steps = [
   { title: "Treći", description: "Kontakt Info" },
 ];
 
+const schema = yup.object({
+  date: yup.number().required(),
+  service_id: yup.string().required(),
+  // service_duration: yup.number().required(),
+  worker_id: yup.string().required(),
+  customer_name: yup.string().required(),
+  customer_number: yup.string().required(),
+  notes: yup.string(),
+});
+
 export default function DrawerExample({
   isOpen,
   onClose,
@@ -45,6 +57,13 @@ export default function DrawerExample({
   onClose: any;
 }) {
   const [date, setDate] = useState<Date>(new Date());
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: schema,
+  });
 
   const [activeWorker, setActiveWorker] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("");
@@ -95,8 +114,8 @@ export default function DrawerExample({
     setActiveStep(prevStep => Math.max(prevStep - 1, 1));
   };
 
-  const handleSubmit = () => {
-    setIsSubmitted(true);
+  const submitForm = (data: any) => {
+    console.log(data);
   };
 
   useEffect(() => {
@@ -145,123 +164,125 @@ export default function DrawerExample({
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">Zakaži termin</DrawerHeader>
-          <DrawerBody display="flex" flexDirection="column" p={4}>
-            <CustomStepper activeStep={activeStep} steps={steps} />
-            <Divider mt={2} mb={5} orientation="horizontal" />
+          <form onSubmit={submitForm}>
+            <DrawerBody display="flex" flexDirection="column" p={4}>
+              <CustomStepper activeStep={activeStep} steps={steps} />
+              <Divider mt={2} mb={5} orientation="horizontal" />
 
-            {activeStep === 1 && (
-              <Stack spacing="20px" px={2}>
-                <Box>
-                  <Select
-                    cursor="pointer"
-                    placeholder="Izaberi kategoriju"
-                    onChange={handleChangeCategory}
-                  >
-                    {categories?.data?.map((category: Category) => {
-                      return (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                </Box>
-                <Box>
-                  <Select
-                    placeholder="Izaberi uslugu"
-                    cursor="pointer"
-                    onChange={handleChangeService}
-                  >
-                    {services?.data
-                      ?.filter(
-                        service => service.category_id === activeCategory
-                      )
-                      .map((service: Service) => {
+              {activeStep === 1 && (
+                <Stack spacing="20px" px={2}>
+                  <Box>
+                    <Select
+                      cursor="pointer"
+                      placeholder="Izaberi kategoriju"
+                      onChange={handleChangeCategory}
+                    >
+                      {categories?.data?.map((category: Category) => {
                         return (
-                          <option key={service.id} value={service.name}>
-                            {service.name}
+                          <option key={category.id} value={category.id}>
+                            {category.name}
                           </option>
                         );
                       })}
-                  </Select>
-                </Box>
+                    </Select>
+                  </Box>
+                  <Box>
+                    <Select
+                      placeholder="Izaberi uslugu"
+                      cursor="pointer"
+                      onChange={handleChangeService}
+                    >
+                      {services?.data
+                        ?.filter(
+                          service => service.category_id === activeCategory
+                        )
+                        .map((service: Service) => {
+                          return (
+                            <option key={service.id} value={service.name}>
+                              {service.name}
+                            </option>
+                          );
+                        })}
+                    </Select>
+                  </Box>
 
-                <Stack spacing={2}>
-                  <Text color="blue">Izaberi radnika</Text>
-                  <ChoseStaff
-                    //  data={workers.filter(worker => activeService === worker)}
-                    data={workers}
-                    isWorkerActive={isWorkerActive}
-                    handleButtonClick={handleButtonClick}
-                  />
+                  <Stack spacing={2}>
+                    <Text color="blue">Izaberi radnika</Text>
+                    <ChoseStaff
+                      //  data={workers.filter(worker => activeService === worker)}
+                      data={workers}
+                      isWorkerActive={isWorkerActive}
+                      handleButtonClick={handleButtonClick}
+                    />
+                  </Stack>
                 </Stack>
-              </Stack>
-            )}
+              )}
 
-            {activeStep === 2 && (
-              <Stack spacing="20px" px={2}>
-                <Stack spacing={0}>
-                  <Text color="blue">Izaberi datum</Text>
-                  <Calendar onClickDay={onClickDay} value={date} />
-                </Stack>
+              {activeStep === 2 && (
+                <Stack spacing="20px" px={2}>
+                  <Stack spacing={0}>
+                    <Text color="blue">Izaberi datum</Text>
+                    <Calendar onClickDay={onClickDay} value={date} />
+                  </Stack>
 
-                <VStack align="start" spacing={0}>
-                  <FormLabel>Izaberi termin</FormLabel>
-                  <SimpleGrid gap={3} columns={4} spacing="10px">
-                    <Button
-                      colorScheme="#2D3748"
-                      variant="outline"
-                      _hover={{ bg: "#ebedf0" }}
-                    >
-                      12:00
-                    </Button>
-                    <Button
-                      colorScheme="#2D3748"
-                      variant="outline"
-                      _hover={{ bg: "#ebedf0" }}
-                      isDisabled={true}
-                    >
-                      13:00
-                    </Button>
-                    <Button
-                      colorScheme="#2D3748"
-                      variant="outline"
-                      _hover={{ bg: "#ebedf0" }}
-                    >
-                      14:00
-                    </Button>
-                    <Button
-                      colorScheme="#2D3748"
-                      variant="outline"
-                      _hover={{ bg: "#ebedf0" }}
-                    >
-                      15:00
-                    </Button>
-                  </SimpleGrid>
-                </VStack>
-              </Stack>
-            )}
-            {activeStep === 3 && (
-              <Stack spacing="20px">
-                <Stack spacing={0}>
-                  <FormLabel htmlFor="fullName">Ime i prezime</FormLabel>
-                  <Input
-                    ref={firstField}
-                    id="fullName"
-                    placeholder="Unesi ime i prezime"
-                  />
+                  <VStack align="start" spacing={0}>
+                    <FormLabel>Izaberi termin</FormLabel>
+                    <SimpleGrid gap={3} columns={4} spacing="10px">
+                      <Button
+                        colorScheme="#2D3748"
+                        variant="outline"
+                        _hover={{ bg: "#ebedf0" }}
+                      >
+                        12:00
+                      </Button>
+                      <Button
+                        colorScheme="#2D3748"
+                        variant="outline"
+                        _hover={{ bg: "#ebedf0" }}
+                        isDisabled={true}
+                      >
+                        13:00
+                      </Button>
+                      <Button
+                        colorScheme="#2D3748"
+                        variant="outline"
+                        _hover={{ bg: "#ebedf0" }}
+                      >
+                        14:00
+                      </Button>
+                      <Button
+                        colorScheme="#2D3748"
+                        variant="outline"
+                        _hover={{ bg: "#ebedf0" }}
+                      >
+                        15:00
+                      </Button>
+                    </SimpleGrid>
+                  </VStack>
                 </Stack>
-                <Stack spacing={0}>
-                  <FormLabel htmlFor="number">Broj telefona</FormLabel>
-                  <Input id="number" placeholder="Broj telefona" />
+              )}
+              {activeStep === 3 && (
+                <Stack spacing="20px">
+                  <Stack spacing={0}>
+                    <FormLabel htmlFor="fullName">Ime i prezime</FormLabel>
+                    <Input
+                      ref={firstField}
+                      id="fullName"
+                      placeholder="Unesi ime i prezime"
+                    />
+                  </Stack>
+                  <Stack spacing={0}>
+                    <FormLabel htmlFor="number">Broj telefona</FormLabel>
+                    <Input id="number" placeholder="Broj telefona" />
+                  </Stack>
+                  <Stack spacing={0}>
+                    <FormLabel htmlFor="desc">Napomena</FormLabel>
+                    <Textarea id="desc" />
+                  </Stack>
                 </Stack>
-                <Stack spacing={0}>
-                  <FormLabel htmlFor="desc">Napomena</FormLabel>
-                  <Textarea id="desc" />
-                </Stack>
-              </Stack>
-            )}
-          </DrawerBody>
+              )}
+            </DrawerBody>
+          </form>
 
           <DrawerFooter borderTopWidth="1px">
             {activeStep === 1 ? (
@@ -285,9 +306,7 @@ export default function DrawerExample({
             )}
 
             {activeStep === steps.length ? (
-              <Button variant="blue" onClick={handleSubmit}>
-                Potvrdi
-              </Button>
+              <Button variant="blue">Potvrdi</Button>
             ) : (
               <Button variant="blue" onClick={handleNext}>
                 Dalje
