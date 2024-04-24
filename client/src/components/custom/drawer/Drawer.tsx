@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useRef } from "react";
+import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Button,
@@ -61,9 +62,8 @@ export default function DrawerExample({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: schema,
-  });
+    control,
+  } = useForm({ resolver: yupResolver(schema) });
 
   const [activeWorker, setActiveWorker] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("");
@@ -107,22 +107,18 @@ export default function DrawerExample({
     return activeWorker === id;
   };
   const handleNext = () => {
-    setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
+    setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
   };
 
   const handlePrev = () => {
-    setActiveStep(prevStep => Math.max(prevStep - 1, 1));
+    setActiveStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
   const submitForm = (data: any) => {
-    console.log(data);
+    if (activeStep === steps.length) {
+      console.log(data, "data");
+    }
   };
-
-  useEffect(() => {
-    console.log(services);
-  }, [services]);
-
-  console.log(date);
 
   return (
     <Drawer
@@ -161,10 +157,10 @@ export default function DrawerExample({
           </DrawerFooter>
         </DrawerContent>
       ) : (
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">Zakaži termin</DrawerHeader>
-          <form onSubmit={submitForm}>
+        <form onSubmit={handleSubmit(submitForm)}>
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader borderBottomWidth="1px">Zakaži termin</DrawerHeader>
             <DrawerBody display="flex" flexDirection="column" p={4}>
               <CustomStepper activeStep={activeStep} steps={steps} />
               <Divider mt={2} mb={5} orientation="horizontal" />
@@ -187,23 +183,31 @@ export default function DrawerExample({
                     </Select>
                   </Box>
                   <Box>
-                    <Select
-                      placeholder="Izaberi uslugu"
-                      cursor="pointer"
-                      onChange={handleChangeService}
-                    >
-                      {services?.data
-                        ?.filter(
-                          service => service.category_id === activeCategory
-                        )
-                        .map((service: Service) => {
-                          return (
-                            <option key={service.id} value={service.name}>
-                              {service.name}
-                            </option>
-                          );
-                        })}
-                    </Select>
+                    <Controller
+                      control={control}
+                      name="service_id"
+                      render={({ field: { onChange, value } }) => (
+                        <Select
+                          placeholder="Izaberi uslugu"
+                          cursor="pointer"
+                          onChange={onChange}
+                          value={value}
+                        >
+                          {services?.data
+                            ?.filter(
+                              (service) =>
+                                service.category_id === activeCategory
+                            )
+                            .map((service: Service) => {
+                              return (
+                                <option key={service.id} value={service.id}>
+                                  {service.name}
+                                </option>
+                              );
+                            })}
+                        </Select>
+                      )}
+                    />
                   </Box>
 
                   <Stack spacing={2}>
@@ -266,54 +270,61 @@ export default function DrawerExample({
                   <Stack spacing={0}>
                     <FormLabel htmlFor="fullName">Ime i prezime</FormLabel>
                     <Input
-                      ref={firstField}
+                      // ref={firstField}
                       id="fullName"
                       placeholder="Unesi ime i prezime"
+                      {...register("customer_name")}
                     />
                   </Stack>
                   <Stack spacing={0}>
                     <FormLabel htmlFor="number">Broj telefona</FormLabel>
-                    <Input id="number" placeholder="Broj telefona" />
+                    <Input
+                      id="number"
+                      placeholder="Broj telefona"
+                      {...register("customer_number")}
+                    />
                   </Stack>
                   <Stack spacing={0}>
                     <FormLabel htmlFor="desc">Napomena</FormLabel>
-                    <Textarea id="desc" />
+                    <Textarea id="desc" {...register("notes")} />
                   </Stack>
                 </Stack>
               )}
             </DrawerBody>
-          </form>
 
-          <DrawerFooter borderTopWidth="1px">
-            {activeStep === 1 ? (
-              <Button
-                variant="outline"
-                mr={3}
-                onClick={onClose}
-                disabled={activeStep === 1}
-              >
-                Izadji
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                mr={3}
-                onClick={handlePrev}
-                disabled={activeStep === 1}
-              >
-                Nazad
-              </Button>
-            )}
+            <DrawerFooter borderTopWidth="1px">
+              {activeStep === 1 ? (
+                <Button
+                  variant="outline"
+                  mr={3}
+                  onClick={onClose}
+                  disabled={activeStep === 1}
+                >
+                  Izadji
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  mr={3}
+                  onClick={handlePrev}
+                  disabled={activeStep === 1}
+                >
+                  Nazad
+                </Button>
+              )}
 
-            {activeStep === steps.length ? (
-              <Button variant="blue">Potvrdi</Button>
-            ) : (
-              <Button variant="blue" onClick={handleNext}>
-                Dalje
-              </Button>
-            )}
-          </DrawerFooter>
-        </DrawerContent>
+              {activeStep === steps.length ? (
+                <Button variant="blue" type="submit">
+                  Potvrdi
+                </Button>
+              ) : (
+                <Button variant="blue" onClick={handleNext}>
+                  Dalje
+                </Button>
+              )}
+            </DrawerFooter>
+          </DrawerContent>
+        </form>
       )}
     </Drawer>
   );
