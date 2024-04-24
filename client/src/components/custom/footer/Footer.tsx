@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Box,
-  Text,
-  IconButton,
-  Img,
-  Stack,
-  Icon,
-  HStack,
-} from "@chakra-ui/react";
+import { Box, Text, IconButton, Img, Stack, Icon } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebookF, FaPhone } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
@@ -64,28 +56,38 @@ export default function Footer() {
           </Stack>
 
           <Stack direction="row" spacing={3}>
-            <IconButton
-              border="1px solid white"
-              borderRadius="full"
-              isRound={true}
-              aria-label="Instagram"
-              color="#EFEEED"
-              icon={<FaInstagram size={20} />}
-              variant="none"
-              h="38px"
-              minW="38px"
-            />
-            <IconButton
-              border="1px solid white"
-              borderRadius="full"
-              isRound={true}
-              aria-label="Facebook"
-              color="#EFEEED"
-              icon={<FaFacebookF size={18} />}
-              variant="none"
-              h="38px"
-              minW="38px"
-            />
+            <Link
+              to="https://www.instagram.com/beauty_corner__marija/"
+              color="white"
+            >
+              <IconButton
+                border="1px solid white"
+                borderRadius="full"
+                isRound={true}
+                aria-label="Instagram"
+                color="#EFEEED"
+                icon={<FaInstagram size={20} />}
+                variant="none"
+                h="38px"
+                minW="38px"
+              />
+            </Link>
+            <Link
+              to="https://m.facebook.com/p/Kozmeti%C4%8Dki-salon-Beauty-Corner-100064815321266/"
+              color="white"
+            >
+              <IconButton
+                border="1px solid white"
+                borderRadius="full"
+                isRound={true}
+                aria-label="Facebook"
+                color="#EFEEED"
+                icon={<FaFacebookF size={18} />}
+                variant="none"
+                h="38px"
+                minW="38px"
+              />
+            </Link>
           </Stack>
         </Stack>
         <Stack

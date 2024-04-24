@@ -44,7 +44,7 @@ export default function DrawerExample({
   isOpen: any;
   onClose: any;
 }) {
-  const [day, setDay] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
 
   const [activeWorker, setActiveWorker] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("");
@@ -60,8 +60,8 @@ export default function DrawerExample({
   );
   const { data: services } = useQuery(["services"], apiServices.getServices);
 
-  const onClickDay = (day: Date) => {
-    setDay(day);
+  const onClickDay = (date: Date) => {
+    setDate(date);
   };
 
   const firstField = useRef<HTMLInputElement>(null);
@@ -103,7 +103,7 @@ export default function DrawerExample({
     console.log(services);
   }, [services]);
 
-  console.log(activeWorker);
+  console.log(date);
 
   return (
     <Drawer
@@ -202,7 +202,7 @@ export default function DrawerExample({
               <Stack spacing="20px" px={2}>
                 <Stack spacing={0}>
                   <Text color="blue">Izaberi datum</Text>
-                  <Calendar onClickDay={onClickDay} value={day} />
+                  <Calendar onClickDay={onClickDay} value={date} />
                 </Stack>
 
                 <VStack align="start" spacing={0}>

@@ -6,6 +6,7 @@ import {
   Center,
   Icon,
   useMediaQuery,
+  IconButton,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
@@ -42,7 +43,7 @@ const FollowUsSection = () => {
       />
       <Stack
         direction="column"
-        gap={{ base: 3, md: 6 }}
+        gap={{ base: 3, md: 4 }}
         zIndex={1}
         px={{ base: "5%", md: 0 }}
       >
@@ -65,13 +66,33 @@ const FollowUsSection = () => {
             to="https://www.instagram.com/beauty_corner__marija/"
             color="white"
           >
-            <Icon as={FaInstagram} boxSize={{ base: "28px", md: "32px" }} />
+            <IconButton
+              border="1px solid white"
+              borderRadius="full"
+              isRound={true}
+              aria-label="Instagram"
+              color="#EFEEED"
+              icon={<FaInstagram size={20} />}
+              variant="none"
+              h="38px"
+              minW="38px"
+            />
           </Link>
           <Link
             to="https://m.facebook.com/p/Kozmeti%C4%8Dki-salon-Beauty-Corner-100064815321266/"
             color="white"
           >
-            <Icon as={FaFacebookF} boxSize={{ base: "24px", md: "28px" }} />
+            <IconButton
+              border="1px solid white"
+              borderRadius="full"
+              isRound={true}
+              aria-label="Facebook"
+              color="#EFEEED"
+              icon={<FaFacebookF size={18} />}
+              variant="none"
+              h="38px"
+              minW="38px"
+            />
           </Link>
         </Stack>
       </Stack>
@@ -88,7 +109,7 @@ const FollowUsSection = () => {
       )}
       <Stack
         direction="column"
-        gap={{ base: 3, md: 6 }}
+        gap={{ base: 3, md: 4 }}
         zIndex={1}
         px={{ base: "5%", md: 0 }}
       >

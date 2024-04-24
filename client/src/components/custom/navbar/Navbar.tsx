@@ -6,10 +6,10 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 import logo from "../../../assets/logo.png";
 import Links from "./links/Links";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import Sidebar from "../sidebar/Sidebar";
 
 export default function Navbar() {

@@ -26,7 +26,7 @@ function App() {
   ) : (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/admin" element={isAuthenticated ? <Admin /> : <Login />} />
+      <Route path="/admin" element={isAuthenticated ? <Admin /> : <Admin />} />
     </Routes>
   );
 }
