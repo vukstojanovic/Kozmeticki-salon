@@ -12,9 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import apiServices from "./services";
+import apiServices from "../../services";
 import { useQuery } from "@tanstack/react-query";
-import { Category } from "./services";
+import { Category } from "../../services";
 
 type AddCategoryModalProps = {
   isOpen: boolean;

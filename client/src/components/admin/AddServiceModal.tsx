@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { ServiceType } from "./services";
-import apiServices from "./services";
+import { ServiceType } from "../../services";
+import apiServices from "../../services";
 import {
   Input,
   Button,

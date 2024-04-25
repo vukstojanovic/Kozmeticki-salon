@@ -1,5 +1,5 @@
 import { useState } from "react";
-import apiServices from "./services";
+import apiServices from "../../../../services";
 import {
   Text,
   Spinner,
@@ -13,10 +13,10 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import EditDeleteCategory from "./EditDeleteCategory";
-import EditDeleteService from "./EditDeleteService";
-import AddCategoryModal from "./AddCategoryModal";
-import AddServiceModal from "./AddServiceModal";
+import EditDeleteCategory from "../../EditDeleteCategory";
+import EditDeleteService from "../../EditDeleteService";
+import AddCategoryModal from "../../AddCategoryModal";
+import AddServiceModal from "../../AddServiceModal";
 import {
   Table,
   Thead,
@@ -34,7 +34,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { IoMdSettings } from "react-icons/io";
 import { FaCirclePlus } from "react-icons/fa6";
 
-export default function CategoryAdmin() {
+export default function CategoriesAdmin() {
   const {
     data: categoriesData,
     isLoading: categoriesLoading,

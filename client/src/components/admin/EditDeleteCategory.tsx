@@ -13,8 +13,8 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Category } from "./services";
-import apiServices from "./services";
+import { Category } from "../../services";
+import apiServices from "../../services";
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 

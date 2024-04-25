@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import apiServices from "./services";
+import apiServices from "../../../../services";
 import {
   Input,
   Button,
@@ -10,8 +10,8 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { WorkersType } from "./services";
-import EditDeleteWorkers from "./EditDeleteWorkers";
+import { WorkersType } from "../../../../services";
+import EditDeleteWorkers from "../../EditDeleteWorkers";
 
 export default function WorkersAdmin() {
   const {

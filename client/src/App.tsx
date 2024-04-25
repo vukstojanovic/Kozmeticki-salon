@@ -4,8 +4,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Admin from "./Admin";
 import Home from "./Home";
-import Loader from "./components/custom/loader/Loader";
-import Login from "./components/custom/login/Login";
+import Loader from "./components/client/loader/Loader";
+import Login from "./components/client/login/Login";
 
 function App() {
   const [isAuthenticated] = useState(true);

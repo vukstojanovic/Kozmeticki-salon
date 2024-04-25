@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Icon, useMediaQuery, useDisclosure, Box } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-import AdminSidebar from "./components/adminSidebar/AdminSidebar";
-import AdminFullCalendar from "./components/custom/adminFullCalendar/adminFullCalendar";
-import CategoryAdmin from "./CategoryAdmin";
-import WorkersAdmin from "./WorkersAdmin";
+import AdminSidebar from "./components/admin/adminSidebar/AdminSidebar";
+import AdminFullCalendar from "./components/admin/tabs/adminFullCalendar/adminFullCalendar";
+import WorkersAdmin from "./components/admin/tabs/workersAdmin/WorkersAdmin";
+import CategoriesAdmin from "./components/admin/tabs/categoriesAdmin/CategoriesAdmin";
 
 const Admin = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -39,7 +39,7 @@ const Admin = () => {
         px={{ base: "3%", md: "1%" }}
       >
         {selectedIndex === 0 && <AdminFullCalendar />}
-        {selectedIndex === 1 && <CategoryAdmin />}
+        {selectedIndex === 1 && <CategoriesAdmin />}
         {selectedIndex === 2 && <WorkersAdmin />}
       </Box>
       <AdminSidebar

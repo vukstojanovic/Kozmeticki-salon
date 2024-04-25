@@ -12,7 +12,7 @@ import {
   Icon,
   useMediaQuery,
 } from "@chakra-ui/react";
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoGridOutline } from "react-icons/io5";
@@ -45,10 +45,11 @@ export default function AdminSidebar({
       onClose={onClose}
       isOpen={isOpen}
       variant="secondary"
+      closeOnOverlayClick={isLargerThan768 && false}
     >
       <DrawerOverlay background="none" />
       <DrawerContent backgroundColor="darkBlue">
-        <DrawerHeader>
+        <DrawerHeader alignSelf="center">
           <Img src={logo} alt="logo" h={107} w={150} />
         </DrawerHeader>
         {!isLargerThan768 && <DrawerCloseButton color="lightGray" />}

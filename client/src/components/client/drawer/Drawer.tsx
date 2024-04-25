@@ -107,11 +107,11 @@ export default function DrawerExample({
     return activeWorker === id;
   };
   const handleNext = () => {
-    setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
+    setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
   };
 
   const handlePrev = () => {
-    setActiveStep((prevStep) => Math.max(prevStep - 1, 1));
+    setActiveStep(prevStep => Math.max(prevStep - 1, 1));
   };
 
   const submitForm = (data: any) => {
@@ -195,8 +195,7 @@ export default function DrawerExample({
                         >
                           {services?.data
                             ?.filter(
-                              (service) =>
-                                service.category_id === activeCategory
+                              service => service.category_id === activeCategory
                             )
                             .map((service: Service) => {
                               return (

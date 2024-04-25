@@ -1,12 +1,12 @@
 import { Container, VStack } from "@chakra-ui/react";
 import "./App.scss";
-import Header from "./components/custom/header/Header";
-import Footer from "./components/custom/footer/Footer";
-import Services from "./components/custom/services/Services";
-import FollowUsSection from "./components/custom/followUsSection/FollowUsSection";
-import AboutUs from "./components/custom/aboutUs/AboutUs";
-import VaucherSection from "./components/custom/voucherSection/VoucherSection";
-import WorkHoursSection from "./components/custom/workHoursSection/WorkHoursSection";
+import Header from "./components/client/header/Header";
+import Footer from "./components/client/footer/Footer";
+import Services from "./components/client/services/Services";
+import FollowUsSection from "./components/client/followUsSection/FollowUsSection";
+import AboutUs from "./components/client/aboutUs/AboutUs";
+import VaucherSection from "./components/client/voucherSection/VoucherSection";
+import WorkHoursSection from "./components/client/workHoursSection/WorkHoursSection";
 
 const Home = () => {
   return (

@@ -9,8 +9,8 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { WorkersType } from "./services";
-import apiServices from "./services";
+import { WorkersType } from "../../services";
+import apiServices from "../../services";
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardFooter } from "@chakra-ui/react";
