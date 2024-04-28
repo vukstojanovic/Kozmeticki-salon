@@ -11,7 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { WorkersType } from "../../../../services";
-import EditDeleteWorkers from "../../EditDeleteWorkers";
+import EditDeleteWorkers from "./EditDeleteWorkers";
+import { AddIcon } from "@chakra-ui/icons";
 
 export default function WorkersAdmin() {
   const {
@@ -77,8 +78,13 @@ export default function WorkersAdmin() {
         />
         <input {...register("image")} type="file" />
 
-        <Button bgColor="#EAA89F" color="white" type="submit">
-          Add Worker
+        <Button
+          rightIcon={<AddIcon boxSize={3} />}
+          bgColor="#EA5A29"
+          color="white"
+          type="submit"
+        >
+          Dodaj zaposlenog
         </Button>
       </form>
       <SimpleGrid minChildWidth="120px" spacing="10px">

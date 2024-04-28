@@ -33,6 +33,7 @@ import { useState } from "react";
 import Calendar from "../calendar/Calendar";
 import CustomStepper from "../customStepper/CustomStepper";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { WorkersRadio } from "../workersRadio/WorkersRadio";
 
 const steps = [
   { title: "Prvi", description: "Usluga & Osoblje" },
@@ -63,7 +64,7 @@ export default function DrawerExample({
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm();
 
   const [activeWorker, setActiveWorker] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("");
@@ -211,11 +212,16 @@ export default function DrawerExample({
 
                   <Stack spacing={2}>
                     <Text color="blue">Izaberi radnika</Text>
-                    <ChoseStaff
+                    {/* <ChoseStaff
                       //  data={workers.filter(worker => activeService === worker)}
                       data={workers}
                       isWorkerActive={isWorkerActive}
                       handleButtonClick={handleButtonClick}
+                    /> */}
+                    <WorkersRadio
+                      control={control}
+                      name="workers_id"
+                      allWorkers={workers}
                     />
                   </Stack>
                 </Stack>

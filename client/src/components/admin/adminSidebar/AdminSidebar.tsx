@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import logo from "../../../assets/logo.png";
+import "./adminSidebar.scss";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoGridOutline } from "react-icons/io5";
@@ -45,9 +46,9 @@ export default function AdminSidebar({
       onClose={onClose}
       isOpen={isOpen}
       variant="secondary"
-      closeOnOverlayClick={isLargerThan768 && false}
+      closeOnOverlayClick={!isLargerThan768 && true}
     >
-      <DrawerOverlay background="none" />
+      {!isLargerThan768 && <DrawerOverlay />}
       <DrawerContent backgroundColor="darkBlue">
         <DrawerHeader alignSelf="center">
           <Img src={logo} alt="logo" h={107} w={150} />

@@ -9,8 +9,8 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { WorkersType } from "../../services";
-import apiServices from "../../services";
+import { WorkersType } from "../../../../services";
+import apiServices from "../../../../services";
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardFooter } from "@chakra-ui/react";
@@ -43,26 +43,24 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
   }
 
   return (
-    <Card maxW="sm" boxShadow="none">
+    <Card maxW="sm" bg="#F8FAFB" borderRadius="20px" boxShadow="xs">
       <CardBody>
         <Avatar
-          size="2xl"
+          size="xl"
           name="Segun Adebayo"
           src="https://bit.ly/sage-adebayo"
         />
         <Stack mt="6" spacing="3">
           <Heading size="md"> {name}</Heading>
-          <Text>
-            This sofa is perfect for modern tropical spaces, baroque inspired
-            spaces, earthy toned spaces and for people who love a chic design
-            with a sprinkle of vintage design.
-          </Text>
           <Text color="blue.600" fontSize="2xl">
             $450
           </Text>
         </Stack>
       </CardBody>
-      <Divider />
+      <Divider
+        color="lightGray
+      "
+      />
       <CardFooter>
         <form onSubmit={handleSubmit(data => updateWorker({ data, id }))}>
           <Flex justifyContent="space-between">
@@ -77,17 +75,18 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
               placeholder="Enter name..."
               {...register("name")}
             />
-            <Button bgColor="#EAA89F" color="white" type="submit">
-              Update
+            <Button variant="outline" type="submit">
+              Izmeni
             </Button>
           </Flex>
         </form>
         <Button
           onClick={() => deleteWorker(id)}
-          bgColor="#EAA89F"
+          colorScheme="red"
           color="white"
+          ml={3}
         >
-          Delete
+          Izbriši
         </Button>
       </CardFooter>
     </Card>
