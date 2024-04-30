@@ -33,7 +33,7 @@ import { useState } from "react";
 import Calendar from "../calendar/Calendar";
 import CustomStepper from "../customStepper/CustomStepper";
 import { FaRegCheckCircle } from "react-icons/fa";
-import { WorkersRadio } from "../workersRadio/WorkersRadio";
+import { WorkersRadioGroup } from "../workersRadio/WorkersRadioGroup";
 
 const steps = [
   { title: "Prvi", description: "Usluga & Osoblje" },
@@ -108,11 +108,11 @@ export default function DrawerExample({
     return activeWorker === id;
   };
   const handleNext = () => {
-    setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
+    setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
   };
 
   const handlePrev = () => {
-    setActiveStep(prevStep => Math.max(prevStep - 1, 1));
+    setActiveStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
   const submitForm = (data: any) => {
@@ -196,7 +196,8 @@ export default function DrawerExample({
                         >
                           {services?.data
                             ?.filter(
-                              service => service.category_id === activeCategory
+                              (service) =>
+                                service.category_id === activeCategory
                             )
                             .map((service: Service) => {
                               return (
@@ -212,13 +213,7 @@ export default function DrawerExample({
 
                   <Stack spacing={2}>
                     <Text color="blue">Izaberi radnika</Text>
-                    {/* <ChoseStaff
-                      //  data={workers.filter(worker => activeService === worker)}
-                      data={workers}
-                      isWorkerActive={isWorkerActive}
-                      handleButtonClick={handleButtonClick}
-                    /> */}
-                    <WorkersRadio
+                    <WorkersRadioGroup
                       control={control}
                       name="workers_id"
                       allWorkers={workers}
