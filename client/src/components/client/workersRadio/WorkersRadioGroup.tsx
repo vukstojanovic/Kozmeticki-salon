@@ -24,15 +24,14 @@ const WorkerRadio: React.FC<any> = forwardRef((props, ref) => {
         key={id}
         align="center"
         gap={2}
-        border={
-          state.isChecked ? "1px solid darkgray" : "0.5px solid lightgray"
-        }
-        p={2}
+        border={state.isChecked ? "1px solid darkgray" : "none"}
+        p={1}
         borderRadius="10px"
         cursor="pointer"
       >
         <Image
           borderRadius="full"
+          h="70px"
           src={image || "https://bit.ly/dan-abramov"}
           alt="Dan Abramov"
         />
@@ -57,16 +56,18 @@ export const WorkersRadioGroup: React.FC<any> = ({
   });
 
   return (
-    <Flex {...getRootProps()}>
+    <Flex {...getRootProps()} justify="space-between" align="center">
       {allWorkers?.data?.map((worker: { id: string; name: string }) => {
         return (
-          <WorkerRadio
-            key={worker.id}
-            workerName={worker.name}
-            id={worker.id}
-            //   image={worker.img}
-            {...getRadioProps({ value: worker.id })}
-          />
+          <>
+            <WorkerRadio
+              key={worker.id}
+              workerName={worker.name}
+              id={worker.id}
+              //   image={worker.img}
+              {...getRadioProps({ value: worker.id })}
+            />
+          </>
         );
       })}
     </Flex>

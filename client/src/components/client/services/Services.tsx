@@ -33,7 +33,8 @@ const Services = () => {
       direction="column"
       gap="5vh"
       w="full"
-      py={{ base: "15%", sm: "5%" }}
+      pb={{ base: "15%", sm: "10%" }}
+      pt={{ base: "15%", sm: "5%" }}
       px="7%"
       position="relative"
     >
@@ -66,7 +67,7 @@ const Services = () => {
               >
                 <Box
                   position="relative"
-                  width={{ base: "170px", md: "130px" }}
+                  width={{ base: "170px", md: "150px" }}
                   height={{ base: "130px", md: "160px" }}
                 >
                   <Image

@@ -26,7 +26,6 @@ import {
 } from "@chakra-ui/react";
 import { Category, Service } from "../../../services/index";
 
-import ChoseStaff from "../choseStaff/ChoseStaff";
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services/index";
 import { useState } from "react";
@@ -86,6 +85,9 @@ export default function DrawerExample({
 
   const firstField = useRef<HTMLInputElement>(null);
 
+  console.log(services);
+  console.log(categories);
+
   const handleButtonClick = (id: string) => {
     if (activeWorker === id) {
       setActiveWorker(null);
@@ -108,11 +110,11 @@ export default function DrawerExample({
     return activeWorker === id;
   };
   const handleNext = () => {
-    setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
+    setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
   };
 
   const handlePrev = () => {
-    setActiveStep((prevStep) => Math.max(prevStep - 1, 1));
+    setActiveStep(prevStep => Math.max(prevStep - 1, 1));
   };
 
   const submitForm = (data: any) => {
@@ -196,8 +198,7 @@ export default function DrawerExample({
                         >
                           {services?.data
                             ?.filter(
-                              (service) =>
-                                service.category_id === activeCategory
+                              service => service.category_id === activeCategory
                             )
                             .map((service: Service) => {
                               return (
