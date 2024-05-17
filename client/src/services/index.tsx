@@ -66,10 +66,11 @@ const apiServices = {
 
   updateCategory: ({ data, id }: any) =>
     axiosInstance.put<CategoryType, null>(`/categories/${id}`, data),
+
   getServices: () => axiosInstance.get<null, ServicesData>("/services"),
 
-  addService: (serviceData: ServiceType) =>
-    axiosInstance.post<ServiceType, null>("/services", serviceData),
+  addService: (serviceData: Service) =>
+    axiosInstance.post<Service, null>("/services", serviceData),
 
   deleteService: (id: string) =>
     axiosInstance.delete<null, string>(`/services/${id}`),

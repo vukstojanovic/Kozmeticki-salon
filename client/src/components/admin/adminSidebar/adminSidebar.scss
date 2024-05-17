@@ -1,6 +1,12 @@
-.chakra-modal__content-container {
-  width: unset;
+.css-17pwl6t {
+  width: unset !important;
   @media (max-width: 768px) {
     width: 100%;
+  }
+}
+
+.css-1ril9ce {
+  @media (min-width: 768px) {
+    transform: unset !important;
   }
 }
