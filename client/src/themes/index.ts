@@ -65,11 +65,25 @@ const theme = extendTheme({
             bg: "blue",
           },
         },
+        red: {
+          backgroundColor: "red",
+          color: "white",
+          _hover: {
+            bg: "red",
+          },
+        },
       },
     },
     IconButton: {
       variants: {
         blue: {
+          backgroundColor: "#EA5A29",
+          color: "white",
+          _hover: {
+            bg: "#EA5A29",
+          },
+        },
+        red: {
           backgroundColor: "blue",
           color: "white",
           _hover: {

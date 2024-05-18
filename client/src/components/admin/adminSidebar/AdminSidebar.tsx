@@ -47,6 +47,8 @@ export default function AdminSidebar({
       isOpen={isOpen}
       variant="secondary"
       closeOnOverlayClick={!isLargerThan768 && true}
+      blockScrollOnMount={false}
+      closeOnEsc={false}
     >
       {!isLargerThan768 && <DrawerOverlay />}
       <DrawerContent backgroundColor="darkBlue">

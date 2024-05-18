@@ -12,9 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import apiServices from "../../services";
+import apiServices from "../../../services";
 import { useQuery } from "@tanstack/react-query";
-import { Category } from "../../services";
+import { Category } from "../../../services";
 
 type AddCategoryModalProps = {
   isOpen: boolean;
@@ -41,8 +41,6 @@ export default function AddCategoryModal({
     formState: { errors },
   } = useForm<Category>();
 
-  console.log(errors, "greske");
-
   const { refetch: refetchCategories } = useQuery(
     ["categories"],
     apiServices.getCategories
@@ -51,10 +49,18 @@ export default function AddCategoryModal({
   return (
     <Modal isOpen={isOpen} blockScrollOnMount={false} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader textAlign="center">Add New Category</ModalHeader>
+      <ModalContent display="flex" justifyContent="center" alignItems="center">
+        <ModalHeader textAlign="center">Dodaj novu kategoriju</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody
+          pt={0}
+          pb={5}
+          px={0}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
           <form onSubmit={handleSubmitForm(addCategory)}>
             <Flex
               flexDirection="column"
@@ -63,11 +69,10 @@ export default function AddCategoryModal({
             >
               <Input
                 border="none"
-                borderRadius="3xl"
                 bg="gray.100"
                 focusBorderColor="none"
                 fontSize={13}
-                placeholder="Enter category..."
+                placeholder="Unesi ime kategorije..."
                 {...registerForm("name", {
                   required: "Category name is required",
                 })}
@@ -76,18 +81,8 @@ export default function AddCategoryModal({
               {errors.name && (
                 <Text color="red.500">{errors.name.message}</Text>
               )}
-              <Button
-                bgColor="#2266EE"
-                color="white"
-                type="submit"
-                borderRadius="3xl"
-                mt={"20px"}
-                opacity="0.8"
-                _hover={{
-                  opacity: "1",
-                }}
-              >
-                Add Category
+              <Button variant="blue" type="submit" borderRadius="2xl" mt="20px">
+                Dodaj kategoriju
               </Button>
             </Flex>
           </form>

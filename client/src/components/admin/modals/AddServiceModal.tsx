@@ -1,13 +1,11 @@
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { ServiceType } from "../../services";
-import apiServices from "../../services";
+import { Service, Category } from "../../../services";
+import apiServices from "../../../services";
 import {
   Input,
   Button,
   Text,
-  Spinner,
-  Flex,
   Select as SelectChakra,
   Box,
   FormLabel,
@@ -20,33 +18,43 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
+import React, { useEffect, useState } from "react";
 
 type AddServiceModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  selectedCategory: Category | null;
 };
 
 export default function AddServiceModal({
   isOpen,
   onClose,
+  selectedCategory,
 }: AddServiceModalProps) {
-  const {
-    data: servicesData,
-    isLoading: servicesLoading,
-    isError: servicesError,
-  } = useQuery(["services"], apiServices.getServices);
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<ServiceType>();
-  const { refetch: refetchServices } = useQuery(
-    ["services"],
-    apiServices.getServices
-  );
-  const { data } = useQuery(["categories"], apiServices.getCategories);
-  const { data: workersData } = useQuery(["workers"], apiServices.getWorkers);
+  const [selectedCategoryName, setSelectedCategoryName] = useState<
+    string | null
+  >(selectedCategory ? selectedCategory.name : null);
+
+  useEffect(() => {
+    if (isOpen && selectedCategory) {
+      setSelectedCategoryName(selectedCategory.name);
+    } else {
+      setSelectedCategoryName(null);
+    }
+  }, [isOpen, selectedCategory]);
+
+  function addService(data: Service) {
+    // @ts-ignore
+    const workersIds = data.workers_id.map(worker => worker.value);
+    const categoryId = selectedCategory ? String(selectedCategory.id) : "";
+    const dataToSend = {
+      ...data,
+      workers_id: workersIds,
+      category_id: categoryId,
+    };
+
+    addServiceMutation.mutate(dataToSend);
+  }
 
   const addServiceMutation = useMutation(apiServices.addService, {
     onSuccess: () => {
@@ -55,32 +63,24 @@ export default function AddServiceModal({
     },
   });
 
-  function addService(data: ServiceType) {
-    // @ts-ignore
-    const workersIds = data.workers_id.map(worker => worker.value);
-    const dataToSend = {
-      ...data,
-      workers_id: workersIds,
-    };
-    addServiceMutation.mutate(dataToSend);
-  }
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<Service>();
 
-  if (servicesLoading) {
-    return (
-      <Flex
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        height={"50vh"}
-      >
-        <Spinner />
-      </Flex>
-    );
-  }
+  const { refetch: refetchServices } = useQuery(
+    ["services"],
+    apiServices.getServices
+  );
 
-  if (servicesError) {
-    return <Text>Error</Text>;
-  }
+  const { data } = useQuery(["categories"], apiServices.getCategories);
+  const { data: workersData } = useQuery(["workers"], apiServices.getWorkers);
+
+  const changeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategoryName(event.target.value);
+  };
 
   const CheckboxOption = ({ innerProps, label, isSelected }: any) => (
     <div {...innerProps}>
@@ -92,34 +92,35 @@ export default function AddServiceModal({
   return (
     <Modal isOpen={isOpen} blockScrollOnMount={false} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader textAlign="center">Add New Service</ModalHeader>
+      <ModalContent display="flex" justifyContent="center" alignItems="center">
+        <ModalHeader textAlign="center">Dodaj novu uslugu</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody
+          pt={0}
+          pb={5}
+          px={8}
+          display="flex"
+          flexDirection="column"
+          w="full"
+        >
           <form onSubmit={handleSubmit(addService)}>
             <Box alignItems="center">
-              <FormLabel
-                htmlFor="name"
-                pl="20px"
-                fontSize="12"
-                opacity="0.8"
-                mb="0"
-              >
-                Name
+              <FormLabel htmlFor="name" fontSize="12" opacity="0.8" mb="0">
+                Ime
               </FormLabel>
               <Input
                 {...register("name", { required: "Service name is required" })}
                 id="name"
-                bg="gray.100"
+                bg="white"
+                border="1px solid lightgray"
+                borderRadius="6px"
                 fontSize={16}
-                borderRadius="3xl"
-                border="none"
-                pl="20px"
                 h="40px"
-                mb="20px"
+                mb="15px"
+                pl="10px"
                 size="xs"
                 color="black"
-                placeholder="Enter name..."
+                placeholder="Unesi ime usluge..."
                 _placeholder={{ opacity: 0.7 }}
               />
               {errors.name && (
@@ -127,45 +128,45 @@ export default function AddServiceModal({
                   {errors.name.message}
                 </Text>
               )}
-              <Text pl="20px" fontSize="12" opacity="0.8" mb="0">
-                Category
+
+              <Text fontSize="12" opacity="0.8" mb="0">
+                Izaberi kategoriju
               </Text>
               <SelectChakra
-                {...register("category_id", { valueAsNumber: true })}
-                mb="20px"
+                {...register("category_id", {
+                  valueAsNumber: true,
+                })}
+                mb="15px"
+                onChange={changeSelect}
+                value={selectedCategoryName || ""}
+                css={{
+                  paddingInlineStart: "10px !important",
+                }}
               >
                 {data?.data.map(option => {
                   return (
-                    <>
-                      {" "}
-                      <option key={option.id} value={Number(option.id)}>
-                        {option.name}
-                      </option>
-                    </>
+                    <option key={option.id} value={option.name}>
+                      {option.name}
+                    </option>
                   );
                 })}
               </SelectChakra>
-              <FormLabel
-                htmlFor="time"
-                pl="20px"
-                fontSize="12"
-                opacity="0.8"
-                mb="0"
-              >
-                Time in minutes
+
+              <FormLabel htmlFor="time" fontSize="12" opacity="0.8" mb="0">
+                Unesi vreme
               </FormLabel>
               <Input
                 id="time"
                 fontSize={16}
-                bg="gray.100"
-                border="none"
-                borderRadius="3xl"
+                bg="white"
+                border="1px solid lightgray"
+                borderRadius="6px"
                 h="40px"
-                pl="20px"
-                mb="20px"
+                mb="15px"
+                pl="10px"
                 size="xs"
                 color="black"
-                placeholder="Enter time in minutes..."
+                placeholder="Unesi vreme u minutima..."
                 _placeholder={{ opacity: 0.7 }}
                 {...register("time_in_minutes", {
                   required: "Minutes are required",
@@ -179,8 +180,8 @@ export default function AddServiceModal({
                 </Text>
               )}
 
-              <Text pl="20px" fontSize="12" opacity="0.8" mb="0px">
-                Workers
+              <Text fontSize="12" opacity="0.8" mb="0px">
+                Izaberi radnika
               </Text>
               <Controller
                 control={control}
@@ -213,26 +214,25 @@ export default function AddServiceModal({
               />
               <FormLabel
                 htmlFor="price"
-                pl="20px"
                 fontSize="12"
                 marginTop="20px"
                 marginBottom="0px"
                 opacity="0.8"
               >
-                Price
+                Cena
               </FormLabel>
               <Input
                 id="price"
                 fontSize={16}
-                border="none"
-                borderRadius="3xl"
-                bg="gray.100"
+                bg="white"
+                border="1px solid lightgray"
+                borderRadius="6px"
                 h="40px"
-                pl="20px"
-                mb="20px"
+                mb="15px"
+                pl="10px"
                 size="xs"
                 color="black"
-                placeholder="Enter price..."
+                placeholder="Unesi cenu..."
                 {...register("price", {
                   required: "Price is required",
                   valueAsNumber: true,
@@ -246,17 +246,12 @@ export default function AddServiceModal({
               )}
               <Button
                 w="full"
-                bgColor="#2266EE"
-                color="white"
+                variant="blue"
                 type="submit"
-                borderRadius="3xl"
-                mt={"10px"}
-                opacity="0.8"
-                _hover={{
-                  opacity: "1",
-                }}
+                borderRadius="2xl"
+                mt="20px"
               >
-                Add Service
+                Dodaj uslugu
               </Button>
             </Box>
           </form>

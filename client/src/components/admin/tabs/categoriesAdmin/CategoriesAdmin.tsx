@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import apiServices from "../../../../services";
 import {
   Text,
@@ -11,12 +11,14 @@ import {
   Divider,
   Button,
   Icon,
+  HStack,
+  Avatar,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import EditDeleteCategory from "../../EditDeleteCategory";
-import EditDeleteService from "../../EditDeleteService";
-import AddCategoryModal from "../../AddCategoryModal";
-import AddServiceModal from "../../AddServiceModal";
+import EditServiceModal from "../../modals/EditServiceModal";
+import AddCategoryModal from "../../modals/AddCategoryModal";
+import AddServiceModal from "../../modals/AddServiceModal";
+import DeleteServiceModal from "../../modals/DeleteServiceModal";
 import {
   Table,
   Thead,
@@ -30,11 +32,17 @@ import {
 } from "@chakra-ui/react";
 
 import { IoMdAdd } from "react-icons/io";
-import { AddIcon } from "@chakra-ui/icons";
-import { IoMdSettings } from "react-icons/io";
 import { FaCirclePlus } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { Category, Service } from "../../../../services";
 
 export default function CategoriesAdmin() {
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -65,7 +73,27 @@ export default function CategoriesAdmin() {
     onClose: onEditServiceClose,
   } = useDisclosure();
 
-  const [isHovered, setIsHovered] = useState(false);
+  const {
+    isOpen: isDeleteServiceOpen,
+    onOpen: onDeleteServiceOpen,
+    onClose: onDeleteServiceClose,
+  } = useDisclosure();
+
+  const handleAddService = (category: Category | null) => {
+    setSelectedCategory(category);
+    onAddServiceOpen();
+  };
+
+  // const handleDeleteService = (service: Service) => {
+  //   setActiveService(service);
+  //   onDeleteServiceOpen();
+  // };
+
+  const handleEditService = (service: Service, category: Category) => {
+    setSelectedService(service);
+    setSelectedCategory(category);
+    onEditServiceOpen();
+  };
 
   if (categoriesLoading) {
     return (
@@ -110,13 +138,13 @@ export default function CategoriesAdmin() {
               aria-label="Done"
               fontSize="20px"
               icon={<IoMdAdd color="F0EFED" />}
-              onClick={onAddCategoryOpen}
+              onClick={() => onAddServiceOpen()}
             />
           </Stack>
         </Stack>
       </Box>
       {categoriesData?.data.map(category => (
-        <TableContainer marginBlock="20px">
+        <TableContainer marginBlock="20px" key={category.id}>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -128,6 +156,7 @@ export default function CategoriesAdmin() {
                 <Th>Ime Usluge</Th>
                 <Th>Trajanje</Th>
                 <Th>Cena</Th>
+                <Th>Radnici</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -138,31 +167,45 @@ export default function CategoriesAdmin() {
                     <Td width={500}>{service.name}</Td>
                     <Td>{service.time_in_minutes} min</Td>
                     <Td>{service.price} rsd</Td>
-                    <Td isNumeric>
-                      <Icon
-                        as={IoMdSettings}
-                        color="#343A59"
-                        onClick={onEditServiceOpen}
-                        cursor="pointer"
-                        boxSize={5}
+                    <Td>
+                      <Avatar
+                        size="sm"
+                        name="Segun Adebayo"
+                        src="https://bit.ly/sage-adebayo"
                       />
+                    </Td>
+                    <Td isNumeric>
+                      <HStack spacing={4} justify="flex-end">
+                        <Icon
+                          as={RiDeleteBin6Line}
+                          color="#EA5A29"
+                          // onClick={() => handleDeleteService(service)}
+                          cursor="pointer"
+                          boxSize={6}
+                        />
+                        <Icon
+                          as={FaEdit}
+                          color="#343A59"
+                          onClick={() => handleEditService(service, category)}
+                          cursor="pointer"
+                          boxSize={5}
+                        />
+                      </HStack>
                     </Td>
                   </Tr>
                 ))}
-
-              <Button
-                rightIcon={<FaCirclePlus />}
-                bgColor="#343A59"
-                color="#F8F8F8"
-                variant="outline"
-                marginLeft="20px"
-                marginBlock="10px"
-                size="sm"
-              >
-                Dodaj uslugu
-              </Button>
             </Tbody>
           </Table>
+          <Button
+            rightIcon={<FaCirclePlus />}
+            variant="blue"
+            marginLeft="20px"
+            marginBlock="10px"
+            size="sm"
+            onClick={() => handleAddService(category)}
+          >
+            Dodaj uslugu
+          </Button>
         </TableContainer>
       ))}
 
@@ -170,7 +213,22 @@ export default function CategoriesAdmin() {
         isOpen={isAddCategoryOpen}
         onClose={onAddCategoryClose}
       />
-      <AddServiceModal isOpen={isAddServiceOpen} onClose={onAddServiceClose} />
+      <AddServiceModal
+        isOpen={isAddServiceOpen}
+        onClose={onAddServiceClose}
+        selectedCategory={selectedCategory}
+      />
+      <EditServiceModal
+        isOpen={isEditServiceOpen}
+        onClose={onEditServiceClose}
+        selectedService={selectedService}
+        selectedCategory={selectedCategory}
+      />
+      {/* <DeleteServiceModal
+        isOpen={isDeleteServiceOpen}
+        onClose={onDeleteServiceClose}
+        activeService={activeService}
+      /> */}
     </Stack>
   );
 }
