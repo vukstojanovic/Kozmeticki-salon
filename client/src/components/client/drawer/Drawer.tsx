@@ -80,6 +80,7 @@ export default function DrawerExample({
   const { data: services } = useQuery(["services"], apiServices.getServices);
 
   const onClickDay = (date: Date) => {
+    console.log(date.getTime(), "date");
     setDate(date);
   };
 
@@ -230,7 +231,7 @@ export default function DrawerExample({
                     <Calendar onClickDay={onClickDay} value={date} />
                   </Stack>
 
-                  <VStack align="start" spacing={0}>
+                  {/* <VStack align="start" spacing={0}>
                     <FormLabel>Izaberi termin</FormLabel>
                     <SimpleGrid gap={3} columns={4} spacing="10px">
                       <Button
@@ -263,7 +264,7 @@ export default function DrawerExample({
                         15:00
                       </Button>
                     </SimpleGrid>
-                  </VStack>
+                  </VStack> */}
                 </Stack>
               )}
               {activeStep === 3 && (

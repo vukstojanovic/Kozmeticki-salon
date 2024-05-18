@@ -23,8 +23,23 @@ export type Category = {
   name: string;
 };
 
+export type Appointment = {
+  id: string;
+  date: number;
+  service_id: string;
+  worker_id: string;
+  service_duration: number;
+  customer_name: string;
+  customer_number: string;
+  notes?: string;
+};
+
 type CategoriesData = {
   data: Category[];
+};
+
+type AppointmentsData = {
+  data: Appointment[];
 };
 
 export type CategoryType = {
@@ -88,6 +103,9 @@ const apiServices = {
 
   updateWorker: ({ data, id }: any) =>
     axiosInstance.put<Workers, null>(`/workers/${id}`, data),
+
+  getAppointments: () =>
+    axiosInstance.get<null, AppointmentsData>("/appointments"),
 
   loginAdmin: (data: LoginData) =>
     axiosInstance.post<LoginData, string>("/auth/login", data),
