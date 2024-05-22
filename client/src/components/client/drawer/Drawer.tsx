@@ -85,7 +85,7 @@ export default function DrawerExample({
     select: data => {
       return data.data.map(worker => ({
         ...worker,
-        imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov", // ili neka default fotografija
+        imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov",
       }));
     },
   });
