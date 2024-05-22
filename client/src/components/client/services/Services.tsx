@@ -64,6 +64,7 @@ const Services = () => {
                 gap={5}
                 display="flex"
                 alignItems="center"
+                key={category.id}
               >
                 <Box
                   position="relative"

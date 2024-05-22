@@ -39,8 +39,6 @@ export default function WorkersAdmin() {
     formData.append("image", data?.image[0]);
     //@ts-ignore
 
-    console.log(data?.image[0]);
-    console.log(data, "data");
     //@ts-ignore
     addWorkersMutation.mutate({ ...data, image: data?.image[0] });
   }

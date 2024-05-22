@@ -3,9 +3,8 @@ import {
   Box,
   useRadio,
   useRadioGroup,
-  Flex,
-  Image,
   Text,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useController } from "react-hook-form";
 
@@ -18,25 +17,28 @@ const WorkerRadio: React.FC<any> = forwardRef((props, ref) => {
   return (
     <Box as="label">
       <input {...input} />
-      <Flex
+      <Box
         {...checkbox}
-        direction="column"
-        key={id}
-        align="center"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
         gap={2}
         border={state.isChecked ? "1px solid darkgray" : "none"}
         p={1}
         borderRadius="10px"
         cursor="pointer"
       >
-        <Image
+        <Box
           borderRadius="full"
           h="70px"
-          src={image || "https://bit.ly/dan-abramov"}
-          alt="Dan Abramov"
+          w="70px"
+          backgroundImage={`url(${image || "https://bit.ly/dan-abramov"})`}
+          backgroundSize="cover"
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
         />
         <Text color="black">{workerName}</Text>
-      </Flex>
+      </Box>
     </Box>
   );
 });
@@ -56,20 +58,20 @@ export const WorkersRadioGroup: React.FC<any> = ({
   });
 
   return (
-    <Flex {...getRootProps()} justify="space-between" align="center">
-      {allWorkers?.data?.map((worker: { id: string; name: string }) => {
-        return (
-          <>
+    <SimpleGrid {...getRootProps()} columns={[1, 2, 3, 4]} spacing="5px">
+      {allWorkers?.map(
+        (worker: { id: string; name: string; imgUrl: string }) => {
+          return (
             <WorkerRadio
               key={worker.id}
               workerName={worker.name}
               id={worker.id}
-              //   image={worker.img}
+              image={worker.imgUrl}
               {...getRadioProps({ value: worker.id })}
             />
-          </>
-        );
-      })}
-    </Flex>
+          );
+        }
+      )}
+    </SimpleGrid>
   );
 };

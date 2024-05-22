@@ -32,8 +32,6 @@ export default function EditDeleteCategory({ name, id }: Category) {
     apiServices.getCategories
   );
 
-  console.log(data);
-
   const updateCategoryMutation = useMutation(apiServices.updateCategory, {
     onSuccess: () => {
       refetchCategories();
@@ -64,7 +62,6 @@ export default function EditDeleteCategory({ name, id }: Category) {
   }
 
   function updateCategory({ data, id }: any) {
-    console.log(data, id);
     updateCategoryMutation.mutate({ data, id });
   }
 

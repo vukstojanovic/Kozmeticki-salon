@@ -18,11 +18,9 @@ import {
   Icon,
   Input,
   Select,
-  SimpleGrid,
   Stack,
   Text,
   Textarea,
-  VStack,
 } from "@chakra-ui/react";
 import { Category, Service } from "../../../services/index";
 
@@ -34,11 +32,22 @@ import CustomStepper from "../customStepper/CustomStepper";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { WorkersRadioGroup } from "../workersRadio/WorkersRadioGroup";
 
+import jelenaImg from "../../../assets/workers/jelena.jpg";
+import jekaImg from "../../../assets/workers/jeka.jpg";
+import makicaImg from "../../../assets/workers/makica.jpg";
+
 const steps = [
   { title: "Prvi", description: "Usluga & Osoblje" },
   { title: "Drugi", description: "Datum & Vreme" },
   { title: "Treći", description: "Kontakt Info" },
 ];
+
+const workerPhotos: Record<string, string> = {
+  "655bdeb582e8679388fddbf7": jelenaImg,
+  "65e4d478e8c68c704b489b31": jekaImg,
+  "6647113cbb70fae4c701f8b3": makicaImg,
+  "66471142bb70fae4c701f8b7": makicaImg,
+};
 
 const schema = yup.object({
   date: yup.number().required(),
@@ -72,7 +81,15 @@ export default function DrawerExample({
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
+  const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
+    select: data => {
+      return data.data.map(worker => ({
+        ...worker,
+        imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov", // ili neka default fotografija
+      }));
+    },
+  });
+
   const { data: categories } = useQuery(
     ["categories"],
     apiServices.getCategories
@@ -80,14 +97,11 @@ export default function DrawerExample({
   const { data: services } = useQuery(["services"], apiServices.getServices);
 
   const onClickDay = (date: Date) => {
-    console.log(date.getTime(), "date");
+    // console.log(date.getTime(), "date");
     setDate(date);
   };
 
   const firstField = useRef<HTMLInputElement>(null);
-
-  console.log(services);
-  console.log(categories);
 
   const handleButtonClick = (id: string) => {
     if (activeWorker === id) {
@@ -120,7 +134,7 @@ export default function DrawerExample({
 
   const submitForm = (data: any) => {
     if (activeStep === steps.length) {
-      console.log(data, "data");
+      // console.log(data, "data");
     }
   };
 
