@@ -26,7 +26,7 @@ import { Category, Service } from "../../../services/index";
 
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services/index";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "../calendar/Calendar";
 import CustomStepper from "../customStepper/CustomStepper";
 import { FaRegCheckCircle } from "react-icons/fa";
@@ -62,9 +62,11 @@ const schema = yup.object({
 export default function DrawerExample({
   isOpen,
   onClose,
+  selectedCategory,
 }: {
   isOpen: any;
   onClose: any;
+  selectedCategory?: any;
 }) {
   const [date, setDate] = useState<Date>(new Date());
   const {
@@ -75,7 +77,9 @@ export default function DrawerExample({
   } = useForm();
 
   const [activeWorker, setActiveWorker] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("");
+  const [activeCategory, setActiveCategory] = useState<string>(
+    selectedCategory || ""
+  );
   const [activeService, setActiveService] = useState<string>("");
 
   const [activeStep, setActiveStep] = useState(1);
@@ -97,7 +101,6 @@ export default function DrawerExample({
   const { data: services } = useQuery(["services"], apiServices.getServices);
 
   const onClickDay = (date: Date) => {
-    // console.log(date.getTime(), "date");
     setDate(date);
   };
 
@@ -134,9 +137,15 @@ export default function DrawerExample({
 
   const submitForm = (data: any) => {
     if (activeStep === steps.length) {
-      // console.log(data, "data");
+      // Handle form submission
     }
   };
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setActiveCategory(selectedCategory);
+    }
+  }, [selectedCategory]);
 
   return (
     <Drawer
@@ -190,6 +199,7 @@ export default function DrawerExample({
                       cursor="pointer"
                       placeholder="Izaberi kategoriju"
                       onChange={handleChangeCategory}
+                      value={activeCategory}
                     >
                       {categories?.data?.map((category: Category) => {
                         return (
@@ -244,41 +254,6 @@ export default function DrawerExample({
                     <Text color="blue">Izaberi datum</Text>
                     <Calendar onClickDay={onClickDay} value={date} />
                   </Stack>
-
-                  {/* <VStack align="start" spacing={0}>
-                    <FormLabel>Izaberi termin</FormLabel>
-                    <SimpleGrid gap={3} columns={4} spacing="10px">
-                      <Button
-                        colorScheme="#2D3748"
-                        variant="outline"
-                        _hover={{ bg: "#ebedf0" }}
-                      >
-                        12:00
-                      </Button>
-                      <Button
-                        colorScheme="#2D3748"
-                        variant="outline"
-                        _hover={{ bg: "#ebedf0" }}
-                        isDisabled={true}
-                      >
-                        13:00
-                      </Button>
-                      <Button
-                        colorScheme="#2D3748"
-                        variant="outline"
-                        _hover={{ bg: "#ebedf0" }}
-                      >
-                        14:00
-                      </Button>
-                      <Button
-                        colorScheme="#2D3748"
-                        variant="outline"
-                        _hover={{ bg: "#ebedf0" }}
-                      >
-                        15:00
-                      </Button>
-                    </SimpleGrid>
-                  </VStack> */}
                 </Stack>
               )}
               {activeStep === 3 && (
@@ -286,7 +261,6 @@ export default function DrawerExample({
                   <Stack spacing={0}>
                     <FormLabel htmlFor="fullName">Ime i prezime</FormLabel>
                     <Input
-                      // ref={firstField}
                       id="fullName"
                       placeholder="Unesi ime i prezime"
                       {...register("customer_name")}

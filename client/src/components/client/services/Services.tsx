@@ -25,8 +25,17 @@ import tretmaniTela from "../../../assets/services/tretmaniTela.png";
 import masaze from "../../../assets/services/masaze.png";
 import manikir from "../../../assets/services/manikir.jpg";
 import pedikir from "../../../assets/services/pedikir.jpg";
+import { useState } from "react";
+
+// Define the Category interface
+interface Category {
+  id: string;
+  name: string;
+  imgUrl?: string;
+}
 
 const Services = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const categoriesPhotos: Record<string, string> = {
     "655bdc45b620146214b756a4": obrve,
     "655bdc45b620146214b756a1": tretmaniLica,
@@ -42,7 +51,7 @@ const Services = () => {
     isError,
   } = useQuery(["categories"], apiServices.getCategories, {
     select: data => {
-      return data.data.map(category => ({
+      return data.data.map((category: Category) => ({
         ...category,
         imgUrl: categoriesPhotos[category.id] || "https://bit.ly/dan-abramov",
       }));
@@ -51,7 +60,11 @@ const Services = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log(categories);
+  // Define the category parameter type
+  const handleCategoryClick = (category: Category) => {
+    setSelectedCategory(category.id);
+    onOpen();
+  };
 
   if (isLoading) {
     return (
@@ -138,7 +151,7 @@ const Services = () => {
                   aria-label="Done"
                   fontSize="18px"
                   icon={<TimeIcon />}
-                  onClick={onOpen}
+                  onClick={() => handleCategoryClick(category)}
                 />
               </Tooltip>
             </Box>
@@ -161,7 +174,11 @@ const Services = () => {
           </Stack>
         ))}
       </SimpleGrid>
-      <DrawerExample isOpen={isOpen} onClose={onClose} />
+      <DrawerExample
+        isOpen={isOpen}
+        onClose={onClose}
+        selectedCategory={selectedCategory}
+      />
     </Stack>
   );
 };
