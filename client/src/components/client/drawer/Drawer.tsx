@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -26,7 +25,7 @@ import { Category, Service } from "../../../services/index";
 
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services/index";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Calendar from "../calendar/Calendar";
 import CustomStepper from "../customStepper/CustomStepper";
 import { FaRegCheckCircle } from "react-icons/fa";
@@ -86,8 +85,8 @@ export default function DrawerExample({
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
-    select: data => {
-      return data.data.map(worker => ({
+    select: (data) => {
+      return data.data.map((worker) => ({
         ...worker,
         imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov",
       }));
@@ -128,11 +127,11 @@ export default function DrawerExample({
     return activeWorker === id;
   };
   const handleNext = () => {
-    setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
+    setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
   };
 
   const handlePrev = () => {
-    setActiveStep(prevStep => Math.max(prevStep - 1, 1));
+    setActiveStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
   const submitForm = (data: any) => {
@@ -223,7 +222,8 @@ export default function DrawerExample({
                         >
                           {services?.data
                             ?.filter(
-                              service => service.category_id === activeCategory
+                              (service) =>
+                                service.category_id === activeCategory
                             )
                             .map((service: Service) => {
                               return (
@@ -252,7 +252,7 @@ export default function DrawerExample({
                 <Stack spacing="20px" px={2}>
                   <Stack spacing={0}>
                     <Text color="blue">Izaberi datum</Text>
-                    <Calendar onClickDay={onClickDay} value={date} />
+                    <Calendar onClickDay={onClickDay} value={date} selectedWorker={activeWorker} serviceDuration={} />
                   </Stack>
                 </Stack>
               )}
