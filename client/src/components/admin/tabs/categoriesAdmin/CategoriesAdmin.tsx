@@ -122,7 +122,7 @@ export default function CategoriesAdmin() {
         py={2}
         px={3}
         borderRadius="md"
-        boxShadow="lg"
+        boxShadow="md"
       >
         <Text fontSize="xl" as="b">
           Usluge

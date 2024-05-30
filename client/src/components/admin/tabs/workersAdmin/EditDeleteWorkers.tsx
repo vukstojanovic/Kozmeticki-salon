@@ -3,10 +3,11 @@ import {
   Button,
   Flex,
   Stack,
-  Text,
   Heading,
   Divider,
   Avatar,
+  Box,
+  Icon,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { WorkersType } from "../../../../services";
@@ -14,6 +15,7 @@ import apiServices from "../../../../services";
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardFooter } from "@chakra-ui/react";
+import { FaPencilAlt } from "react-icons/fa";
 
 export default function EditDeleteWorkers({ name, id }: WorkersType) {
   const { register, handleSubmit } = useForm<WorkersType>();
@@ -43,51 +45,69 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
   }
 
   return (
-    <Card maxW="sm" bg="#F8FAFB" borderRadius="20px" boxShadow="xs">
-      <CardBody>
-        <Avatar
-          size="xl"
-          name="Segun Adebayo"
-          src="https://bit.ly/sage-adebayo"
-        />
-        <Stack mt="6" spacing="3">
-          <Heading size="md"> {name}</Heading>
-          <Text color="blue.600" fontSize="2xl">
-            $450
-          </Text>
-        </Stack>
-      </CardBody>
-      <Divider
-        color="lightGray
-      "
-      />
-      <CardFooter>
-        <form onSubmit={handleSubmit(data => updateWorker({ data, id }))}>
-          <Flex justifyContent="space-between">
+    <Card bg="white" borderRadius="lg" boxShadow="md">
+      <CardBody display="flex" flexDirection="column" alignItems="center">
+        <Box position="relative">
+          <Avatar
+            size="xl"
+            name="Segun Adebayo"
+            src="https://bit.ly/sage-adebayo"
+          />
+          <Box
+            position="absolute"
+            bottom={0}
+            right={0}
+            bg="white"
+            borderRadius="full"
+            p={2}
+            cursor="pointer"
+            as="label"
+            htmlFor="file-upload"
+            display="flex"
+            border="0.5px solid black"
+          >
+            <Icon as={FaPencilAlt} boxSize={4} color="gray.600" />
             <Input
+              {...register("image")}
+              id="file-upload"
+              type="file"
+              display="none"
+            />
+          </Box>
+        </Box>
+        <Heading size="md" textAlign="center" mt={3}>
+          {name}
+        </Heading>
+      </CardBody>
+      <Divider borderColor="gray.200" />
+      <CardFooter>
+        <form
+          style={{ width: "100%" }}
+          onSubmit={handleSubmit(data => updateWorker({ data, id }))}
+        >
+          <Stack spacing={3} width="100%">
+            <Input
+              defaultValue={name}
               fontSize={13}
-              focusBorderColor="none"
-              border="none"
-              p={0}
-              m={0}
-              size="xs"
-              color="black"
-              placeholder="Enter name..."
+              focusBorderColor="blue.500"
+              borderColor="gray.300"
+              size="sm"
               {...register("name")}
             />
-            <Button variant="outline" type="submit">
-              Izmeni
-            </Button>
-          </Flex>
+            <Flex justifyContent="flex-start" gap={3}>
+              <Button variant="outline" type="submit" borderRadius="md">
+                Izmeni
+              </Button>
+              <Button
+                onClick={() => deleteWorker(id)}
+                colorScheme="red"
+                borderRadius="md"
+              >
+                Izbriši
+              </Button>
+            </Flex>
+          </Stack>
         </form>
-        <Button
-          onClick={() => deleteWorker(id)}
-          colorScheme="red"
-          color="white"
-          ml={3}
-        >
-          Izbriši
-        </Button>
       </CardFooter>
     </Card>
   );

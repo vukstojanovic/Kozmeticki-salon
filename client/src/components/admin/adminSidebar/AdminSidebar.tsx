@@ -51,7 +51,7 @@ export default function AdminSidebar({
       closeOnEsc={false}
     >
       {!isLargerThan768 && <DrawerOverlay />}
-      <DrawerContent backgroundColor="darkBlue">
+      <DrawerContent backgroundColor="darkBlue" zIndex={1}>
         <DrawerHeader alignSelf="center">
           <Img src={logo} alt="logo" h={107} w={150} />
         </DrawerHeader>
@@ -70,6 +70,7 @@ export default function AdminSidebar({
                 borderRadius="md"
                 onClick={() => setSelectedIndex(index)}
                 cursor="pointer"
+                zIndex={2}
               >
                 <Icon as={item.icon} boxSize={6} />
                 <Text fontSize="xl">{item.name}</Text>

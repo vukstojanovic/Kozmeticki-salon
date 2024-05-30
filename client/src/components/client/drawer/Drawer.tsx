@@ -153,6 +153,7 @@ export default function DrawerExample({
       initialFocusRef={firstField}
       onClose={onClose}
       variant="secondary"
+      closeOnOverlayClick={true}
     >
       <DrawerOverlay />
       {isSubmitted ? (

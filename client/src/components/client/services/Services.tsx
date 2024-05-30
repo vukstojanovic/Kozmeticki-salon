@@ -124,13 +124,13 @@ const Services = () => {
           >
             <Box
               position="relative"
-              width={{ base: "170px", md: "150px" }}
-              height={{ base: "130px", md: "160px" }}
+              width={{ base: "170px", md: "2ß0px" }}
+              height={{ base: "130px", md: "150px" }}
             >
               <Image
                 borderRadius="full"
-                width="full"
-                height="full"
+                width="100%"
+                height="100%"
                 objectFit="cover"
                 src={category.imgUrl}
                 alt="service"
