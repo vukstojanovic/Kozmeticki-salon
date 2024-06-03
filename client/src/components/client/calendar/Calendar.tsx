@@ -1,20 +1,116 @@
 import ReactCalendar from "react-calendar";
 import "./Calendar.scss";
-import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services";
+
+const getAppointmentsForWorkerAndDate = (
+  appointments: any = [],
+  workerId: any,
+  selectedDate: any
+) => {
+  return appointments?.filter((appointment: any) => {
+    const appointmentDate = new Date(appointment.date);
+    return (
+      appointment.worker_id === workerId &&
+      appointmentDate.toDateString() === selectedDate.toDateString()
+    );
+  });
+};
+
+const WORKING_HOURS = {
+  weekday: { start: 9, end: 20 },
+  saturday: { start: 9, end: 16 },
+};
+
+const isWeekend = (date: any) => date.getDay() === 6; // Saturday
+const isSunday = (date: any) => date.getDay() === 0; // Sunday
+
+const generateTimeSlots = (startHour: any, endHour: any, durationMs: any) => {
+  const slots = [];
+  const durationMinutes = durationMs / 60000;
+
+  console.log(durationMinutes, "durationMinutes");
+
+  for (let hour = startHour; hour < endHour; hour++) {
+    for (let minute = 0; minute < 60; minute += durationMinutes) {
+      if (minute + durationMinutes <= 60) {
+        slots.push(
+          `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
+        );
+      }
+    }
+  }
+  return slots;
+};
+
+const isTimeSlotAvailable = (slot: any, durationMs: any, appointments: any) => {
+  const slotStart = new Date(`1970-01-01T${slot}:00`);
+  const slotEnd = new Date(slotStart.getTime() + durationMs);
+
+  return !appointments.some((appointment: any) => {
+    const appointmentStart = new Date(appointment.date);
+    const appointmentEnd = new Date(
+      appointmentStart.getTime() + appointment.service_duration
+    );
+
+    return slotStart < appointmentEnd && slotEnd > appointmentStart;
+  });
+};
+
+const getAvailableTimeSlots = (
+  appointments: any,
+  selectedDate: any,
+  workerId: any,
+  serviceDurationMs: any
+) => {
+  if (isSunday(selectedDate)) return []; // No slots on Sunday
+
+  const hours = isWeekend(selectedDate)
+    ? WORKING_HOURS.saturday
+    : WORKING_HOURS.weekday;
+  const allSlots = generateTimeSlots(hours.start, hours.end, serviceDurationMs);
+  const workerAppointments = getAppointmentsForWorkerAndDate(
+    appointments,
+    workerId,
+    selectedDate
+  );
+  console.log(allSlots, "allSlots");
+
+  return allSlots.filter((slot) =>
+    isTimeSlotAvailable(slot, serviceDurationMs, workerAppointments)
+  );
+};
 
 export default function Calendar({
   onClickDay,
   value,
+  selectedWorker,
+  serviceDuration,
+  setAvailableTimeSlots,
 }: {
   onClickDay: (day: Date) => void;
   value: Date;
+  selectedWorker: String | null;
+  serviceDuration: Number;
+  setAvailableTimeSlots: (slots: any) => void;
 }) {
   const { data: appointments } = useQuery(
     ["appointments"],
     apiServices.getAppointments
   );
+
+  generateTimeSlots(9, 22, 600000);
+
+  const handleDayClick = (day: any) => {
+    onClickDay(day);
+    const availableSlots = getAvailableTimeSlots(
+      appointments?.data,
+      day,
+      selectedWorker,
+      serviceDuration
+    );
+    setAvailableTimeSlots(availableSlots);
+  };
 
   const today = new Date();
   const minDate = new Date(
@@ -30,7 +126,7 @@ export default function Calendar({
 
   return (
     <ReactCalendar
-      onClickDay={(day: Date) => onClickDay(day)}
+      onClickDay={handleDayClick}
       value={value}
       minDate={minDate}
       maxDate={maxDate}

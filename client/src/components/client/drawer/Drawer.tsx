@@ -25,7 +25,7 @@ import { Category, Service } from "../../../services/index";
 
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services/index";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Calendar from "../calendar/Calendar";
 import CustomStepper from "../customStepper/CustomStepper";
 import { FaRegCheckCircle } from "react-icons/fa";
@@ -73,16 +73,18 @@ export default function DrawerExample({
     handleSubmit,
     formState: { errors },
     control,
+    watch,
   } = useForm();
 
-  const [activeWorker, setActiveWorker] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>(
     selectedCategory || ""
   );
-  const [activeService, setActiveService] = useState<string>("");
+  const activeService = watch("service_id");
+  const activeWorker = watch("workers_id");
 
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
     select: (data) => {
@@ -99,19 +101,18 @@ export default function DrawerExample({
   );
   const { data: services } = useQuery(["services"], apiServices.getServices);
 
+  const activeServiceDuration = useMemo(() => {
+    const minutes = services?.data?.find(
+      (service) => service.id === activeService
+    )?.time_in_minutes;
+    return minutes ? minutes * 60000 : 0;
+  }, [services, activeService]);
+
   const onClickDay = (date: Date) => {
     setDate(date);
   };
 
   const firstField = useRef<HTMLInputElement>(null);
-
-  const handleButtonClick = (id: string) => {
-    if (activeWorker === id) {
-      setActiveWorker(null);
-    } else {
-      setActiveWorker(id);
-    }
-  };
 
   const handleChangeCategory = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -119,13 +120,6 @@ export default function DrawerExample({
     setActiveCategory(event.target.value);
   };
 
-  const handleChangeService = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setActiveService(event.target.value);
-  };
-
-  const isWorkerActive = (id: string): boolean => {
-    return activeWorker === id;
-  };
   const handleNext = () => {
     setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
   };
@@ -137,6 +131,7 @@ export default function DrawerExample({
   const submitForm = (data: any) => {
     if (activeStep === steps.length) {
       // Handle form submission
+      console.log(data);
     }
   };
 
@@ -253,7 +248,25 @@ export default function DrawerExample({
                 <Stack spacing="20px" px={2}>
                   <Stack spacing={0}>
                     <Text color="blue">Izaberi datum</Text>
-                    <Calendar onClickDay={onClickDay} value={date} selectedWorker={activeWorker} serviceDuration={} />
+                    <Calendar
+                      onClickDay={onClickDay}
+                      value={date}
+                      selectedWorker={activeWorker}
+                      serviceDuration={activeServiceDuration}
+                      setAvailableTimeSlots={setAvailableTimeSlots}
+                    />
+                    <Box mt={4}>
+                      <Text fontSize="lg" mb={2}>
+                        Available Time Slots:
+                      </Text>
+                      {availableTimeSlots.length === 0 ? (
+                        <Text>No available slots</Text>
+                      ) : (
+                        availableTimeSlots.map((slot) => (
+                          <Text key={slot}>{slot}</Text>
+                        ))
+                      )}
+                    </Box>
                   </Stack>
                 </Stack>
               )}
