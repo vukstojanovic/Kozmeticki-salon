@@ -38,7 +38,7 @@ type CategoriesData = {
   data: Category[];
 };
 
-type AppointmentsData = {
+export type AppointmentsData = {
   data: Appointment[];
 };
 
