@@ -1,4 +1,44 @@
-// .fc .fc-daygrid-day.fc-day-today {
-//   background-color: black; /* Light orange background */
-//   border: 2px solid #e67e22; /* Orange border for emphasis */
-// }
+/* customCalendarStyles.scss */
+.fc .fc-daygrid-day.fc-day-today {
+  position: relative;
+}
+
+.fc .fc-daygrid-day.fc-day-today::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.fc .fc-daygrid-day.fc-day-working {
+  background-color: var(--light-grey);
+}
+
+/* Improve event styles */
+.fc-event {
+  font-size: 0.9em;
+  line-height: 1.4;
+  border-radius: 4px;
+  padding: 2px 5px;
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+}
+
+.fc-event:hover {
+  //   border-color: #ccc;
+  //   background-color: #f0f0f0;
+}
+
+/* Adjust time grid styles for better readability */
+.fc-timegrid-slot {
+  height: 2em;
+  border-bottom: 1px solid #ddd;
+}
+
+.fc-timegrid-col-events {
+  margin-top: 0.5em;
+}

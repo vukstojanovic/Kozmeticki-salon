@@ -16,11 +16,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useDisclosure } from "@chakra-ui/react";
 import SelectDayModal from "./selectDayModal";
 
-interface AdminFullCalendarState {
-  weekendsVisible: boolean;
-  currentEvents: EventApi[];
-}
-
 const AdminFullCalendar: React.FC = () => {
   const { data: appointments } = useQuery(
     ["appointments"],
@@ -29,13 +24,31 @@ const AdminFullCalendar: React.FC = () => {
   const [weekendsVisible, setWeekendsVisible] = useState<boolean>(true);
   const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const fullCalendarRef = useRef<FullCalendar>(null); // Dodaj useRef
+  const fullCalendarRef = useRef<FullCalendar>(null);
 
   const {
     isOpen: isSelectDayModalOpen,
     onOpen: onSelectDayModalOpen,
     onClose: onSelectDayModalClose,
   } = useDisclosure();
+
+  function getItemsInDay(items: any = [], targetDayInMillis: any) {
+    // Create a Date object for the target day
+    const targetDate = new Date(targetDayInMillis);
+
+    // Set the time to the start of the day (00:00:00)
+    targetDate.setHours(0, 0, 0, 0);
+    const startOfDay = targetDate.getTime();
+
+    // Set the time to the end of the day (23:59:59.999)
+    targetDate.setHours(23, 59, 59, 999);
+    const endOfDay = targetDate.getTime();
+
+    // Filter the array to get items within the start and end of the day
+    return items?.filter(
+      (item: any) => item.date >= startOfDay && item.date <= endOfDay
+    );
+  }
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     setSelectedDate(selectInfo.start);
@@ -59,15 +72,17 @@ const AdminFullCalendar: React.FC = () => {
 
   const renderEventContent = (eventContent: EventContentArg) => {
     return (
-      <>
+      <div className="fc-event-inner">
         <b>{eventContent.timeText}</b>
         <i>{eventContent.event.title}</i>
-      </>
+      </div>
     );
   };
 
   const addEvent = (title: string, start: Date, end: Date) => {
-    const calendarApi = fullCalendarRef.current?.getApi(); // Koristi useRef za pristup API-ju
+    // console.log(start);
+    // console.log(end);
+    const calendarApi = fullCalendarRef.current?.getApi();
     if (calendarApi) {
       calendarApi.addEvent({
         id: createEventId(),
@@ -80,27 +95,33 @@ const AdminFullCalendar: React.FC = () => {
     onSelectDayModalClose();
   };
 
-  const getBusySlots = (date: Date) => {
-    if (!currentEvents || currentEvents.length === 0) {
-      return [];
+  const dayCellClassNames = (date: Date) => {
+    const day = date.getDay();
+    const hour = date.getHours();
+    let classes = [];
+
+    if (day >= 1 && day <= 5) {
+      classes.push("fc-day-working");
+    } else if (day === 6 && hour >= 9 && hour < 16) {
+      classes.push("fc-day-working");
     }
-    return currentEvents.filter(
-      event =>
-        event.start &&
-        event.end &&
-        event.start.toDateString() === date.toDateString()
-    );
+
+    return classes;
   };
+
+  // Calculate valid range
+  const now = new Date();
+  const startDate = new Date(now.getFullYear(), 4, 1); // May 1st of the current year
+  const endDate = new Date(now.getFullYear(), now.getMonth() + 4, 0); // 3 months ahead from the current month
 
   return (
     <>
       <FullCalendar
-        ref={fullCalendarRef} // Poveži useRef sa FullCalendar komponentom
+        ref={fullCalendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
+          left: "prev,next",
+          right: "title",
         }}
         initialView="dayGridMonth"
         editable={true}
@@ -108,19 +129,29 @@ const AdminFullCalendar: React.FC = () => {
         selectMirror={true}
         dayMaxEvents={true}
         weekends={weekendsVisible}
-        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+        initialEvents={INITIAL_EVENTS}
         select={handleDateSelect}
-        eventContent={renderEventContent} // custom render function
+        eventContent={renderEventContent}
         eventClick={handleEventClick}
-        eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+        eventsSet={handleEvents}
+        dayCellClassNames={arg => dayCellClassNames(arg.date)}
+        validRange={{
+          start: startDate.toISOString().split("T")[0],
+          end: endDate.toISOString().split("T")[0],
+        }}
       />
-      <SelectDayModal
-        isOpen={isSelectDayModalOpen}
-        onClose={onSelectDayModalClose}
-        selectedDate={selectedDate}
-        onAddEvent={addEvent}
-        appointments={appointments ? [appointments] : []}
-      />
+      {appointments && (
+        <SelectDayModal
+          isOpen={isSelectDayModalOpen}
+          onClose={onSelectDayModalClose}
+          selectedDate={selectedDate}
+          onAddEvent={addEvent}
+          appointments={getItemsInDay(
+            appointments?.data || [],
+            selectedDate?.getTime()
+          )}
+        />
+      )}
     </>
   );
 };

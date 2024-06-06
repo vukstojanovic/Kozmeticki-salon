@@ -16,8 +16,10 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Stack,
+  Divider,
 } from "@chakra-ui/react";
-import apiServices, { AppointmentsData } from "../../../../services";
+import apiServices, { Appointment } from "../../../../services";
 import { useQuery } from "@tanstack/react-query";
 
 interface SelectDayModalProps {
@@ -25,7 +27,7 @@ interface SelectDayModalProps {
   onClose: () => void;
   selectedDate: Date | null;
   onAddEvent: (title: string, start: Date, end: Date) => void;
-  appointments?: AppointmentsData[];
+  appointments?: Appointment[];
 }
 
 const generateTimeSlots = (date: Date) => {
@@ -42,12 +44,34 @@ const generateTimeSlots = (date: Date) => {
   return slots;
 };
 
+const getServiceTimeRange = (
+  startMillis: number,
+  durationMinutes: number
+): { startTime: string; endTime: string } => {
+  const serviceDurationInMillis = durationMinutes * 60 * 1000;
+  const endTimeInMillis = serviceDurationInMillis + startMillis;
+
+  const convertMillisToTime = (millis: number): string => {
+    const date = new Date(millis);
+    return date.toLocaleTimeString("sr-RS", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  const startTime = convertMillisToTime(startMillis);
+  const endTime = convertMillisToTime(endTimeInMillis);
+
+  return { startTime, endTime };
+};
+
 const SelectDayModal: React.FC<SelectDayModalProps> = ({
   isOpen,
   onClose,
   selectedDate,
   onAddEvent,
-  appointments = [],
+  appointments,
 }) => {
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
   const timeSlots = selectedDate ? generateTimeSlots(selectedDate) : [];
@@ -61,7 +85,10 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
     }
   };
 
-  console.log(appointments);
+  const getWorkerNameById = (workerId: string) => {
+    const worker = workers?.data.find(worker => worker.id === workerId);
+    return worker ? worker.name : "Nepoznato ime radnice";
+  };
 
   return (
     <Modal
@@ -94,26 +121,61 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
               </TabList>
 
               <TabPanels>
-                {workers?.data.map(worker => (
-                  <TabPanel key={worker.id}>
-                    <Text fontSize="xl" fontWeight="bold" mb={4}>
-                      Slobodni termini
-                    </Text>
-                    <Grid templateColumns="repeat(4, 1fr)" gap={4}>
-                      {timeSlots.map((slot, index) => (
-                        <GridItem key={index}>
-                          <Button
-                            width="100%"
-                            onClick={() => handleAddEvent(slot)}
-                          >
-                            {slot.toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </Button>
-                        </GridItem>
-                      ))}
-                    </Grid>
+                {appointments?.map(appointment => (
+                  <TabPanel key={appointment.worker_id}>
+                    <Stack>
+                      <Text fontSize="xl" fontWeight="bold" mb={4}>
+                        Slobodni termini
+                      </Text>
+
+                      <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+                        {timeSlots.map((slot, index) => (
+                          <GridItem key={index}>
+                            <Button
+                              width="100%"
+                              onClick={() => handleAddEvent(slot)}
+                            >
+                              {slot.toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                              })}
+                            </Button>
+                          </GridItem>
+                        ))}
+                      </Grid>
+                    </Stack>
+                    <Stack>
+                      <Text fontSize="xl" fontWeight="bold" mb={4}>
+                        Zauzeti termini
+                      </Text>
+                      <Box>
+                        {appointments.map(appointment => {
+                          const { startTime, endTime } = getServiceTimeRange(
+                            appointment.date,
+                            appointment.service_duration
+                          );
+                          const workerName = getWorkerNameById(
+                            appointment.worker_id
+                          );
+
+                          return (
+                            <Stack key={appointment.id}>
+                              <Text>Početak termina: {startTime}</Text>
+                              <Text>Kraj termina: {endTime}</Text>
+                              <Text>Ime Radnice: {workerName}</Text>
+                              <Divider />
+                              <Text>
+                                Ime Kupca: {appointment.customer_name}
+                              </Text>
+                              <Text>
+                                Broj Kupca: {appointment.customer_number}
+                              </Text>
+                            </Stack>
+                          );
+                        })}
+                      </Box>
+                    </Stack>
                   </TabPanel>
                 ))}
               </TabPanels>
