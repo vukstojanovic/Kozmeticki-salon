@@ -11,7 +11,7 @@ export type Service = {
   name: string;
   time_in_minutes: number;
   price: number;
-  workers_id: string[];
+  workers_ids: string[];
 };
 
 export type ServicesData = {

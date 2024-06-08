@@ -143,7 +143,7 @@ export default function CategoriesAdmin() {
           </Stack>
         </Stack>
       </Box>
-      {categoriesData?.data.map(category => (
+      {categoriesData?.data.map((category) => (
         <TableContainer marginBlock="20px" key={category.id}>
           <Table variant="simple">
             <Thead>
@@ -161,8 +161,8 @@ export default function CategoriesAdmin() {
             </Thead>
             <Tbody>
               {servicesData?.data
-                .filter(service => service.category_id === category.id)
-                .map(service => (
+                .filter((service) => service.category_id === category.id)
+                .map((service) => (
                   <Tr key={service.id} _hover={{ bgColor: "#ebedf0" }}>
                     <Td width={500}>{service.name}</Td>
                     <Td>{service.time_in_minutes} min</Td>
@@ -222,7 +222,6 @@ export default function CategoriesAdmin() {
         isOpen={isEditServiceOpen}
         onClose={onEditServiceClose}
         selectedService={selectedService}
-        selectedCategory={selectedCategory}
       />
       {/* <DeleteServiceModal
         isOpen={isDeleteServiceOpen}

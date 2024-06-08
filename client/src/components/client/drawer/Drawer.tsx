@@ -86,20 +86,29 @@ export default function DrawerExample({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
-  const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
-    select: (data) => {
-      return data.data.map((worker) => ({
-        ...worker,
-        imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov",
-      }));
-    },
-  });
-
   const { data: categories } = useQuery(
     ["categories"],
     apiServices.getCategories
   );
   const { data: services } = useQuery(["services"], apiServices.getServices);
+
+  const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
+    select: (data) => {
+      return data.data
+        .filter((worker) => {
+          if (!activeService) return true;
+          const currentService = services?.data?.find(
+            (service) => service.id === activeService
+          );
+          return currentService?.workers_ids.includes(worker.id);
+        })
+        .map((worker) => ({
+          ...worker,
+          imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov",
+        }));
+    },
+    enabled: !!services,
+  });
 
   const activeServiceDuration = useMemo(() => {
     const minutes = services?.data?.find(

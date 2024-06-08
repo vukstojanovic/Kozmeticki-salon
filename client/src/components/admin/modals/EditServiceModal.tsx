@@ -13,53 +13,60 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
-import { Service, Category } from "../../../services";
+import { Service } from "../../../services";
 import apiServices from "../../../services";
 import { useMutation } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+type WorkerWithLabel = {
+  value: string;
+  label: string;
+};
+
+type ServiceWithWorkersWithLabel = Omit<Service, "workers_ids"> & {
+  workers_ids: WorkerWithLabel[];
+};
 
 type EditServiceModalProps = {
   isOpen: boolean;
   onClose: () => void;
   selectedService: Service | null;
-  selectedCategory: Category | null;
 };
 
 export default function EditServiceModal({
   isOpen,
   onClose,
   selectedService,
-  selectedCategory,
 }: EditServiceModalProps) {
-  const [selectedCategoryName, setSelectedCategoryName] = useState<
-    string | null
-  >(selectedCategory ? selectedCategory.name : null);
-
-  useEffect(() => {
-    if (isOpen && selectedCategory) {
-      setSelectedCategoryName(selectedCategory.name);
-    } else {
-      setSelectedCategoryName(null);
-    }
-  }, [isOpen, selectedCategory]);
+  const { data: workersData } = useQuery(["workers"], apiServices.getWorkers);
 
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { errors },
     setValue,
-  } = useForm<Service>();
+  } = useForm<ServiceWithWorkersWithLabel>();
 
   useEffect(() => {
     if (selectedService) {
       setValue("name", selectedService.name);
       setValue("time_in_minutes", selectedService.time_in_minutes);
       setValue("price", selectedService.price);
+      setValue("category_id", selectedService.category_id);
+      const workersWithLabels = workersData?.data
+        .filter((worker) => selectedService.workers_ids.includes(worker.id))
+        .map((worker) => ({ value: worker.id, label: worker.name }));
+      // @ts-ignore
+      setValue("workers_ids", workersWithLabels);
+      console.log(selectedService.workers_ids, "selectedService");
     }
-  }, [isOpen, selectedService, setValue]);
+  }, [isOpen, selectedService, setValue, workersData?.data]);
+
+  const activeWorker = watch("workers_ids");
 
   // FETCH ///////////////////////
   const { refetch: refetchServices, data: servicesData } = useQuery(
@@ -70,7 +77,6 @@ export default function EditServiceModal({
     ["categories"],
     apiServices.getCategories
   );
-  const { data: workersData } = useQuery(["workers"], apiServices.getWorkers);
 
   // UPDATE MUTATION ///////////////////////
   const updateServiceMutation = useMutation(apiServices.updateService, {
@@ -81,18 +87,12 @@ export default function EditServiceModal({
   });
 
   // UPDATE FUNCTION ///////////////////////
-  function updateService({ data, id }: any) {
-    const workersIds = data.workers_id.map(
-      (worker: { value: any }) => worker.value
-    );
-    const categoryId = selectedCategory ? String(selectedCategory.id) : "";
-
+  function updateService(data: ServiceWithWorkersWithLabel) {
     const dataToSend = {
       ...data,
-      workers_id: workersIds,
-      category_id: categoryId,
+      workers_ids: data.workers_ids.map((worker) => worker.value),
     };
-    updateServiceMutation.mutate({ data: dataToSend, id });
+    updateServiceMutation.mutate({ data: dataToSend, id: selectedService?.id });
   }
 
   const CheckboxOption = ({ innerProps, label, isSelected }: any) => (
@@ -101,10 +101,6 @@ export default function EditServiceModal({
       {label}
     </div>
   );
-
-  const changeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategoryName(event.target.value);
-  };
 
   return (
     <Modal isOpen={isOpen} blockScrollOnMount={false} onClose={onClose}>
@@ -120,11 +116,7 @@ export default function EditServiceModal({
           flexDirection="column"
           w="full"
         >
-          <form
-            onSubmit={handleSubmit(data =>
-              updateService({ data, id: selectedService?.id })
-            )}
-          >
+          <form onSubmit={handleSubmit((data) => updateService(data))}>
             <Box alignItems="center">
               <FormLabel htmlFor="name" fontSize="12" opacity="0.8" mb="0">
                 Ime
@@ -150,27 +142,33 @@ export default function EditServiceModal({
                 </Text>
               )}
               <Text fontSize="12" opacity="0.8" mb="0">
-                Izaberi kategoriju
+                Kategorija
               </Text>
-              <SelectChakra
-                {...register("category_id", { valueAsNumber: true })}
-                onChange={changeSelect}
-                defaultValue={selectedService?.category_id}
-                value={selectedCategoryName || ""}
-                mb="15px"
-                css={{
-                  paddingInlineStart: "10px !important",
+              <Controller
+                control={control}
+                name="category_id"
+                defaultValue={selectedService?.category_id} // Add this line
+                render={({ field }) => {
+                  return (
+                    <SelectChakra
+                      {...field}
+                      mb="15px"
+                      css={{
+                        paddingInlineStart: "10px !important",
+                      }}
+                    >
+                      {categoriesData?.data.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </SelectChakra>
+                  );
                 }}
-              >
-                {categoriesData?.data.map(option => (
-                  <option key={option.id} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
-              </SelectChakra>
+              />
 
               <FormLabel htmlFor="time" fontSize="12" opacity="0.8" mb="0">
-                Time in minutes
+                Vreme u minutima
               </FormLabel>
               <Input
                 id="time"
@@ -202,11 +200,9 @@ export default function EditServiceModal({
               </Text>
               <Controller
                 control={control}
-                {...register("workers_id", {
-                  required: "Select worker is required field",
-                })}
-                render={({ field }) => (
-                  <>
+                name="workers_ids"
+                render={({ field }) => {
+                  return (
                     <Select
                       isMulti
                       {...field}
@@ -215,20 +211,20 @@ export default function EditServiceModal({
                       }}
                       //@ts-ignore
                       options={
-                        workersData?.data?.map(worker => ({
+                        workersData?.data?.map((worker) => ({
                           value: worker.id,
                           label: worker.name,
                         })) || []
                       }
                     />
-                    {errors.workers_id && (
-                      <Text color="red.500" mt={"7px"} ml="20px" mb="15px">
-                        {errors.workers_id.message}
-                      </Text>
-                    )}
-                  </>
-                )}
+                  );
+                }}
               />
+              {errors.workers_ids && (
+                <Text color="red.500" mt={"7px"} ml="20px" mb="15px">
+                  {errors.workers_ids.message}
+                </Text>
+              )}
               <FormLabel
                 htmlFor="price"
                 fontSize="12"

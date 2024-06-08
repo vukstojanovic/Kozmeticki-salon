@@ -45,7 +45,7 @@ export default function AddServiceModal({
 
   function addService(data: Service) {
     // @ts-ignore
-    const workersIds = data.workers_id.map(worker => worker.value);
+    const workersIds = data.workers_id.map((worker) => worker.value);
     const categoryId = selectedCategory ? String(selectedCategory.id) : "";
     const dataToSend = {
       ...data,
@@ -143,7 +143,7 @@ export default function AddServiceModal({
                   paddingInlineStart: "10px !important",
                 }}
               >
-                {data?.data.map(option => {
+                {data?.data.map((option) => {
                   return (
                     <option key={option.id} value={option.name}>
                       {option.name}
@@ -185,7 +185,7 @@ export default function AddServiceModal({
               </Text>
               <Controller
                 control={control}
-                {...register("workers_id", {
+                {...register("workers_ids", {
                   required: "Select worker is required field",
                 })}
                 render={({ field }) => (
@@ -198,15 +198,15 @@ export default function AddServiceModal({
                       }}
                       //@ts-ignore
                       options={
-                        workersData?.data?.map(worker => ({
+                        workersData?.data?.map((worker) => ({
                           value: worker.id,
                           label: worker.name,
                         })) || []
                       }
                     />
-                    {errors.workers_id && (
+                    {errors.workers_ids && (
                       <Text color="red.500" mt={"7px"} ml="20px" mb="15px">
-                        {errors.workers_id.message}
+                        {errors.workers_ids.message}
                       </Text>
                     )}
                   </>
