@@ -66,6 +66,7 @@ export type WorkersType = {
 };
 
 export type Workers = {
+  id: string;
   name: string;
   image?: string;
 };
@@ -106,6 +107,12 @@ const apiServices = {
 
   getAppointments: () =>
     axiosInstance.get<null, AppointmentsData>("/appointments"),
+
+  updateAppointment: ({ data, id }: any) =>
+    axiosInstance.put<Partial<Appointment>>(`/appointments/${id}`, data),
+
+  deleteAppointment: (id: string) =>
+    axiosInstance.delete<null, string>(`/appointments/${id}`),
 
   loginAdmin: (data: LoginData) =>
     axiosInstance.post<LoginData, string>("/auth/login", data),

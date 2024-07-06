@@ -93,16 +93,16 @@ export default function DrawerExample({
   const { data: services } = useQuery(["services"], apiServices.getServices);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
-    select: (data) => {
+    select: data => {
       return data.data
-        .filter((worker) => {
+        .filter(worker => {
           if (!activeService) return true;
           const currentService = services?.data?.find(
-            (service) => service.id === activeService
+            service => service.id === activeService
           );
           return currentService?.workers_ids.includes(worker.id);
         })
-        .map((worker) => ({
+        .map(worker => ({
           ...worker,
           imgUrl: workerPhotos[worker.id] || "https://bit.ly/dan-abramov",
         }));
@@ -112,7 +112,7 @@ export default function DrawerExample({
 
   const activeServiceDuration = useMemo(() => {
     const minutes = services?.data?.find(
-      (service) => service.id === activeService
+      service => service.id === activeService
     )?.time_in_minutes;
     return minutes ? minutes * 60000 : 0;
   }, [services, activeService]);
@@ -130,11 +130,11 @@ export default function DrawerExample({
   };
 
   const handleNext = () => {
-    setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
+    setActiveStep(prevStep => Math.min(prevStep + 1, steps.length));
   };
 
   const handlePrev = () => {
-    setActiveStep((prevStep) => Math.max(prevStep - 1, 1));
+    setActiveStep(prevStep => Math.max(prevStep - 1, 1));
   };
 
   const submitForm = (data: any) => {
@@ -227,8 +227,7 @@ export default function DrawerExample({
                         >
                           {services?.data
                             ?.filter(
-                              (service) =>
-                                service.category_id === activeCategory
+                              service => service.category_id === activeCategory
                             )
                             .map((service: Service) => {
                               return (
@@ -271,7 +270,7 @@ export default function DrawerExample({
                       {availableTimeSlots.length === 0 ? (
                         <Text>No available slots</Text>
                       ) : (
-                        availableTimeSlots.map((slot) => (
+                        availableTimeSlots.map(slot => (
                           <Text key={slot}>{slot}</Text>
                         ))
                       )}

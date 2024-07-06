@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -7,63 +7,66 @@ import {
   ModalBody,
   ModalCloseButton,
   Box,
-  Grid,
-  GridItem,
-  Text,
-  Button,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
   Stack,
-  Divider,
 } from "@chakra-ui/react";
 import apiServices, { Appointment } from "../../../../services";
 import { useQuery } from "@tanstack/react-query";
+
+import FreeAppointments from "./panels/FreeAppointments";
+import BusyAppointments from "./panels/BusyAppointments";
+import AddAppointmentForm from "./panels/AddAppointmentForm";
+import AppointmentDetails from "./panels/AppointmentDetails";
 
 interface SelectDayModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedDate: Date | null;
-  onAddEvent: (title: string, start: Date, end: Date) => void;
+  onAddEvent: (
+    title: string,
+    start: Date,
+    end: Date,
+    customerName: string,
+    customerNumber: string,
+    service: string
+  ) => void;
   appointments?: Appointment[];
 }
 
 const generateTimeSlots = (date: Date) => {
-  const slots = [];
+  const slots: Date[] = [];
+  const dayOfWeek = date.getDay();
   const start = new Date(date);
   start.setHours(0, 0, 0, 0);
 
-  for (let i = 0; i < 48; i++) {
-    const slotTime = new Date(start);
-    slotTime.setMinutes(slotTime.getMinutes() + i * 30);
-    slots.push(slotTime);
+  let startHour, endHour;
+
+  if (dayOfWeek === 0) {
+    // Sunday
+    return slots; // No slots on Sunday
+  } else if (dayOfWeek === 6) {
+    // Saturday
+    startHour = 9;
+    endHour = 16;
+  } else {
+    // Weekdays
+    startHour = 9;
+    endHour = 20;
+  }
+
+  for (let hour = startHour; hour < endHour; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const slotTime = new Date(start);
+      slotTime.setHours(hour, minute, 0, 0);
+      slots.push(slotTime);
+    }
   }
 
   return slots;
-};
-
-const getServiceTimeRange = (
-  startMillis: number,
-  durationMinutes: number
-): { startTime: string; endTime: string } => {
-  const serviceDurationInMillis = durationMinutes * 60 * 1000;
-  const endTimeInMillis = serviceDurationInMillis + startMillis;
-
-  const convertMillisToTime = (millis: number): string => {
-    const date = new Date(millis);
-    return date.toLocaleTimeString("sr-RS", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
-  const startTime = convertMillisToTime(startMillis);
-  const endTime = convertMillisToTime(endTimeInMillis);
-
-  return { startTime, endTime };
 };
 
 const SelectDayModal: React.FC<SelectDayModalProps> = ({
@@ -73,21 +76,43 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
   onAddEvent,
   appointments,
 }) => {
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<Appointment | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
+  const [newEventTitle, setNewEventTitle] = useState("");
+  const [newCustomerName, setNewCustomerName] = useState("");
+  const [newCustomerNumber, setNewCustomerNumber] = useState("");
+  const [newService, setNewService] = useState("");
+
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
   const timeSlots = selectedDate ? generateTimeSlots(selectedDate) : [];
 
-  const handleAddEvent = (slot: Date) => {
-    const title = prompt("Please enter a new title for your event");
-    if (title) {
-      const end = new Date(slot);
-      end.setMinutes(slot.getMinutes() + 30);
-      onAddEvent(title, slot, end);
+  const handleAddEvent = () => {
+    if (newEventTitle && selectedSlot) {
+      const end = new Date(selectedSlot);
+      end.setMinutes(selectedSlot.getMinutes() + 30);
+      onAddEvent(
+        newEventTitle,
+        selectedSlot,
+        end,
+        newCustomerName,
+        newCustomerNumber,
+        newService
+      );
+      setSelectedSlot(null);
+      setNewEventTitle("");
+      setNewCustomerName("");
+      setNewCustomerNumber("");
+      setNewService("");
+      setSelectedAppointment(null); // Reset selected appointment
     }
   };
 
-  const getWorkerNameById = (workerId: string) => {
-    const worker = workers?.data.find(worker => worker.id === workerId);
-    return worker ? worker.name : "Nepoznato ime radnice";
+  const handleSlotClick = (appointment: Appointment) => {
+    setSelectedAppointment(
+      selectedAppointment?.id === appointment.id ? null : appointment
+    );
+    setSelectedSlot(null); // Clear selected slot when clicking on existing appointment
   };
 
   return (
@@ -95,7 +120,10 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
       size="xl"
       isOpen={isOpen}
       blockScrollOnMount={false}
-      onClose={onClose}
+      onClose={() => {
+        setSelectedAppointment(null);
+        onClose();
+      }}
     >
       <ModalOverlay />
       <ModalContent display="flex" justifyContent="center" alignItems="center">
@@ -103,78 +131,54 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
           Termini za {selectedDate?.toLocaleDateString()}
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody
-          pt={0}
-          pb={5}
-          px={0}
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <ModalBody pt={0} pb={5} px={5} w="full">
           <Box width="100%">
             <Tabs>
               <TabList>
                 {workers?.data.map(worker => (
-                  <Tab key={worker.id}>{worker.name}</Tab>
+                  <Tab fontSize="18px" lineHeight="20px" key={worker.id}>
+                    {worker.name}
+                  </Tab>
                 ))}
               </TabList>
 
               <TabPanels>
-                {appointments?.map(appointment => (
-                  <TabPanel key={appointment.worker_id}>
+                {workers?.data.map(worker => (
+                  <TabPanel key={worker.id}>
                     <Stack>
-                      <Text fontSize="xl" fontWeight="bold" mb={4}>
-                        Slobodni termini
-                      </Text>
-
-                      <Grid templateColumns="repeat(6, 1fr)" gap={4}>
-                        {timeSlots.map((slot, index) => (
-                          <GridItem key={index}>
-                            <Button
-                              width="100%"
-                              onClick={() => handleAddEvent(slot)}
-                            >
-                              {slot.toLocaleTimeString("en-US", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                              })}
-                            </Button>
-                          </GridItem>
-                        ))}
-                      </Grid>
-                    </Stack>
-                    <Stack>
-                      <Text fontSize="xl" fontWeight="bold" mb={4}>
-                        Zauzeti termini
-                      </Text>
-                      <Box>
-                        {appointments.map(appointment => {
-                          const { startTime, endTime } = getServiceTimeRange(
-                            appointment.date,
-                            appointment.service_duration
-                          );
-                          const workerName = getWorkerNameById(
-                            appointment.worker_id
-                          );
-
-                          return (
-                            <Stack key={appointment.id}>
-                              <Text>Početak termina: {startTime}</Text>
-                              <Text>Kraj termina: {endTime}</Text>
-                              <Text>Ime Radnice: {workerName}</Text>
-                              <Divider />
-                              <Text>
-                                Ime Kupca: {appointment.customer_name}
-                              </Text>
-                              <Text>
-                                Broj Kupca: {appointment.customer_number}
-                              </Text>
-                            </Stack>
-                          );
-                        })}
-                      </Box>
+                      {selectedSlot ? (
+                        <AddAppointmentForm
+                          newEventTitle={newEventTitle}
+                          newCustomerName={newCustomerName}
+                          newCustomerNumber={newCustomerNumber}
+                          newService={newService}
+                          setNewEventTitle={setNewEventTitle}
+                          setNewCustomerName={setNewCustomerName}
+                          setNewCustomerNumber={setNewCustomerNumber}
+                          setNewService={setNewService}
+                          handleAddEvent={handleAddEvent}
+                        />
+                      ) : selectedAppointment &&
+                        selectedAppointment.worker_id === worker.id ? (
+                        <AppointmentDetails
+                          appointment={selectedAppointment}
+                          workerName={worker.name}
+                        />
+                      ) : (
+                        <>
+                          <BusyAppointments
+                            appointments={appointments?.filter(
+                              appointment => appointment.worker_id === worker.id
+                            )}
+                            selectedAppointment={selectedAppointment}
+                            handleSlotClick={handleSlotClick}
+                          />
+                          <FreeAppointments
+                            timeSlots={timeSlots}
+                            setSelectedSlot={setSelectedSlot}
+                          />
+                        </>
+                      )}
                     </Stack>
                   </TabPanel>
                 ))}
