@@ -2,6 +2,7 @@ import ReactCalendar from "react-calendar";
 import "./Calendar.scss";
 import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services";
+import { useEffect } from "react";
 
 const getAppointmentsForWorkerAndDate = (
   appointments: any = [],
@@ -43,17 +44,30 @@ const generateTimeSlots = (startHour: any, endHour: any, durationMs: any) => {
   return slots;
 };
 
-const isTimeSlotAvailable = (slot: any, durationMs: any, appointments: any) => {
-  const slotStart = new Date(`1970-01-01T${slot}:00`);
+const isTimeSlotAvailable = (
+  slot: any,
+  durationMs: any,
+  appointments: any,
+  selectedDate: any
+) => {
+  const slotStart = new Date(selectedDate);
+  const hours = Number(slot.split(":")[0]);
+  const minutes = Number(slot.split(":")[1]);
+  slotStart.setHours(hours, minutes, 0, 0);
   const slotEnd = new Date(slotStart.getTime() + durationMs);
 
   return !appointments.some((appointment: any) => {
     const appointmentStart = new Date(appointment.date);
     const appointmentEnd = new Date(
-      appointmentStart.getTime() + appointment.service_duration
+      appointmentStart.getTime() + appointment.service_duration * 60000
     );
 
     return slotStart < appointmentEnd && slotEnd > appointmentStart;
+    // return !(
+    //   (appointmentStart >= slotStart && appointmentStart < slotEnd) ||
+    //   (appointmentEnd > slotStart && appointmentEnd < slotEnd) ||
+    //   (appointmentStart <= slotStart && appointmentEnd > slotEnd)
+    // );
   });
 };
 
@@ -74,10 +88,14 @@ const getAvailableTimeSlots = (
     workerId,
     selectedDate
   );
-  console.log(allSlots, "allSlots");
 
   return allSlots.filter((slot) =>
-    isTimeSlotAvailable(slot, serviceDurationMs, workerAppointments)
+    isTimeSlotAvailable(
+      slot,
+      serviceDurationMs,
+      workerAppointments,
+      selectedDate
+    )
   );
 };
 
@@ -115,7 +133,7 @@ export default function Calendar({
   const today = new Date();
   const minDate = new Date(
     today.getFullYear(),
-    today.getMonth() - 1,
+    today.getMonth(),
     today.getDate()
   );
   const maxDate = new Date(
@@ -123,6 +141,22 @@ export default function Calendar({
     today.getMonth() + 3,
     today.getDate()
   );
+
+  useEffect(() => {
+    const availableSlots = getAvailableTimeSlots(
+      appointments?.data,
+      value,
+      selectedWorker,
+      serviceDuration
+    );
+    setAvailableTimeSlots(availableSlots);
+  }, [
+    appointments?.data,
+    selectedWorker,
+    serviceDuration,
+    setAvailableTimeSlots,
+    value,
+  ]);
 
   return (
     <ReactCalendar
