@@ -13,6 +13,8 @@ import {
   Tab,
   TabPanel,
   Stack,
+  Button,
+  IconButton,
 } from "@chakra-ui/react";
 import apiServices, { Appointment } from "../../../../services";
 import { useQuery } from "@tanstack/react-query";
@@ -20,7 +22,8 @@ import { useQuery } from "@tanstack/react-query";
 import FreeAppointments from "./panels/FreeAppointments";
 import BusyAppointments from "./panels/BusyAppointments";
 import AddAppointmentForm from "./panels/AddAppointmentForm";
-import AppointmentDetails from "./panels/AppointmentDetails";
+import EditAppointmentForm from "./panels/EditAppointmentForm";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 interface SelectDayModalProps {
   isOpen: boolean;
@@ -32,7 +35,8 @@ interface SelectDayModalProps {
     end: Date,
     customerName: string,
     customerNumber: string,
-    service: string
+    service: string,
+    workerId: number
   ) => void;
   appointments?: Appointment[];
 }
@@ -47,7 +51,7 @@ const generateTimeSlots = (date: Date) => {
 
   if (dayOfWeek === 0) {
     // Sunday
-    return slots; // No slots on Sunday
+    return slots;
   } else if (dayOfWeek === 6) {
     // Saturday
     startHour = 9;
@@ -83,29 +87,33 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
   const [newCustomerName, setNewCustomerName] = useState("");
   const [newCustomerNumber, setNewCustomerNumber] = useState("");
   const [newService, setNewService] = useState("");
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
   const timeSlots = selectedDate ? generateTimeSlots(selectedDate) : [];
 
   const handleAddEvent = () => {
-    if (newEventTitle && selectedSlot) {
-      const end = new Date(selectedSlot);
-      end.setMinutes(selectedSlot.getMinutes() + 30);
-      onAddEvent(
-        newEventTitle,
-        selectedSlot,
-        end,
-        newCustomerName,
-        newCustomerNumber,
-        newService
-      );
-      setSelectedSlot(null);
-      setNewEventTitle("");
-      setNewCustomerName("");
-      setNewCustomerNumber("");
-      setNewService("");
-      setSelectedAppointment(null); // Reset selected appointment
-    }
+    // if (newEventTitle && selectedSlot) {
+    //   const end = new Date(selectedSlot);
+    //   end.setMinutes(selectedSlot.getMinutes() + 30);
+    //   const workerId = workers?.data[activeTabIndex].id;
+    //   onAddEvent(
+    //     newEventTitle,
+    //     selectedSlot,
+    //     end,
+    //     newCustomerName,
+    //     newCustomerNumber,
+    //     newService,
+    //     workerId
+    //   );
+    //   setSelectedSlot(null);
+    //   setNewEventTitle("");
+    //   setNewCustomerName("");
+    //   setNewCustomerNumber("");
+    //   setNewService("");
+    //   setSelectedAppointment(null);
+    // }
+    console.log("dodato");
   };
 
   const handleSlotClick = (appointment: Appointment) => {
@@ -113,6 +121,11 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
       selectedAppointment?.id === appointment.id ? null : appointment
     );
     setSelectedSlot(null); // Clear selected slot when clicking on existing appointment
+  };
+
+  const handleBack = () => {
+    setSelectedAppointment(null);
+    setSelectedSlot(null);
   };
 
   return (
@@ -131,60 +144,77 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
           Termini za {selectedDate?.toLocaleDateString()}
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody pt={0} pb={5} px={5} w="full">
-          <Box width="100%">
-            <Tabs>
-              <TabList>
-                {workers?.data.map(worker => (
-                  <Tab fontSize="18px" lineHeight="20px" key={worker.id}>
-                    {worker.name}
-                  </Tab>
-                ))}
-              </TabList>
+        <ModalBody w="full" pt={5} pb={5}>
+          {selectedSlot || selectedAppointment ? (
+            <Box>
+              <IconButton
+                onClick={handleBack}
+                aria-label="Nazad"
+                icon={<ChevronLeftIcon />}
+                mb={4}
+                variant="outline" // You can change this to "solid" or any other variant you prefer
+              />
+              {selectedSlot ? (
+                <AddAppointmentForm
+                  // handleAddEvent={handleAddEvent}
+                  workerId={workers?.data[activeTabIndex].id}
+                />
+              ) : (
+                selectedAppointment && (
+                  <EditAppointmentForm
+                    appointment={selectedAppointment}
+                    workerId={
+                      workers?.data.find(
+                        worker => worker.id === selectedAppointment.worker_id
+                      )?.name
+                    }
+                  />
+                )
+              )}
+            </Box>
+          ) : (
+            <Box width="100%">
+              <Tabs
+                onChange={index => setActiveTabIndex(index)}
+                display="flex"
+                flexDirection="column"
+                gap={5}
+              >
+                <TabList>
+                  {workers?.data.map(worker => (
+                    <Tab fontSize="18px" lineHeight="20px" key={worker.id}>
+                      {worker.name}
+                    </Tab>
+                  ))}
+                </TabList>
 
-              <TabPanels>
-                {workers?.data.map(worker => (
-                  <TabPanel key={worker.id}>
-                    <Stack>
-                      {selectedSlot ? (
-                        <AddAppointmentForm
-                          newEventTitle={newEventTitle}
-                          newCustomerName={newCustomerName}
-                          newCustomerNumber={newCustomerNumber}
-                          newService={newService}
-                          setNewEventTitle={setNewEventTitle}
-                          setNewCustomerName={setNewCustomerName}
-                          setNewCustomerNumber={setNewCustomerNumber}
-                          setNewService={setNewService}
-                          handleAddEvent={handleAddEvent}
+                <TabPanels
+                  shadow="md"
+                  borderWidth="1px"
+                  borderRadius="md"
+                  bg="white"
+                >
+                  {workers?.data.map(worker => (
+                    <TabPanel key={worker.id}>
+                      <Stack>
+                        <BusyAppointments
+                          appointments={appointments?.filter(
+                            appointment => appointment.worker_id === worker.id
+                          )}
+                          selectedAppointment={selectedAppointment}
+                          handleSlotClick={handleSlotClick}
                         />
-                      ) : selectedAppointment &&
-                        selectedAppointment.worker_id === worker.id ? (
-                        <AppointmentDetails
-                          appointment={selectedAppointment}
-                          workerName={worker.name}
+                        <FreeAppointments
+                          timeSlots={timeSlots}
+                          setSelectedSlot={setSelectedSlot}
                         />
-                      ) : (
-                        <>
-                          <BusyAppointments
-                            appointments={appointments?.filter(
-                              appointment => appointment.worker_id === worker.id
-                            )}
-                            selectedAppointment={selectedAppointment}
-                            handleSlotClick={handleSlotClick}
-                          />
-                          <FreeAppointments
-                            timeSlots={timeSlots}
-                            setSelectedSlot={setSelectedSlot}
-                          />
-                        </>
-                      )}
-                    </Stack>
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </Tabs>
-          </Box>
+                      </Stack>
+                    </TabPanel>
+                  ))}
+                </TabPanels>
+              </Tabs>
+            </Box>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

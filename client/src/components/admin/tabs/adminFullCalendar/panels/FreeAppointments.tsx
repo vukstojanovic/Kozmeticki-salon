@@ -11,30 +11,34 @@ const FreeAppointments: React.FC<FreeAppointmentsProps> = ({
   setSelectedSlot,
 }) => (
   <Box>
-    <Text fontSize="xl" fontWeight="bold" mt={6} mb={4}>
+    <Text fontSize="xl" fontWeight="bold" mt={4} mb={2}>
       Slobodni termini
     </Text>
-    <SimpleGrid columns={6} spacing={4}>
-      {timeSlots.map(slot => (
-        <Box
-          key={slot.toISOString()}
-          border="1px solid"
-          borderColor="gray.200"
-          borderRadius="md"
-          p={4}
-          cursor="pointer"
-          onClick={() => setSelectedSlot(slot)}
-        >
-          <Text>
-            {slot.toLocaleTimeString("sr-RS", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            })}
-          </Text>
-        </Box>
-      ))}
-    </SimpleGrid>
+    {timeSlots.length === 0 ? (
+      <Text color="black">Nema slobodnih termina</Text>
+    ) : (
+      <SimpleGrid columns={6} spacing={3}>
+        {timeSlots.map(slot => (
+          <Box
+            key={slot.toISOString()}
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="md"
+            p={4}
+            cursor="pointer"
+            onClick={() => setSelectedSlot(slot)}
+          >
+            <Text>
+              {slot.toLocaleTimeString("sr-RS", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
+            </Text>
+          </Box>
+        ))}
+      </SimpleGrid>
+    )}
   </Box>
 );
 

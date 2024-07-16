@@ -108,6 +108,12 @@ const apiServices = {
   getAppointments: () =>
     axiosInstance.get<null, AppointmentsData>("/appointments"),
 
+  addAppointment: (appointmentsData: Appointment) =>
+    axiosInstance.post<null, AppointmentsData>(
+      "/appointments",
+      appointmentsData
+    ),
+
   updateAppointment: ({ data, id }: any) =>
     axiosInstance.put<Partial<Appointment>>(`/appointments/${id}`, data),
 
