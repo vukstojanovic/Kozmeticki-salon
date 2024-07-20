@@ -26,23 +26,44 @@ const WORKING_HOURS = {
 const isWeekend = (date: any) => date.getDay() === 6; // Saturday
 const isSunday = (date: any) => date.getDay() === 0; // Sunday
 
+// const generateTimeSlots = (startHour: any, endHour: any, durationMs: any) => {
+//   const slots = [];
+//   const durationMinutes = durationMs / 60000;
+
+//   console.log(durationMinutes, "durationMinutes");
+
+//   for (let hour = startHour; hour < endHour; hour++) {
+//     for (let minute = 0; minute < 60; minute += durationMinutes) {
+//       if (minute + durationMinutes <= 60) {
+//         slots.push(
+//           `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
+//         );
+//       }
+//     }
+//   }
+//   return slots;
+// };
+
 const generateTimeSlots = (startHour: any, endHour: any, durationMs: any) => {
   const slots = [];
   const durationMinutes = durationMs / 60000;
 
-  console.log(durationMinutes, "durationMinutes");
-
   for (let hour = startHour; hour < endHour; hour++) {
-    for (let minute = 0; minute < 60; minute += durationMinutes) {
+    let minute = 0;
+    while (minute < 60) {
       if (minute + durationMinutes <= 60) {
         slots.push(
           `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
         );
       }
+      minute += durationMinutes;
     }
   }
+  console.log(slots, "slots");
   return slots;
 };
+
+console.log(generateTimeSlots(9, 22, 540000), "hello");
 
 const isTimeSlotAvailable = (
   slot: any,
@@ -116,8 +137,6 @@ export default function Calendar({
     ["appointments"],
     apiServices.getAppointments
   );
-
-  generateTimeSlots(9, 22, 600000);
 
   const handleDayClick = (day: any) => {
     onClickDay(day);
