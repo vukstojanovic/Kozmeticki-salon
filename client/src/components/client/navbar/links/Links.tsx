@@ -15,7 +15,7 @@ const items = ["O Nama", "Usluge", "Kontakt"];
 interface LinksProps {
   selectedIndex: number | null;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  handleLinkClick: (index: number, path: string) => void; // Dodajemo handleLinkClick kao prop
+  handleLinkClick: (index: number, elementId: string) => void;
 }
 
 const Links = ({
@@ -38,6 +38,7 @@ const Links = ({
         <Stack direction="row" p={2} justifyContent="space-between">
           <HStack>
             {items.map((item, index) => {
+              const elementId = item.toLowerCase().replace(/\s+/g, "-");
               return (
                 <Text
                   as="button"
@@ -46,12 +47,7 @@ const Links = ({
                     fontSize: "20px",
                     marginLeft: "20px",
                   }}
-                  onClick={() =>
-                    handleLinkClick(
-                      index,
-                      `#${item.toLowerCase().replace(/\s+/g, "-")}`
-                    )
-                  } // Korišćenje handleLinkClick funkcije pri kliku
+                  onClick={() => handleLinkClick(index, elementId)}
                 >
                   {item}
                 </Text>

@@ -7,7 +7,6 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
 
 import logo from "../../../assets/logo.png";
 import Links from "./links/Links";
@@ -17,13 +16,11 @@ export default function Navbar() {
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();
 
-  const handleLinkClick = (index: number, path: string) => {
+  const handleLinkClick = (index: number, elementId: string) => {
     setSelectedIndex(index);
     onClose();
-    navigate(path);
-    const element = document.getElementById(path.substring(1));
+    const element = document.getElementById(elementId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }

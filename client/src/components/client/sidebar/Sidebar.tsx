@@ -19,7 +19,7 @@ interface SidebarProps {
   onClose: () => void;
   selectedIndex: number | null;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  handleLinkClick: (index: number, path: string) => void;
+  handleLinkClick: (index: number, elementId: string) => void;
 }
 
 export default function Sidebar({
@@ -49,6 +49,8 @@ export default function Sidebar({
           >
             <VStack spacing={3}>
               {items.map((item, index) => {
+                const elementId = item.toLowerCase().replace(/\s+/g, "-");
+                const isSelected = selectedIndex === index;
                 return (
                   <Text
                     as="button"
@@ -56,13 +58,9 @@ export default function Sidebar({
                     style={{
                       fontSize: "20px",
                       marginLeft: "20px",
+                      color: isSelected ? "#E6888A" : "#343A59",
                     }}
-                    onClick={() =>
-                      handleLinkClick(
-                        index,
-                        `#${item.toLowerCase().replace(/\s+/g, "-")}`
-                      )
-                    }
+                    onClick={() => handleLinkClick(index, elementId)}
                   >
                     {item}
                   </Text>
