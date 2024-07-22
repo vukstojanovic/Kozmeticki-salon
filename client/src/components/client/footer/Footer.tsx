@@ -15,9 +15,9 @@ export default function Footer() {
 
   return (
     <Box
+      id="kontakt"
       as="footer"
       className="footer"
-      id="Kontakt"
       display="flex"
       flexDirection="row"
       justifyContent="space-between"

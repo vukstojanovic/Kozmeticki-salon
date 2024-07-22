@@ -10,16 +10,16 @@ import {
   VStack,
   Text,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 
-const items = ["Usluge", "O Nama", "Edukacije", "Kontakt"];
+const items = ["O Nama", "Usluge", "Kontakt"];
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   selectedIndex: number | null;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  handleLinkClick: (index: number, path: string) => void;
 }
 
 export default function Sidebar({
@@ -27,6 +27,7 @@ export default function Sidebar({
   onClose,
   selectedIndex,
   setSelectedIndex,
+  handleLinkClick,
 }: SidebarProps) {
   return (
     <Drawer
@@ -48,22 +49,23 @@ export default function Sidebar({
           >
             <VStack spacing={3}>
               {items.map((item, index) => {
-                const isSelected = selectedIndex === index;
                 return (
-                  <Link
-                    to={`/${item}`}
+                  <Text
+                    as="button"
                     key={item}
                     style={{
                       fontSize: "20px",
                       marginLeft: "20px",
-                      color: isSelected ? "#E6888A" : "#343A59",
                     }}
-                    onClick={() => setSelectedIndex(index)}
+                    onClick={() =>
+                      handleLinkClick(
+                        index,
+                        `#${item.toLowerCase().replace(/\s+/g, "-")}`
+                      )
+                    }
                   >
-                    <Text display="block" fontSize="xl" color="currentColor">
-                      {item}
-                    </Text>
-                  </Link>
+                    {item}
+                  </Text>
                 );
               })}
             </VStack>

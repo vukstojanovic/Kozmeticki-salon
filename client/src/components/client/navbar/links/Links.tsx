@@ -10,14 +10,19 @@ import {
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 
-const items = ["Usluge", "O Nama", "Edukacije", "Kontakt"];
+const items = ["O Nama", "Usluge", "Kontakt"];
 
 interface LinksProps {
   selectedIndex: number | null;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  handleLinkClick: (index: number, path: string) => void; // Dodajemo handleLinkClick kao prop
 }
 
-const Links = ({ selectedIndex, setSelectedIndex }: LinksProps) => {
+const Links = ({
+  selectedIndex,
+  setSelectedIndex,
+  handleLinkClick,
+}: LinksProps) => {
   return (
     <HStack className="links" spacing="50px" width="100%" pl={5}>
       <Box display="flex" flexDirection="column" flexGrow={1}>
@@ -33,22 +38,23 @@ const Links = ({ selectedIndex, setSelectedIndex }: LinksProps) => {
         <Stack direction="row" p={2} justifyContent="space-between">
           <HStack>
             {items.map((item, index) => {
-              const isSelected = selectedIndex === index;
               return (
-                <Link
-                  to={`/${item}`}
+                <Text
+                  as="button"
                   key={item}
                   style={{
                     fontSize: "20px",
                     marginLeft: "20px",
-                    color: isSelected ? "#E6888A" : "#343A59",
                   }}
-                  onClick={() => setSelectedIndex(index)}
+                  onClick={() =>
+                    handleLinkClick(
+                      index,
+                      `#${item.toLowerCase().replace(/\s+/g, "-")}`
+                    )
+                  } // Korišćenje handleLinkClick funkcije pri kliku
                 >
-                  <Text display="block" fontSize="xl" color="currentColor">
-                    {item}
-                  </Text>
-                </Link>
+                  {item}
+                </Text>
               );
             })}
           </HStack>

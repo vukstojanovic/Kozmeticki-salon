@@ -4,6 +4,7 @@ import section111 from "../../../assets/section111.png";
 const AboutUs = () => {
   return (
     <Stack
+      id="o-nama"
       display="flex"
       direction="row"
       gap="5vh"
