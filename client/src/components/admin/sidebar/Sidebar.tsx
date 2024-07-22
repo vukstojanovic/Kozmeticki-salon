@@ -1,10 +1,9 @@
 import React from "react";
 import { Flex, IconButton, Stack, Img, Divider } from "@chakra-ui/react";
-import { FiMenu } from "react-icons/fi";
+import { FiMenu, FiLogOut } from "react-icons/fi";
 import NavItem from "./NavItem";
-
 import logo from "../../../assets/logo.png";
-import logoCircle from "../../../assets/logoCircle.png";
+import logoCircle2 from "../../../assets/logoCircle2.png";
 import { IconType } from "react-icons";
 
 interface SidebarProps {
@@ -12,6 +11,7 @@ interface SidebarProps {
   navSize: "small" | "large";
   changeNavSize: (size: "small" | "large") => void;
   items: { name: string; icon: IconType }[];
+  onLogout: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -19,6 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   navSize,
   changeNavSize,
   items,
+  onLogout,
 }) => {
   return (
     <Flex
@@ -58,11 +59,18 @@ const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </Stack>
       </Flex>
+
       <Flex p="5%" flexDir="column" w="100%" alignItems="center" mb={4}>
-        <Divider display={navSize === "small" ? "none" : "flex"} />
+        <NavItem
+          navSize={navSize}
+          icon={FiLogOut}
+          title="Logout"
+          onClick={onLogout}
+        />
+        <Divider mt={4} display={navSize === "small" ? "none" : "flex"} />
         <Flex mt={4} align="center">
           <Img
-            src={navSize === "small" ? logoCircle : logo}
+            src={navSize === "small" ? logoCircle2 : logo}
             alt="logo"
             h={navSize === "small" ? "unset" : 107}
             w={navSize === "small" ? "unset" : 150}

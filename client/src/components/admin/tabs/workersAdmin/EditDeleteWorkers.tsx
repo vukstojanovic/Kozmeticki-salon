@@ -53,7 +53,7 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
             name="Segun Adebayo"
             src="https://bit.ly/sage-adebayo"
           />
-          <Box
+          {/* <Box
             position="absolute"
             bottom={0}
             right={0}
@@ -73,7 +73,7 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
               type="file"
               display="none"
             />
-          </Box>
+          </Box> */}
         </Box>
         <Heading size="md" textAlign="center" mt={3}>
           {name}

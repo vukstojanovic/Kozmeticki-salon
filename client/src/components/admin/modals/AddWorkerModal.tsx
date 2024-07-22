@@ -80,12 +80,12 @@ export default function AddWorkerModal({
               px={5}
             >
               <Box position="relative">
-                <Avatar
+                {/* <Avatar
                   size="xl"
                   name="Segun Adebayo"
                   src="https://bit.ly/sage-adebayo"
-                />
-                <Box
+                /> */}
+                {/* <Box
                   position="absolute"
                   bottom={0}
                   right={0}
@@ -105,7 +105,7 @@ export default function AddWorkerModal({
                     type="file"
                     display="none"
                   />
-                </Box>
+                </Box> */}
               </Box>
 
               <Input

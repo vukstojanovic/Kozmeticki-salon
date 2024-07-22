@@ -4,10 +4,10 @@ import AdminFullCalendar from "./components/admin/tabs/adminFullCalendar/adminFu
 import WorkersAdmin from "./components/admin/tabs/workersAdmin/WorkersAdmin";
 import CategoriesAdmin from "./components/admin/tabs/categoriesAdmin/CategoriesAdmin";
 import Sidebar from "./components/admin/sidebar/Sidebar";
-
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoGridOutline } from "react-icons/io5";
 import { MdSupervisorAccount } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const items = [
   { name: "Kalendar", icon: FaRegCalendarAlt },
@@ -15,9 +15,14 @@ const items = [
   { name: "Zaposleni", icon: MdSupervisorAccount },
 ];
 
-const Admin = () => {
+interface AdminProps {
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+}
+
+const Admin: React.FC<AdminProps> = ({ setIsAuthenticated }) => {
   const [activeTab, setActiveTab] = useState<string>(items[0].name);
   const [navSize, changeNavSize] = useState<"small" | "large">("large");
+  const navigate = useNavigate();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -32,6 +37,12 @@ const Admin = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    navigate("/login");
+  };
+
   return (
     <Flex>
       <Sidebar
@@ -39,6 +50,7 @@ const Admin = () => {
         navSize={navSize}
         changeNavSize={changeNavSize}
         items={items}
+        onLogout={handleLogout}
       />
       <Stack
         my="2.5vh"

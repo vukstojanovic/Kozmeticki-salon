@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import {
   FormErrorMessage,
@@ -11,27 +10,36 @@ import {
 } from "@chakra-ui/react";
 import apiServices from "../../../services";
 import logo from "../../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 interface FormValues {
   username: string;
   password: string;
 }
 
-export default function Login() {
+interface LoginProps {
+  onSuccess: () => void;
+}
+
+export default function Login({ onSuccess }: LoginProps) {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
+  const navigate = useNavigate();
 
   const onSubmit = async (values: FormValues) => {
     try {
       const token = await apiServices.loginAdmin(values);
+      console.log("Login data:", values);
       if (token) {
         localStorage.setItem("token", token);
+        onSuccess();
+        navigate("/admin");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Login error:", error);
     }
   };
 

@@ -5,13 +5,17 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Admin from "./Admin";
 import Home from "./Home";
 import Loader from "./components/client/loader/Loader";
-import Login from "./components/client/login/Login";
+import Login from "./components/admin/login/Login";
 
 function App() {
-  const [isAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Check authentication status from localStorage
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+
     const fakeDataFetch = () => {
       setTimeout(() => {
         setIsLoading(false);
@@ -26,7 +30,22 @@ function App() {
   ) : (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/admin" element={isAuthenticated ? <Admin /> : <Admin />} />
+      <Route
+        path="/admin"
+        element={
+          isAuthenticated ? (
+            <Admin setIsAuthenticated={setIsAuthenticated} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <Login onSuccess={() => setIsAuthenticated(true)} /> // Pass function to Login
+        }
+      />
     </Routes>
   );
 }
