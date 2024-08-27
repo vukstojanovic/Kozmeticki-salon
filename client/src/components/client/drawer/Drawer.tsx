@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { Category, Service } from "../../../services/index";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services/index";
 import { useState, useEffect, useRef, useMemo } from "react";
 import Calendar from "../calendar/Calendar";
@@ -34,6 +34,7 @@ import { WorkersRadioGroup } from "../workersRadio/WorkersRadioGroup";
 import jelenaImg from "../../../assets/workers/jelena.jpg";
 import jekaImg from "../../../assets/workers/jeka.jpg";
 import makicaImg from "../../../assets/workers/makica.jpg";
+import { AppointmentsRadioGroup } from "../appointmentsRadio/AppointmentsRadioGroup";
 
 const steps = [
   { title: "Prvi", description: "Usluga & Osoblje" },
@@ -49,12 +50,12 @@ const workerPhotos: Record<string, string> = {
 };
 
 const schema = yup.object({
-  date: yup.number().required(),
-  service_id: yup.string().required(),
+  date: yup.number().required("Morate izabrati datum i vreme"),
+  service_id: yup.string().required("Morate izabrati uslugu"),
   // service_duration: yup.number().required(),
-  worker_id: yup.string().required(),
-  customer_name: yup.string().required(),
-  customer_number: yup.string().required(),
+  worker_id: yup.string().required("Morate izabrati radnika"),
+  customer_name: yup.string().required("Ime i prezime je obavezno"),
+  customer_number: yup.string().required("Broj telefona je obavezan"),
   notes: yup.string(),
 });
 
@@ -74,13 +75,20 @@ export default function DrawerExample({
     formState: { errors },
     control,
     watch,
-  } = useForm();
+    trigger,
+    reset,
+    setValue,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "all",
+  });
 
   const [activeCategory, setActiveCategory] = useState<string>(
     selectedCategory || ""
   );
   const activeService = watch("service_id");
-  const activeWorker = watch("workers_id");
+  // @ts-ignore
+  const activeWorker = watch("worker_id");
 
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -91,6 +99,13 @@ export default function DrawerExample({
     apiServices.getCategories
   );
   const { data: services } = useQuery(["services"], apiServices.getServices);
+
+  useEffect(() => {
+    // @ts-ignore
+    setValue("worker_id", undefined);
+    // @ts-ignore
+    setValue("date", undefined);
+  }, [activeService, setValue]);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers, {
     select: (data) => {
@@ -110,6 +125,13 @@ export default function DrawerExample({
     enabled: !!services,
   });
 
+  const appointmentMutation = useMutation(apiServices.addAppointment, {
+    onSuccess: () => {
+      setIsSubmitted(true);
+      reset();
+    },
+  });
+
   const activeServiceDuration = useMemo(() => {
     const minutes = services?.data?.find(
       (service) => service.id === activeService
@@ -127,9 +149,19 @@ export default function DrawerExample({
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setActiveCategory(event.target.value);
+    // @ts-ignore
+    setValue("service_id", undefined);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (activeStep === 1) {
+      const isFirstStepValid = await trigger(["service_id", "worker_id"]);
+      if (!isFirstStepValid) return;
+    } else if (activeStep === 2) {
+      const isSecondStepValid = await trigger("date");
+      if (!isSecondStepValid) return;
+    }
+
     setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length));
   };
 
@@ -140,7 +172,16 @@ export default function DrawerExample({
   const submitForm = (data: any) => {
     if (activeStep === steps.length) {
       // Handle form submission
-      console.log(data);
+      console.log({
+        ...data,
+        date: Number(data.date),
+        service_duration: activeServiceDuration,
+      });
+      appointmentMutation.mutate({
+        ...data,
+        date: Number(data.date),
+        service_duration: activeServiceDuration,
+      });
     }
   };
 
@@ -240,64 +281,54 @@ export default function DrawerExample({
                         </Select>
                       )}
                     />
+                    <Text color="red" mt={1}>
+                      {errors.service_id?.message} &nbsp;
+                    </Text>
                   </Box>
 
                   <Stack spacing={2}>
                     <Text color="blue">Izaberi radnika</Text>
                     <WorkersRadioGroup
+                      key={[activeService, activeWorker]}
                       control={control}
-                      name="workers_id"
+                      name="worker_id"
                       allWorkers={workers}
                     />
+                    <Text color="red">{errors.worker_id?.message} &nbsp;</Text>
                   </Stack>
                 </Stack>
               )}
 
               {activeStep === 2 && (
-                <Stack spacing="20px" px={2}>
-                  <Stack spacing={0}>
-                    <Text color="blue">Izaberi datum</Text>
-                    <Calendar
-                      onClickDay={onClickDay}
-                      value={date}
-                      selectedWorker={activeWorker}
-                      serviceDuration={activeServiceDuration}
-                      setAvailableTimeSlots={setAvailableTimeSlots}
-                    />
-                    <Box mt={4}>
-                      <Text fontSize="lg" mb={2}>
-                        Available Time Slots:
-                      </Text>
-                      {availableTimeSlots.length === 0 ? (
-                        <Text>No available slots</Text>
-                      ) : (
-                        <Flex wrap="wrap">
-                          {availableTimeSlots.map((slot) => (
-                            <Box
-                              key={slot}
-                              py={2}
-                              px={2}
-                              width="70px"
-                              border={1}
-                              borderColor="black"
-                              borderStyle="solid"
-                              borderRadius={8}
-                              mr={1}
-                              mb={1}
-                              cursor="pointer"
-                              textAlign="center"
-                            >
-                              {slot}
-                            </Box>
-                          ))}
-                        </Flex>
-                      )}
-                    </Box>
-                  </Stack>
+                <Stack spacing="10px" px={2}>
+                  <Text color="blue">Izaberi datum</Text>
+                  <Calendar
+                    onClickDay={onClickDay}
+                    value={date}
+                    // @ts-ignore
+                    selectedWorker={activeWorker}
+                    serviceDuration={activeServiceDuration}
+                    setAvailableTimeSlots={setAvailableTimeSlots}
+                  />
+                  <Box mt={4}>
+                    <Text fontSize="lg" mb={2}>
+                      Available Time Slots:
+                    </Text>
+                    {availableTimeSlots.length === 0 ? (
+                      <Text>No available slots</Text>
+                    ) : (
+                      <AppointmentsRadioGroup
+                        control={control}
+                        name="date"
+                        slots={availableTimeSlots}
+                      />
+                    )}
+                  </Box>
+                  <Text color="red">{errors.date?.message} &nbsp;</Text>
                 </Stack>
               )}
               {activeStep === 3 && (
-                <Stack spacing="20px">
+                <Stack spacing={1}>
                   <Stack spacing={0}>
                     <FormLabel htmlFor="fullName">Ime i prezime</FormLabel>
                     <Input
@@ -305,6 +336,9 @@ export default function DrawerExample({
                       placeholder="Unesi ime i prezime"
                       {...register("customer_name")}
                     />
+                    <Text color="red" mt={1}>
+                      {errors.customer_name?.message} &nbsp;
+                    </Text>
                   </Stack>
                   <Stack spacing={0}>
                     <FormLabel htmlFor="number">Broj telefona</FormLabel>
@@ -313,6 +347,9 @@ export default function DrawerExample({
                       placeholder="Broj telefona"
                       {...register("customer_number")}
                     />
+                    <Text color="red" mt={1}>
+                      {errors.customer_number?.message} &nbsp;
+                    </Text>
                   </Stack>
                   <Stack spacing={0}>
                     <FormLabel htmlFor="desc">Napomena</FormLabel>

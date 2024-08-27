@@ -1,16 +1,9 @@
 import { forwardRef } from "react";
-import {
-  Box,
-  useRadio,
-  useRadioGroup,
-  Flex,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Box, useRadio, useRadioGroup, Flex } from "@chakra-ui/react";
 import { useController } from "react-hook-form";
 
-const WorkerRadio: React.FC<any> = forwardRef((props, ref) => {
-  const { workerName, id, image } = props;
+const AppointmentRadio: React.FC<any> = forwardRef((props, ref) => {
+  const { slotName, slotValue } = props;
   const { state, getInputProps, getRadioProps } = useRadio(props);
   const input = getInputProps({ ref });
   const checkbox = getRadioProps();
@@ -18,34 +11,33 @@ const WorkerRadio: React.FC<any> = forwardRef((props, ref) => {
   return (
     <Box as="label">
       <input {...input} />
-      <Flex
+      <Box
         {...checkbox}
-        direction="column"
-        key={id}
-        align="center"
-        gap={2}
-        border={
-          state.isChecked ? "1px solid darkgray" : "0.5px solid lightgray"
-        }
-        p={2}
-        borderRadius="10px"
+        key={slotValue}
+        py={2}
+        px={2}
+        width="70px"
+        border={1}
+        borderColor="black"
+        borderStyle="solid"
+        backgroundColor={state.isChecked ? "black" : "white"}
+        textColor={state.isChecked ? "white" : "black"}
+        borderRadius={8}
+        mr={1}
+        mb={1}
         cursor="pointer"
+        textAlign="center"
       >
-        <Image
-          borderRadius="full"
-          src={image || "https://bit.ly/dan-abramov"}
-          alt="Dan Abramov"
-        />
-        <Text color="black">{workerName}</Text>
-      </Flex>
+        {slotName}
+      </Box>
     </Box>
   );
 });
 
-export const WorkersRadioGroup: React.FC<any> = ({
+export const AppointmentsRadioGroup: React.FC<any> = ({
   control,
   name,
-  allWorkers,
+  slots,
 }) => {
   const { field } = useController({
     name,
@@ -57,15 +49,15 @@ export const WorkersRadioGroup: React.FC<any> = ({
   });
 
   return (
-    <Flex {...getRootProps()}>
-      {allWorkers?.data?.map((worker: { id: string; name: string }) => {
+    <Flex wrap="wrap" {...getRootProps()}>
+      {slots?.map((slot: { name: string; value: number }) => {
         return (
-          <WorkerRadio
-            key={worker.id}
-            workerName={worker.name}
-            id={worker.id}
-            //   image={worker.img}
-            {...getRadioProps({ value: worker.id })}
+          <AppointmentRadio
+            key={slot.value}
+            slotName={slot.name}
+            id={slot.value}
+            slotValue={slot.value}
+            {...getRadioProps({ value: slot.value })}
           />
         );
       })}

@@ -26,44 +26,36 @@ const WORKING_HOURS = {
 const isWeekend = (date: any) => date.getDay() === 6; // Saturday
 const isSunday = (date: any) => date.getDay() === 0; // Sunday
 
-// const generateTimeSlots = (startHour: any, endHour: any, durationMs: any) => {
-//   const slots = [];
-//   const durationMinutes = durationMs / 60000;
+function generateTimeSlots(startHour: any, endHour: any, durationMs: any) {
+  const durationMinutes = durationMs / (1000 * 60); // Convert duration from milliseconds to minutes
 
-//   console.log(durationMinutes, "durationMinutes");
+  // Convert startHour and endHour to total minutes from midnight
+  const startTotalMinutes = startHour * 60;
+  const endTotalMinutes = endHour * 60;
 
-//   for (let hour = startHour; hour < endHour; hour++) {
-//     for (let minute = 0; minute < 60; minute += durationMinutes) {
-//       if (minute + durationMinutes <= 60) {
-//         slots.push(
-//           `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
-//         );
-//       }
-//     }
-//   }
-//   return slots;
-// };
+  let currentMinutes = startTotalMinutes;
+  const timeSlots = [];
 
-const generateTimeSlots = (startHour: any, endHour: any, durationMs: any) => {
-  const slots = [];
-  const durationMinutes = durationMs / 60000;
+  while (currentMinutes < endTotalMinutes) {
+    const hh = Math.floor(currentMinutes / 60);
+    const mm = currentMinutes % 60;
+    const formattedTime = `${hh.toString().padStart(2, "0")}:${mm
+      .toString()
+      .padStart(2, "0")}`;
 
-  for (let hour = startHour; hour < endHour; hour++) {
-    let minute = 0;
-    while (minute < 60) {
-      if (minute + durationMinutes <= 60) {
-        slots.push(
-          `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
-        );
-      }
-      minute += durationMinutes;
+    // Ensure we do not exceed endHour
+    if (currentMinutes + durationMinutes <= endTotalMinutes) {
+      timeSlots.push(formattedTime);
+    } else {
+      break; // Stop adding slots if next slot exceeds endHour
     }
-  }
-  console.log(slots, "slots");
-  return slots;
-};
 
-console.log(generateTimeSlots(9, 22, 540000), "hello");
+    // Move to the next time slot
+    currentMinutes += durationMinutes;
+  }
+
+  return timeSlots;
+}
 
 const isTimeSlotAvailable = (
   slot: any,
@@ -84,11 +76,6 @@ const isTimeSlotAvailable = (
     );
 
     return slotStart < appointmentEnd && slotEnd > appointmentStart;
-    // return !(
-    //   (appointmentStart >= slotStart && appointmentStart < slotEnd) ||
-    //   (appointmentEnd > slotStart && appointmentEnd < slotEnd) ||
-    //   (appointmentStart <= slotStart && appointmentEnd > slotEnd)
-    // );
   });
 };
 
@@ -110,14 +97,45 @@ const getAvailableTimeSlots = (
     selectedDate
   );
 
-  return allSlots.filter((slot) =>
-    isTimeSlotAvailable(
-      slot,
-      serviceDurationMs,
-      workerAppointments,
-      selectedDate
+  return allSlots
+    .filter((slot) =>
+      isTimeSlotAvailable(
+        slot,
+        serviceDurationMs,
+        workerAppointments,
+        selectedDate
+      )
     )
-  );
+    .map((slot) => {
+      const currentDate = new Date(selectedDate);
+      const [hours, minutes] = slot.split(":");
+      currentDate.setHours(parseInt(hours, 10));
+      currentDate.setMinutes(parseInt(minutes, 10));
+      currentDate.setSeconds(0);
+      const currentDateInMs = currentDate.getTime();
+      return { name: slot, value: currentDateInMs.toString() };
+    });
+
+  // return allSlots.reduce((acc, current) => {
+  //   if (
+  //     isTimeSlotAvailable(
+  //       current,
+  //       serviceDurationMs,
+  //       workerAppointments,
+  //       selectedDate
+  //     )
+  //   ) {
+  //     const currentDate = new Date(selectedDate);
+  //     const [hours, minutes] = current.split(":");
+  //     currentDate.setHours(parseInt(hours, 10));
+  //     currentDate.setMinutes(parseInt(minutes, 10));
+  //     currentDate.setSeconds(0);
+  //     console.log(typeof current, "current");
+  //     const currentDateInMs = currentDate.getTime();
+  //     acc.push({ name: current, value: currentDateInMs.toString() });
+  //     return acc;
+  //   }
+  // }, []);
 };
 
 export default function Calendar({
