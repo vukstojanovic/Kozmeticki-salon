@@ -30,29 +30,29 @@ async function getAppointment(req, res) {
 
 async function postAppointment(req, res) {
   try {
-    const { date, worker_id, service_duration } = req.body;
-    const newAppointmentEnd = date + service_duration * 60000;
+    // const { date, worker_id, service_duration } = req.body;
+    // const newAppointmentEnd = date + service_duration * 60000;
 
-    const overlappingAppointments = await Appointment.find({
-      worker_id,
-      $expr: {
-        $and: [
-          { $lt: ["$date", newAppointmentEnd] },
-          {
-            $gt: [
-              { $add: ["$date", { $multiply: ["$service_duration", 60000] }] },
-              date,
-            ],
-          },
-        ],
-      },
-    });
+    // const overlappingAppointments = await Appointment.find({
+    //   worker_id,
+    //   $expr: {
+    //     $and: [
+    //       { $lt: ["$date", newAppointmentEnd] },
+    //       {
+    //         $gt: [
+    //           { $add: ["$date", { $multiply: ["$service_duration", 60000] }] },
+    //           date,
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // });
 
-    if (overlappingAppointments.length > 0) {
-      return res
-        .status(400)
-        .json({ message: "Overlapping appointments are not allowed." });
-    }
+    // if (overlappingAppointments.length > 0) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Overlapping appointments are not allowed." });
+    // }
 
     const appointment = await Appointment.create(req.body);
     res.status(200).json(appointment);
