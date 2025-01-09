@@ -1,18 +1,11 @@
-import {
-  Stack,
-  Text,
-  Heading,
-  Box,
-  Grid,
-  GridItem,
-  Icon,
-  Img,
-  Divider,
-} from "@chakra-ui/react";
+import { Stack, Text, Box, Icon, Divider } from "@chakra-ui/react";
 import { CiClock2 } from "react-icons/ci";
+import { GoCircleSlash } from "react-icons/go";
+import { motion } from "framer-motion";
 
 import cover from "../../../assets/cover.png";
-import { GoCircleSlash } from "react-icons/go";
+
+const MotionBox = motion(Box);
 
 const WorkHoursSection = () => {
   return (
@@ -29,7 +22,7 @@ const WorkHoursSection = () => {
       position="relative"
       marginTop={{ base: "100px", md: "unset" }}
     >
-      <Box
+      <MotionBox
         w={{ base: "250px", md: "350px" }}
         h={{ base: "300px", md: "400px" }}
         bg="white"
@@ -43,6 +36,9 @@ const WorkHoursSection = () => {
         boxShadow="xl"
         marginRight={{ base: "auto", md: "unset" }}
         marginLeft={{ base: "auto", md: "unset" }}
+        initial={{ opacity: 0, y: -100 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, type: "spring", stiffness: 50 }}
       >
         <Stack
           justify="space-around"
@@ -121,7 +117,7 @@ const WorkHoursSection = () => {
             </Stack>
           </Stack>
         </Stack>
-      </Box>
+      </MotionBox>
     </Stack>
   );
 };

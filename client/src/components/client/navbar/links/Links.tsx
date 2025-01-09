@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const items = ["O Nama", "Usluge", "Kontakt"];
 
@@ -27,6 +28,8 @@ const Links = ({
     <HStack className="links" spacing="50px" width="100%" pl={5}>
       <Box display="flex" flexDirection="column" flexGrow={1}>
         <Text
+          as="a"
+          href="tel:+381613931281"
           fontSize="18px"
           color="black"
           alignSelf="end"
@@ -40,23 +43,38 @@ const Links = ({
             {items.map((item, index) => {
               const elementId = item.toLowerCase().replace(/\s+/g, "-");
               return (
-                <Text
-                  as="button"
+                <motion.div
                   key={item}
-                  style={{
-                    fontSize: "20px",
-                    marginLeft: "20px",
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: index * 0.2,
+                    duration: 0.5,
                   }}
-                  onClick={() => handleLinkClick(index, elementId)}
                 >
-                  {item}
-                </Text>
+                  <Text
+                    as="button"
+                    style={{
+                      fontSize: "20px",
+                      marginLeft: "20px",
+                    }}
+                    onClick={() => handleLinkClick(index, elementId)}
+                  >
+                    {item}
+                  </Text>
+                </motion.div>
               );
             })}
           </HStack>
           <HStack mr={2}>
             <Center height="35px">
-              <Divider orientation="vertical" borderColor="blue" />
+              <motion.div
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 1 }}
+              >
+                <Divider orientation="vertical" borderColor="blue" />
+              </motion.div>
             </Center>
 
             <Link
@@ -73,7 +91,13 @@ const Links = ({
             </Link>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" borderColor="blue" />
+        <motion.div
+          initial={{ width: "0%" }}
+          animate={{ width: "100%" }}
+          transition={{ duration: 1 }}
+        >
+          <Divider orientation="horizontal" borderColor="blue" />
+        </motion.div>
       </Box>
     </HStack>
   );

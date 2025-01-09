@@ -1,6 +1,8 @@
 /* customCalendarStyles.scss */
+
 .fc .fc-daygrid-day.fc-day-today {
   position: relative;
+  background-color: #fff; /* Bela pozadina za današnji dan */
 }
 
 .fc .fc-daygrid-day.fc-day-today::after {
@@ -14,8 +16,8 @@
   border-radius: 50%;
 }
 
-.fc .fc-daygrid-day.fc-day-working {
-  background-color: var(--light-grey);
+.fc .fc-daygrid-day.fc-day-past {
+  background-color: #f0f0f0; /* Svetlo siva nijansa za prošle dane */
 }
 
 /* Improve event styles */

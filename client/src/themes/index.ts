@@ -1,6 +1,13 @@
 import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
+  breakpoints: {
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+  },
+
   fonts: {
     heading: `'Alfa Slab One', serif`,
     body: `'Abhaya Libre', serif`,
@@ -71,6 +78,10 @@ const theme = extendTheme({
           _hover: {
             bg: "red",
           },
+        },
+        transparent: {
+          backgroundColor: "transparent",
+          color: "white",
         },
       },
     },

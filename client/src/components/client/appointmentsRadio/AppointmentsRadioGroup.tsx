@@ -1,5 +1,11 @@
 import { forwardRef } from "react";
-import { Box, useRadio, useRadioGroup, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  useRadio,
+  useRadioGroup,
+  Flex,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { useController } from "react-hook-form";
 
 const AppointmentRadio: React.FC<any> = forwardRef((props, ref) => {
@@ -17,7 +23,7 @@ const AppointmentRadio: React.FC<any> = forwardRef((props, ref) => {
         py={2}
         px={2}
         width="70px"
-        border={1}
+        border={0.5}
         borderColor="black"
         borderStyle="solid"
         backgroundColor={state.isChecked ? "black" : "white"}
@@ -49,7 +55,7 @@ export const AppointmentsRadioGroup: React.FC<any> = ({
   });
 
   return (
-    <Flex wrap="wrap" {...getRootProps()}>
+    <SimpleGrid columns={4} gap="2px" {...getRootProps()}>
       {slots?.map((slot: { name: string; value: number }) => {
         return (
           <AppointmentRadio
@@ -61,6 +67,6 @@ export const AppointmentsRadioGroup: React.FC<any> = ({
           />
         );
       })}
-    </Flex>
+    </SimpleGrid>
   );
 };

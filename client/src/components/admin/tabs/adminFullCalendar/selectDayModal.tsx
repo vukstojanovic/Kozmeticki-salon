@@ -83,36 +83,12 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
   const [selectedAppointment, setSelectedAppointment] =
     useState<Appointment | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
-  const [newEventTitle, setNewEventTitle] = useState("");
-  const [newCustomerName, setNewCustomerName] = useState("");
-  const [newCustomerNumber, setNewCustomerNumber] = useState("");
-  const [newService, setNewService] = useState("");
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
   const timeSlots = selectedDate ? generateTimeSlots(selectedDate) : [];
 
   const handleAddEvent = () => {
-    // if (newEventTitle && selectedSlot) {
-    //   const end = new Date(selectedSlot);
-    //   end.setMinutes(selectedSlot.getMinutes() + 30);
-    //   const workerId = workers?.data[activeTabIndex].id;
-    //   onAddEvent(
-    //     newEventTitle,
-    //     selectedSlot,
-    //     end,
-    //     newCustomerName,
-    //     newCustomerNumber,
-    //     newService,
-    //     workerId
-    //   );
-    //   setSelectedSlot(null);
-    //   setNewEventTitle("");
-    //   setNewCustomerName("");
-    //   setNewCustomerNumber("");
-    //   setNewService("");
-    //   setSelectedAppointment(null);
-    // }
     console.log("dodato");
   };
 
@@ -120,7 +96,7 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
     setSelectedAppointment(
       selectedAppointment?.id === appointment.id ? null : appointment
     );
-    setSelectedSlot(null); // Clear selected slot when clicking on existing appointment
+    setSelectedSlot(null);
   };
 
   const handleBack = () => {
@@ -152,7 +128,7 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
                 aria-label="Nazad"
                 icon={<ChevronLeftIcon />}
                 mb={4}
-                variant="outline" // You can change this to "solid" or any other variant you prefer
+                variant="outline"
               />
               {selectedSlot ? (
                 <AddAppointmentForm
@@ -161,14 +137,7 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
                 />
               ) : (
                 selectedAppointment && (
-                  <EditAppointmentForm
-                    appointment={selectedAppointment}
-                    workerId={
-                      workers?.data.find(
-                        worker => worker.id === selectedAppointment.worker_id
-                      )?.name
-                    }
-                  />
+                  <EditAppointmentForm appointment={selectedAppointment} />
                 )
               )}
             </Box>
@@ -205,6 +174,9 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
                           handleSlotClick={handleSlotClick}
                         />
                         <FreeAppointments
+                          appointments={appointments?.filter(
+                            appointment => appointment.worker_id === worker.id
+                          )}
                           timeSlots={timeSlots}
                           setSelectedSlot={setSelectedSlot}
                         />

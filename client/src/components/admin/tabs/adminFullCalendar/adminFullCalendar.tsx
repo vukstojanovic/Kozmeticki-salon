@@ -9,7 +9,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { INITIAL_EVENTS, createEventId } from "./event-utils";
+import { createEventId } from "./event-utils";
 import "./customCalendarStyles.scss";
 import apiServices from "../../../../services/index";
 import { useQuery } from "@tanstack/react-query";
@@ -33,18 +33,12 @@ const AdminFullCalendar: React.FC = () => {
   } = useDisclosure();
 
   function getItemsInDay(items: any = [], targetDayInMillis: any) {
-    // Create a Date object for the target day
     const targetDate = new Date(targetDayInMillis);
-
-    // Set the time to the start of the day (00:00:00)
     targetDate.setHours(0, 0, 0, 0);
     const startOfDay = targetDate.getTime();
-
-    // Set the time to the end of the day (23:59:59.999)
     targetDate.setHours(23, 59, 59, 999);
     const endOfDay = targetDate.getTime();
 
-    // Filter the array to get items within the start and end of the day
     return items?.filter(
       (item: any) => item.date >= startOfDay && item.date <= endOfDay
     );
@@ -80,8 +74,6 @@ const AdminFullCalendar: React.FC = () => {
   };
 
   const addEvent = (title: string, start: Date, end: Date) => {
-    // console.log(start);
-    // console.log(end);
     const calendarApi = fullCalendarRef.current?.getApi();
     if (calendarApi) {
       calendarApi.addEvent({
@@ -124,13 +116,13 @@ const AdminFullCalendar: React.FC = () => {
           right: "title",
         }}
         initialView="dayGridMonth"
-        editable={true}
-        selectable={true}
+        editable={false} // Isključuje drag-and-drop
+        droppable={false} // Isključuje mogućnost drag-and-drop
+        selectable={true} // Omogućava tap na mobilnim uređajima
         selectMirror={true}
         dayMaxEvents={true}
         weekends={weekendsVisible}
-        initialEvents={INITIAL_EVENTS}
-        select={handleDateSelect}
+        select={handleDateSelect} // Obrada selektovanja tapom
         eventContent={renderEventContent}
         eventClick={handleEventClick}
         eventsSet={handleEvents}
@@ -139,6 +131,7 @@ const AdminFullCalendar: React.FC = () => {
           start: startDate.toISOString().split("T")[0],
           end: endDate.toISOString().split("T")[0],
         }}
+        longPressDelay={200} // Smanjuje broj sekundi za tap and hold, 200ms umesto 500ms
       />
       {appointments && (
         <SelectDayModal

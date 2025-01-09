@@ -55,7 +55,7 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
       bg="white"
     >
       <FormControl mb={4}>
-        <FormLabel>Izaberi uslugu</FormLabel>
+        <FormLabel mb={0}>Izaberi uslugu</FormLabel>
         <Controller
           control={control}
           name="service_id"
@@ -81,7 +81,7 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Trajanje usluge</FormLabel>
+        <FormLabel mb={0}>Trajanje usluge (min)</FormLabel>
         <Controller
           control={control}
           name="service_duration"
@@ -102,7 +102,7 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Ime i prezime klijenta</FormLabel>
+        <FormLabel mb={0}>Ime i prezime klijenta</FormLabel>
         <Controller
           control={control}
           name="customerName"
@@ -111,7 +111,7 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Broj telefona klijenta</FormLabel>
+        <FormLabel mb={0}>Broj telefona klijenta</FormLabel>
         <Controller
           control={control}
           name="customerNumber"
@@ -120,7 +120,7 @@ const AddAppointmentForm: React.FC<AddAppointmentFormProps> = ({
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Napomena</FormLabel>
+        <FormLabel mb={0}>Napomena</FormLabel>
         <Controller
           control={control}
           name="note"

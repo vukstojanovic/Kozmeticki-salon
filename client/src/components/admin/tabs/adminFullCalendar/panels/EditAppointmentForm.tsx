@@ -14,16 +14,14 @@ import apiServices from "../../../../../services";
 
 interface EditAppointmentFormsProps {
   appointment: Appointment;
-  workerId: string | undefined;
 }
 
 const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
   appointment,
-  workerId,
 }) => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      service_duration: appointment.service_duration,
+      service_duration: appointment.service_duration / 60000,
     },
   });
 
@@ -33,7 +31,7 @@ const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
   );
 
   const filteredServices = services?.data.filter((service: Service) =>
-    service.workers_ids.includes(workerId!)
+    service.id.includes(appointment.service_id)
   );
 
   const serviceName = filteredServices?.find(
@@ -43,7 +41,7 @@ const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
   const onSubmit = (data: any) => {
     const formattedData = {
       ...data,
-      service_duration: Number(data.service_duration),
+      service_duration: Number(data.service_duration) * 60000,
     };
     console.log(formattedData);
   };
@@ -59,12 +57,16 @@ const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
       bg="white"
     >
       <FormControl mb={4}>
-        <FormLabel>Izabrana usluga</FormLabel>
+        <FormLabel fontWeight="bold" mb={0}>
+          Izabrana usluga
+        </FormLabel>
         <Text>{serviceName}</Text>
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Trajanje usluge</FormLabel>
+        <FormLabel fontWeight="bold" mb={0}>
+          Trajanje usluge (min)
+        </FormLabel>
         <Controller
           control={control}
           name="service_duration"
@@ -81,17 +83,23 @@ const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Ime i prezime klijenta</FormLabel>
+        <FormLabel fontWeight="bold" mb={0}>
+          Ime i prezime klijenta
+        </FormLabel>
         <Text>{appointment.customer_name}</Text>
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Broj telefona klijenta</FormLabel>
+        <FormLabel fontWeight="bold" mb={0}>
+          Broj telefona klijenta
+        </FormLabel>
         <Text>{appointment.customer_number}</Text>
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Napomena</FormLabel>
+        <FormLabel fontWeight="bold" mb={0}>
+          Napomena
+        </FormLabel>
         <Text>{appointment.notes || "Nema napomena"}</Text>
       </FormControl>
 

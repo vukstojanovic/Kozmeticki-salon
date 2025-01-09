@@ -8,6 +8,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  animation: gradientAnimation 10s ease infinite;
 
   @media (max-width: 768px) {
     background-image: url("../../../assets/mobile.png");

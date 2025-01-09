@@ -130,6 +130,8 @@ const FollowUsSection = () => {
         >
           <Icon as={MdLocalPhone} boxSize={{ base: "28px", md: "32px" }} />
           <Text
+            as="a"
+            href="tel:+381613931281"
             fontSize={{ base: "18px", md: "22px" }}
             color="white"
             lineHeight="28px"

@@ -17,10 +17,14 @@ const WorkerRadio: React.FC<any> = forwardRef((props, ref) => {
         flexDirection="column"
         alignItems="center"
         gap={2}
-        border={state.isChecked ? "2px solid darkgray" : "none"}
+        borderWidth={state.isChecked ? "0.5px" : "0.5px"}
+        borderColor={state.isChecked ? "darkgray" : "transparent"}
         p={1}
         borderRadius="10px"
         cursor="pointer"
+        transition="border-width 0.2s ease"
+        width="100px"
+        height="120px"
       >
         <Box
           borderRadius="full"
