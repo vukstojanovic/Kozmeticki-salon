@@ -179,6 +179,16 @@ export default function Calendar({
     today.getDate()
   );
 
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    if (
+      view === "month" &&
+      (date < minDate || date > maxDate || date.getDay() === 0)
+    ) {
+      return "unavailable-date";
+    }
+    return null;
+  };
+
   useEffect(() => {
     const availableSlots = getAvailableTimeSlots(
       appointments?.data,
@@ -201,6 +211,7 @@ export default function Calendar({
       value={value}
       minDate={minDate}
       maxDate={maxDate}
+      tileClassName={tileClassName}
     />
   );
 }

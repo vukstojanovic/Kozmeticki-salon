@@ -54,3 +54,8 @@
 .react-calendar__month-view__days__day {
   font-size: 18px;
 }
+
+.unavailable-date {
+  opacity: 0.3;
+  pointer-events: none; /* Makes it unclickable */
+}
