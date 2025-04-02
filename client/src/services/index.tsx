@@ -23,6 +23,7 @@ export type Category = {
   name: string;
 };
 
+//  needs start time to be added
 export type Appointment = {
   id: string;
   date: number;

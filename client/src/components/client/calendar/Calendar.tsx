@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import apiServices from "../../../services";
 import { useEffect } from "react";
 
+// gets all the appointments that the worker has on the selected day
 const getAppointmentsForWorkerAndDate = (
   appointments: any = [],
   workerId: any,
@@ -69,14 +70,35 @@ const isTimeSlotAvailable = (
   slotStart.setHours(hours, minutes, 0, 0);
   const slotEnd = new Date(slotStart.getTime() + durationMs);
 
-  return !appointments.some((appointment: any) => {
+  // return !appointments.some((appointment: any) => {
+  //   const appointmentStart = new Date(appointment.date);
+  //   const appointmentEnd = new Date(
+  //     appointmentStart.getTime() + appointment.service_duration * 60000
+  //   );
+
+  //   return slotStart < appointmentEnd && slotEnd > appointmentStart;
+  // });
+
+  // This was the part the was causing problem. Previously, it was not checking the time slots and available times correctly.
+  //  loop through all the appointments that the worker has on that day
+  for (let i = 0; i < appointments.length; i++) {
+    // get a specific appointment
+    const appointment = appointments[i];
+
     const appointmentStart = new Date(appointment.date);
     const appointmentEnd = new Date(
-      appointmentStart.getTime() + appointment.service_duration * 60000
+      appointmentStart.getTime() + appointment.service_duration
     );
 
-    return slotStart < appointmentEnd && slotEnd > appointmentStart;
-  });
+    //  logic for handling appointments
+    if (
+      (slotEnd >= appointmentStart && slotEnd <= appointmentEnd) ||
+      (slotStart >= appointmentStart && slotStart < appointmentEnd)
+    ) {
+      return false;
+    }
+  }
+  return true;
 };
 
 const getAvailableTimeSlots = (
@@ -96,7 +118,6 @@ const getAvailableTimeSlots = (
     workerId,
     selectedDate
   );
-
   return allSlots
     .filter((slot) =>
       isTimeSlotAvailable(
