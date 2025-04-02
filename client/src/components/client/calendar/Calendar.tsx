@@ -92,7 +92,7 @@ const isTimeSlotAvailable = (
 
     //  logic for handling appointments
     if (
-      (slotEnd >= appointmentStart && slotEnd <= appointmentEnd) ||
+      (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
       (slotStart >= appointmentStart && slotStart < appointmentEnd)
     ) {
       return false;
