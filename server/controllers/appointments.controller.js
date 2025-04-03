@@ -30,32 +30,52 @@ async function getAppointment(req, res) {
 
 async function postAppointment(req, res) {
   try {
-    // const { date, worker_id, service_duration } = req.body;
-    // const newAppointmentEnd = date + service_duration * 60000;
+    const { date, worker_id, service_duration } = req.body;
+    const newAppointmentStart = date;
+    const newAppointmentEnd = date + (service_duration * 60000);
 
-    // const overlappingAppointments = await Appointment.find({
-    //   worker_id,
-    //   $expr: {
-    //     $and: [
-    //       { $lt: ["$date", newAppointmentEnd] },
-    //       {
-    //         $gt: [
-    //           { $add: ["$date", { $multiply: ["$service_duration", 60000] }] },
-    //           date,
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // });
+    //  This part of the code will ensure that there are no records currently stores in the database
+    //  that could overlap with the new one
+    const overlappingAppointments = await Appointment.find({
+      worker_id,
+      $or: [
+      {
+        $and: [
+        { date: { $lte: newAppointmentStart } },
+        {
+          $expr: {
+          $gt: [
+            { $add: ["$date", "$service_duration"] },
+            newAppointmentStart,
+          ],
+          },
+        },
+        ],
+      },
+      {
+        $and: [
+        { date: { $lt: newAppointmentEnd } },
+        {
+          $expr: {
+          $gte: [
+            { $add: ["$date", "$service_duration"] },
+            newAppointmentEnd,
+          ],
+          },
+        },
+        ],
+      },
+      ],
+    });
 
-    // if (overlappingAppointments.length > 0) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Overlapping appointments are not allowed." });
-    // }
+    if (overlappingAppointments.length > 0) {
+      return res
+      .status(400)
+      .json({ message: "Overlapping appointments are not allowed." });
+    }
 
     const appointment = await Appointment.create(req.body);
-    res.status(200).json(appointment);
+    res.status(201).json(appointment);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
