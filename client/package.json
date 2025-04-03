@@ -28,6 +28,7 @@
     "@types/react-leaflet": "^3.0.0",
     "@types/yup": "^0.32.0",
     "axios": "^1.5.1",
+    "client": "file:",
     "framer-motion": "^10.16.5",
     "json-server": "^0.17.4",
     "leaflet": "^1.9.4",

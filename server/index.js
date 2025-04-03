@@ -29,10 +29,11 @@ app.use("/auth", authRoutes);
 // });
 
 mongoose
-  .connect(
-    "mongodb+srv://vuks838:byzantium1@jobify.brx6x.mongodb.net/Salon-API?retryWrites=true&w=majority"
+.connect(
+    // "mongodb://localhost:27017/salon"
+    "mongodb+srv://vuks838:byzantium1@jobify.brx6x.mongodb.net/Salon-API?retryWrites=true&w=majority&ssl=true"
   )
   .then(() => {
     app.listen(4000, () => console.log("listenting on port 4000"));
   })
-  .catch((error) => console.log(error));
+  .catch((error) => console.log("error:", error));
