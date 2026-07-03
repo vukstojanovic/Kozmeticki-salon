@@ -88,10 +88,6 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
   const { data: workers } = useQuery(["workers"], apiServices.getWorkers);
   const timeSlots = selectedDate ? generateTimeSlots(selectedDate) : [];
 
-  const handleAddEvent = () => {
-    console.log("dodato");
-  };
-
   const handleSlotClick = (appointment: Appointment) => {
     setSelectedAppointment(
       selectedAppointment?.id === appointment.id ? null : appointment
@@ -132,7 +128,7 @@ const SelectDayModal: React.FC<SelectDayModalProps> = ({
               />
               {selectedSlot ? (
                 <AddAppointmentForm
-                  // handleAddEvent={handleAddEvent}
+                  selectedSlot={selectedSlot}
                   workerId={workers?.data[activeTabIndex].id}
                 />
               ) : (

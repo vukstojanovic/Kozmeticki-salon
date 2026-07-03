@@ -55,6 +55,13 @@ export default function CategoriesAdmin() {
     isError: servicesError,
   } = useQuery(["services"], apiServices.getServices);
 
+  const { data: workersData, isLoading: workersLoading } = useQuery(
+    ["workers"], 
+    apiServices.getWorkers
+  );
+  
+
+  console.log(servicesData);
   const {
     isOpen: isAddCategoryOpen,
     onOpen: onAddCategoryOpen,
@@ -79,10 +86,14 @@ export default function CategoriesAdmin() {
     onClose: onDeleteServiceClose,
   } = useDisclosure();
 
+  
+
   const handleAddService = (category: Category | null) => {
     setSelectedCategory(category);
     onAddServiceOpen();
   };
+
+  console.log(servicesData)
 
   // const handleDeleteService = (service: Service) => {
   //   setActiveService(service);
@@ -143,7 +154,7 @@ export default function CategoriesAdmin() {
           </Stack>
         </Stack>
       </Box>
-      {categoriesData?.data.map((category) => (
+      {categoriesData?.data.map(category => (
         <TableContainer marginBlock="20px" key={category.id}>
           <Table variant="simple">
             <Thead>
@@ -160,41 +171,51 @@ export default function CategoriesAdmin() {
               </Tr>
             </Thead>
             <Tbody>
-              {servicesData?.data
-                .filter((service) => service.category_id === category.id)
-                .map((service) => (
-                  <Tr key={service.id} _hover={{ bgColor: "#ebedf0" }}>
-                    <Td width={500}>{service.name}</Td>
-                    <Td>{service.time_in_minutes} min</Td>
-                    <Td>{service.price} rsd</Td>
-                    <Td>
-                      <Avatar
-                        size="sm"
-                        name="Segun Adebayo"
-                        src="https://bit.ly/sage-adebayo"
-                      />
-                    </Td>
-                    <Td isNumeric>
-                      <HStack spacing={4} justify="flex-end">
-                        <Icon
-                          as={RiDeleteBin6Line}
-                          color="#EA5A29"
-                          // onClick={() => handleDeleteService(service)}
-                          cursor="pointer"
-                          boxSize={6}
-                        />
-                        <Icon
-                          as={FaEdit}
-                          color="#343A59"
-                          onClick={() => handleEditService(service, category)}
-                          cursor="pointer"
-                          boxSize={5}
-                        />
+            {servicesData?.data
+              .filter(service => service.category_id === category.id)
+              .map(service => (
+                <Tr key={service.id} _hover={{ bgColor: "#ebedf0" }}>
+                  <Td width={500}>{service.name}</Td>
+                  <Td>{service.time_in_minutes} min</Td>
+                  <Td>{service.price} rsd</Td>
+                  <Td>
+                    {service.workers_ids && service.workers_ids.length > 0 ? (
+                      <HStack spacing={2}>
+                        {service.workers_ids.map(workerId => {
+                          const worker = workersData?.data?.find(w => w.id === workerId);
+                          console.log('Worker found:', worker, 'for workerId:', workerId);
+                          return (
+                            <Text key={workerId}>
+                              {worker?.name || "Unknown Worker"}
+                            </Text>
+                          );
+                        })}
                       </HStack>
-                    </Td>
-                  </Tr>
-                ))}
-            </Tbody>
+                    ) : (
+                      <Text fontSize="sm" color="gray.500">No workers assigned</Text>
+                    )}
+                  </Td>
+                  <Td isNumeric>
+                    <HStack spacing={4} justify="flex-end">
+                      <Icon
+                        as={RiDeleteBin6Line}
+                        color="#EA5A29"
+                        // onClick={() => handleDeleteService(service)}
+                        cursor="pointer"
+                        boxSize={6}
+                      />
+                      <Icon
+                        as={FaEdit}
+                        color="#343A59"
+                        onClick={() => handleEditService(service, category)}
+                        cursor="pointer"
+                        boxSize={5}
+                      />
+                    </HStack>
+                  </Td>
+                </Tr>
+              ))}
+          </Tbody>
           </Table>
           <Button
             rightIcon={<FaCirclePlus />}

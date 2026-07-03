@@ -6,11 +6,13 @@ import {
   Input,
   Button,
   Text,
+  Stack,
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
-import { Appointment, Service } from "../../../../../services/index";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Appointment } from "../../../../../services/index";
 import apiServices from "../../../../../services";
+import { useServiceName } from "../../../../../hooks/useServiceName";
 
 interface EditAppointmentFormsProps {
   appointment: Appointment;
@@ -19,31 +21,48 @@ interface EditAppointmentFormsProps {
 const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
   appointment,
 }) => {
-  const { control, handleSubmit } = useForm({
+  console.log(appointment);
+  const queryClient = useQueryClient();
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       service_duration: appointment.service_duration / 60000,
     },
   });
+  const { serviceName } = useServiceName(appointment.service_id);
 
-  const { data: services }: { data: any } = useQuery(
-    ["services"],
-    apiServices.getServices
-  );
+  const updateMutation = useMutation(apiServices.updateAppointment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["appointments"]);
+      reset();
+    },
+    onError: error => {
+      console.error("Greška prilikom editovanja termina:", error);
+    },
+  });
 
-  const filteredServices = services?.data.filter((service: Service) =>
-    service.id.includes(appointment.service_id)
-  );
-
-  const serviceName = filteredServices?.find(
-    (service: { id: string }) => service.id === appointment.service_id
-  )?.name;
+  const deleteMutation = useMutation(apiServices.deleteAppointment, {
+    onSuccess: data => {
+      console.log("Uspešno obrisan termin:", data);
+      queryClient.invalidateQueries(["appointments"]);
+      reset();
+    },
+    onError: error => {
+      console.error("Greška prilikom brisanja termina:", error);
+    },
+  });
 
   const onSubmit = (data: any) => {
-    const formattedData = {
-      ...data,
-      service_duration: Number(data.service_duration) * 60000,
-    };
-    console.log(formattedData);
+    updateMutation.mutate({
+      data: {
+        ...appointment,
+        service_duration: Number(data.service_duration) * 60000,
+      },
+      id: appointment.id,
+    });
+  };
+
+  const deleteAppointment = (id: string) => {
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -55,57 +74,78 @@ const EditAppointmentForms: React.FC<EditAppointmentFormsProps> = ({
       borderWidth="1px"
       borderRadius="md"
       bg="white"
+      display="flex"
+      flexDirection="column"
+      alignItems="start"
+      gap={6}
     >
-      <FormControl mb={4}>
-        <FormLabel fontWeight="bold" mb={0}>
-          Izabrana usluga
-        </FormLabel>
-        <Text>{serviceName}</Text>
-      </FormControl>
+      <Stack direction="column" spacing={3}>
+        <FormControl>
+          <FormLabel fontWeight="bold" mb={0}>
+            Izabrana usluga
+          </FormLabel>
+          <Text>{serviceName}</Text>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel fontWeight="bold" mb={0}>
-          Trajanje usluge (min)
-        </FormLabel>
-        <Controller
-          control={control}
-          name="service_duration"
-          render={({ field }) => (
-            <Input
-              type="number"
-              placeholder={`Trajanje usluge`}
-              {...field}
-              defaultValue={appointment.service_duration || ""}
-              required
-            />
-          )}
-        />
-      </FormControl>
+        <FormControl>
+          <FormLabel fontWeight="bold" mb={0}>
+            Trajanje usluge (min)
+          </FormLabel>
+          <Controller
+            control={control}
+            name="service_duration"
+            render={({ field }) => (
+              <Input
+                type="number"
+                placeholder={`Trajanje usluge`}
+                {...field}
+                defaultValue={appointment.service_duration || ""}
+                required
+              />
+            )}
+          />
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel fontWeight="bold" mb={0}>
-          Ime i prezime klijenta
-        </FormLabel>
-        <Text>{appointment.customer_name}</Text>
-      </FormControl>
+        <FormControl>
+          <FormLabel fontWeight="bold" mb={0}>
+            Ime i prezime klijenta
+          </FormLabel>
+          <Text>{appointment.customer_name}</Text>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel fontWeight="bold" mb={0}>
-          Broj telefona klijenta
-        </FormLabel>
-        <Text>{appointment.customer_number}</Text>
-      </FormControl>
+        <FormControl>
+          <FormLabel fontWeight="bold" mb={0}>
+            Broj telefona klijenta
+          </FormLabel>
+          <Text>{appointment.customer_number}</Text>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel fontWeight="bold" mb={0}>
-          Napomena
-        </FormLabel>
-        <Text>{appointment.notes || "Nema napomena"}</Text>
-      </FormControl>
+        <FormControl>
+          <FormLabel fontWeight="bold" mb={0}>
+            Napomena
+          </FormLabel>
+          <Text>{appointment.notes || "Nema napomena"}</Text>
+        </FormControl>
+      </Stack>
 
-      <Button type="submit" variant="blue">
-        Sačuvaj Promene
-      </Button>
+      <Stack direction="row" spacing={4}>
+        <Button type="submit" variant="blue">
+          Sačuvaj Promene
+        </Button>
+        <Button
+          type="button"
+          variant="red"
+          onClick={() => {
+            if (appointment.id) {
+              deleteAppointment(appointment.id);
+            } else {
+              console.error("ID termina nije definisan.");
+            }
+          }}
+        >
+          Obriši termin
+        </Button>
+      </Stack>
     </Box>
   );
 };

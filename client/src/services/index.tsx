@@ -119,7 +119,7 @@ const apiServices = {
     axiosInstance.put<Partial<Appointment>>(`/appointments/${id}`, data),
 
   deleteAppointment: (id: string) =>
-    axiosInstance.delete<null, string>(`/appointments/${id}`),
+    axiosInstance.delete<void>(`/appointments/${id}`),
 
   loginAdmin: (data: LoginData) =>
     axiosInstance.post<LoginData, string>("/auth/login", data),

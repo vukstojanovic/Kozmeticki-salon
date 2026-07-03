@@ -20,6 +20,7 @@ export default function ServicesAdmin() {
     isLoading: servicesLoading,
     isError: servicesError,
   } = useQuery(["services"], apiServices.getServices);
+
   const { register, handleSubmit, control } = useForm<ServiceType>();
   const { refetch: refetchServices } = useQuery(
     ["services"],
@@ -36,7 +37,7 @@ export default function ServicesAdmin() {
 
   function addService(data: ServiceType) {
     // @ts-ignore
-    const workersIds = data.workers_id.map((worker) => worker.value);
+    const workersIds = data.workers_id.map(worker => worker.value);
     const dataToSend = {
       ...data,
       workers_ids: workersIds,
@@ -84,7 +85,7 @@ export default function ServicesAdmin() {
             placeholder="Enter name..."
           />
           <SelectChakra {...register("category_id", { valueAsNumber: true })}>
-            {data?.data.map((option) => {
+            {data?.data.map(option => {
               return (
                 <option key={option.id} value={Number(option.id)}>
                   {option.name}
@@ -117,7 +118,7 @@ export default function ServicesAdmin() {
                 }}
                 // @ts-ignore
                 options={
-                  workersData?.data.map((worker) => ({
+                  workersData?.data.map(worker => ({
                     value: worker.id,
                     label: worker.name,
                   })) || []

@@ -30,6 +30,7 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
       refetchWorkers();
     },
   });
+  
   const updateWorkerMutation = useMutation(apiServices.updateWorker, {
     onSuccess: () => {
       refetchWorkers();
@@ -48,11 +49,11 @@ export default function EditDeleteWorkers({ name, id }: WorkersType) {
     <Card bg="white" borderRadius="lg" boxShadow="md">
       <CardBody display="flex" flexDirection="column" alignItems="center">
         <Box position="relative">
-          <Avatar
+          {/* <Avatar
             size="xl"
             name="Segun Adebayo"
             src="https://bit.ly/sage-adebayo"
-          />
+          /> */}
           {/* <Box
             position="absolute"
             bottom={0}

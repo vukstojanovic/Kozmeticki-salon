@@ -12,14 +12,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check authentication status from localStorage
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
 
     const fakeDataFetch = () => {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         setIsLoading(false);
-      }, 500);
+      });
     };
 
     fakeDataFetch();
@@ -42,9 +41,7 @@ function App() {
       />
       <Route
         path="/login"
-        element={
-          <Login onSuccess={() => setIsAuthenticated(true)} /> // Pass function to Login
-        }
+        element={<Login onSuccess={() => setIsAuthenticated(true)} />}
       />
     </Routes>
   );

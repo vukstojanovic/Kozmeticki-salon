@@ -101,10 +101,16 @@ const AdminFullCalendar: React.FC = () => {
     return classes;
   };
 
-  // Calculate valid range
+  // Izračunaj opseg za 3 meseca unazad i 3 meseca unapred od trenutnog datuma
   const now = new Date();
-  const startDate = new Date(now.getFullYear(), 4, 1); // May 1st of the current year
-  const endDate = new Date(now.getFullYear(), now.getMonth() + 4, 0); // 3 months ahead from the current month
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  
+  // 3 meseca unazad
+  const startDate = new Date(currentYear, currentMonth - 3, 1);
+  
+  // 3 meseca unapred (poslednji dan trećeg meseca od sada)
+  const endDate = new Date(currentYear, currentMonth + 4, 0); // +4 jer želimo kraj trećeg meseca unapred
 
   return (
     <>
@@ -116,13 +122,13 @@ const AdminFullCalendar: React.FC = () => {
           right: "title",
         }}
         initialView="dayGridMonth"
-        editable={false} // Isključuje drag-and-drop
-        droppable={false} // Isključuje mogućnost drag-and-drop
-        selectable={true} // Omogućava tap na mobilnim uređajima
+        editable={false}
+        droppable={false}
+        selectable={true}
         selectMirror={true}
         dayMaxEvents={true}
         weekends={weekendsVisible}
-        select={handleDateSelect} // Obrada selektovanja tapom
+        select={handleDateSelect}
         eventContent={renderEventContent}
         eventClick={handleEventClick}
         eventsSet={handleEvents}
@@ -131,7 +137,7 @@ const AdminFullCalendar: React.FC = () => {
           start: startDate.toISOString().split("T")[0],
           end: endDate.toISOString().split("T")[0],
         }}
-        longPressDelay={200} // Smanjuje broj sekundi za tap and hold, 200ms umesto 500ms
+        longPressDelay={200}
       />
       {appointments && (
         <SelectDayModal
